@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation dbt Project</title>
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --sidebar-color: #252526;
+            --text-color: #cccccc;
+            --accent-color: #007acc;
+            --code-bg: #2d2d2d;
+            --comment-color: #6a9955;
+            --keyword-color: #569cd6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Style */
+        .sidebar {
+            width: 300px;
+            background-color: var(--sidebar-color);
+            border-right: 1px solid #333;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .sidebar h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            padding-left: 10px;
+            color: #888;
+        }
+
+        .tree-item {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: block;
+            text-decoration: none;
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .tree-item:hover {
+            background-color: #37373d;
+        }
+
+        .folder {
+            font-weight: bold;
+            color: #dcb67a;
+            margin-top: 5px;
+        }
+
+        .file {
+            margin-left: 15px;
+            color: #9cdcfe;
+        }
+
+        /* Content Area */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .card {
+            background-color: var(--sidebar-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .card.active {
+            display: block;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        code {
+            color: #ce9178;
+        }
+
+        .comment { color: var(--comment-color); }
+        .keyword { color: var(--keyword-color); }
+
+        h1 { color: white; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        .description { margin-bottom: 20px; line-height: 1.6; }
+        .command { color: #4ec9b0; font-family: monospace; background-color: #1b1b1b; padding: 2px 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>📁 my_dbt_project</h2>
+        <a href="#dbt_project" class="tree-item file">📄 dbt_project.yml</a>
+        <a href="#profiles" class="tree-item file">📄 profiles.yml</a>
+        
+        <div class="tree-item folder">📁 models</div>
+        <div style="margin-left:15px">
+            <div class="tree-item folder">📁 stg</div>
+            <a href="#stg_orders" class="tree-item file">📄 stg_orders.sql</a>
+            <a href="#stg_customers" class="tree-item file">📄 stg_customers.sql</a>
+            
+            <div class="tree-item folder">📁 intermediate</div>
+            <a href="#int_cleaning" class="tree-item file">📄 intermediate_cleaning.sql</a>
+            <a href="#int_agg" class="tree-item file">📄 intermediate_agg.sql</a>
+            
+            <div class="tree-item folder">📁 marts</div>
+            <a href="#final_report" class="tree-item file">📄 final_report.sql</a>
+            <a href="#revenue_summary" class="tree-item file">📄 revenue_summary.sql</a>
+
+            <div class="tree-item folder">📁 schema</div>
+            <a href="#orders_columns" class="tree-item file">📄 orders_columns.yml</a>
+        </div>
+
+        <div class="tree-item folder">📁 sources</div>
+        <a href="#sources_sales" class="tree-item file" style="margin-left:15px">📄 sales.yml</a>
+
+        <div class="tree-item folder">📁 snapshots</div>
+        <a href="#snapshot_orders" class="tree-item file" style="margin-left:15px">📄 orders_snapshot.sql</a>
+
+        <div class="tree-item folder">📁 seeds</div>
+        <a href="#seed_countries" class="tree-item file" style="margin-left:15px">📄 countries.csv</a>
+    </div>
+
+    <div class="main-content" id="content-area">
+        
+        <div id="welcome" class="card active">
+            <h1>Bienvenue dans ton Projet dbt</h1>
+            <p class="description">Clique sur un fichier dans l'arborescence à gauche pour voir son contenu, son explication et la commande dbt associée.</p>
+        </div>
+
+        <div id="dbt_project" class="card">
+            <h1>dbt_project.yml</h1>
+            <p class="description">Fichier principal de configuration. Définit les chemins et la matérialisation par défaut.</p>
+            <pre><code><span class="keyword">name:</span> 'my_dbt_project'
+<span class="keyword">config-version:</span> 2
+<span class="keyword">models:</span>
+  <span class="keyword">my_dbt_project:</span>
+    <span class="keyword">stg:</span>
+      <span class="keyword">+materialized:</span> view
+    <span class="keyword">marts:</span>
+      <span class="keyword">+materialized:</span> table</code></pre>
+        </div>
+
+        <div id="stg_orders" class="card">
+            <h1>stg_orders.sql</h1>
+            <p class="description">Modèle de <strong>staging</strong> pour récupérer les données brutes des commandes.</p>
+            <pre><code><span class="comment">-- Nettoyage de base des commandes</span>
+<span class="keyword">SELECT</span> * 
+<span class="keyword">FROM</span> {{ source(<span class="keyword">'sales'</span>, <span class="keyword">'orders'</span>) }}</code></pre>
+            <p>Commande : <span class="command">dbt run --select stg_orders</span></p>
+        </div>
+
+        <div id="int_cleaning" class="card">
+            <h1>intermediate_cleaning.sql</h1>
+            <p class="description">Modèle <strong>ephemeral</strong> : n'existe pas dans la base. Injecté inline dans le modèle final.</p>
+            <pre><code>{{ config(materialized=<span class="keyword">'ephemeral'</span>) }}
+
+<span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> {{ ref(<span class="keyword">'stg_orders'</span>) }}
+<span class="keyword">WHERE</span> amount &gt; 0</code></pre>
+            <p>Commande : <span class="command">dbt run --select final_report</span></p>
+        </div>
+
+        <div id="int_agg" class="card">
+            <h1>intermediate_agg.sql</h1>
+            <p class="description">Modèle intermédiaire matérialisé en <strong>table</strong> (synthèse par client).</p>
+            <pre><code>{{ config(materialized=<span class="keyword">'table'</span>) }}
+
+<span class="keyword">SELECT</span> customer_id, SUM(amount) AS total
+<span class="keyword">FROM</span> {{ ref(<span class="keyword">'intermediate_cleaning'</span>) }}
+<span class="keyword">GROUP BY</span> customer_id</code></pre>
+            <p>Commande : <span class="command">dbt run --select revenue_summary</span></p>
+        </div>
+
+        <div id="final_report" class="card">
+            <h1>final_report.sql</h1>
+            <p class="description">Modèle final matérialisé en <strong>table ou vue</strong>.</p>
+            <pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> {{ ref(<span class="keyword">'intermediate_cleaning'</span>) }}</code></pre>
+            <p>Commande : <span class="command">dbt run --select final_report</span></p>
+        </div>
+
+        <div id="orders_columns" class="card">
+            <h1>orders_columns.yml</h1>
+            <p class="description">Tests sur les colonnes : not_null et unique sur customer_id.</p>
+            <pre><code>models:
+  - name: stg_orders
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique</code></pre>
+            <p>Commande : <span class="command">dbt test --select stg_orders</span></p>
+        </div>
+
+        <div id="sources_sales" class="card">
+            <h1>sales.yml (source)</h1>
+            <p class="description">Source de données pour commandes et clients, avec freshness check.</p>
+            <pre><code>sources:
+  - name: sales
+    tables:
+      - name: orders
+        freshness:
+          warn_after:
+            count: 12
+            period: hour
+          error_after:
+            count: 24
+            period: hour</code></pre>
+            <p>Commande : <span class="command">dbt source freshness</span></p>
+        </div>
+
+        <div id="snapshot_orders" class="card">
+            <h1>orders_snapshot.sql</h1>
+            <p class="description">Historisation (SCD Type 2) des commandes.</p>
+            <pre><code>{% snapshot orders_snapshot %}
+{{
+    config(
+        target_schema=<span class="keyword">'snapshots'</span>,
+        unique_key=<span class="keyword">'order_id'</span>,
+        strategy=<span class="keyword">'timestamp'</span>,
+        updated_at=<span class="keyword">'updated_at'</span>
+    )
+}}
+
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> {{ ref(<span class="keyword">'stg_orders'</span>) }}
+{% endsnapshot %}</code></pre>
+            <p>Commande : <span class="command">dbt snapshot --select orders_snapshot</span></p>
+        </div>
+
+        <div id="seed_countries" class="card">
+            <h1>countries.csv (Seed)</h1>
+            <p class="description">Table statique importée via CSV.</p>
+            <pre><code>id,country_name,country_code
+1,France,FR
+2,United States,US
+3,Japan,JP</code></pre>
+            <p>Commande : <span class="command">dbt seed --select countries</span></p>
+        </div>
+
+    </div>
+
+    <script>
+        document.querySelectorAll('.tree-item.file').forEach(item => {
+            item.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href').substring(1);
+                
+                document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+                const targetCard = document.getElementById(targetId);
+                if(targetCard) targetCard.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
