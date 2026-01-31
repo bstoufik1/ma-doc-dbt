@@ -114,6 +114,21 @@ h1 { color:white; border-bottom:1px solid #444; padding-bottom:10px; }
    
 
 
+    <!-- AJOUT: Section tests -->
+  
+
+		<div class="tree-item folder">📁 tests</div>
+		<div style="margin-left:15px">
+			<a href="#test_orders_amount_positive" class="tree-item file">📄 orders_amount_positive.sql</a>
+			<a href="#test_customers_email_valid" class="tree-item file">📄 customers_email_valid.sql</a>
+		</div>
+
+
+
+
+
+
+
     <div class="tree-item folder">📁 seeds</div>
      
 		<div style="margin-left:15px">
@@ -291,36 +306,64 @@ h1 { color:white; border-bottom:1px solid #444; padding-bottom:10px; }
         <p>Commande : <span class="command">dbt run --select revenue_summary</span></p>
     </div>
 
-    <!-- schema/orders_columns.yml -->
-    <div id="orders_columns" class="card">
-        <h1>orders_columns.yml</h1>
-        <p class="description">Tests des colonnes pour stg_orders.</p>
-        <pre><code>models:
+<!-- schema/orders_columns.yml -->
+<div id="orders_columns" class="card">
+    <h1>orders_columns.yml</h1>
+    <p class="description">Tests des colonnes pour stg_orders.</p>
+    <pre><code>models:
   - name: stg_orders
+    description: "Table des commandes enrichie pour dbt"
     columns:
       - name: customer_id
+        description: "Identifiant du client pour chaque commande"
         tests:
           - not_null
           - unique
       - name: amount
+        description: "Montant de la commande"
         tests:
           - not_null
           - severity: warn</code></pre>
-        <p>Commande : <span class="command">dbt test --select stg_orders</span></p>
-    </div>
+    <p>Commande pour tester : <span class="command">dbt test --select stg_orders</span></p>
 
-    <!-- schema/customers_columns.yml -->
-    <div id="customers_columns" class="card">
-        <h1>customers_columns.yml</h1>
-        <pre><code>models:
+    <!-- Test singulier dbt pour montant positif -->
+    <h2>orders_amount_positive.sql</h2>
+    <p>Test singulier dbt : vérifie que le montant des commandes est strictement positif.</p>
+    <pre><code>-- tests/orders_amount_positive.sql
+SELECT *
+FROM {{ ref('stg_orders') }}
+WHERE amount &lt;= 0
+
+Principe dbt :
+➜ Si cette requête retourne au moins une ligne → ❌ test en échec</code></pre>
+    <p>Commandes associées :</p>
+    <pre><code>dbt test --select orders_amount_positive
+dbt test --select test_type:singular</code></pre>
+</div>
+
+
+ <!-- schema/customers_columns.yml -->
+<div id="customers_columns" class="card">
+    <h1>customers_columns.yml</h1>
+    <pre><code>models:
   - name: stg_customers
+    description: "Table des clients enrichie pour dbt"
     columns:
       - name: customer_id
+        description: "Identifiant unique du client"
         tests:
           - not_null
-          - unique</code></pre>
-        <p>Commande : <span class="command">dbt test --select stg_customers</span></p>
-    </div>
+          - unique
+      - name: email
+        description: "Email du client"
+        tests:
+          - not_null
+      - name: created_at
+        description: "Date de création du client"</code></pre>
+    <p>Commande pour tester : <span class="command">dbt test --select stg_customers</span></p>
+    <p>Source : <span class="source">sales.customers</span></p>
+</div>
+
 
     <!-- sources/sales.yml -->
     <div id="sources_sales" class="card">
@@ -441,6 +484,60 @@ h1 { color:white; border-bottom:1px solid #444; padding-bottom:10px; }
             </ul>
         </div>
     </div>
+
+
+
+
+
+
+
+<!-- tests/orders_amount_positive.sql -->
+<div id="test_orders_amount_positive" class="card">
+    <h1>orders_amount_positive.sql</h1>
+    <p class="description">
+        Test singulier dbt : vérifie que le montant des commandes est strictement positif.
+    </p>
+
+    <pre><code><span class="comment">-- tests/orders_amount_positive.sql</span>
+<span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> {{ ref('stg_orders') }}
+<span class="keyword">WHERE</span> amount &lt;= 0</code></pre>
+
+    <p>
+        <strong>Principe dbt :</strong><br>
+        ➜ Si cette requête retourne au moins une ligne → ❌ test en échec
+    </p>
+
+    <p>Commandes associées :</p>
+    <span class="command">dbt test --select orders_amount_positive</span><br>
+    <span class="command">dbt test --select test_type:singular</span>
+</div>
+
+
+
+<!-- tests/customers_email_valid.sql -->
+<div id="test_customers_email_valid" class="card">
+    <h1>customers_email_valid.sql</h1>
+    <p class="description">
+        Test métier : contrôle la validité du format des emails clients.
+    </p>
+
+    <pre><code><span class="comment">-- tests/customers_email_valid.sql</span>
+<span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> {{ ref('stg_customers') }}
+<span class="keyword">WHERE</span> email <span class="keyword">NOT LIKE</span> '%@%'</code></pre>
+
+    <p>
+        <strong>Pourquoi un test singulier ?</strong>
+    </p>
+    <ul>
+        <li>Règle métier spécifique</li>
+        <li>Non couverte par un test générique dbt</li>
+    </ul>
+
+    <p>Commande associée :</p>
+    <span class="command">dbt test --select customers_email_valid</span>
+</div>
 
 
 
