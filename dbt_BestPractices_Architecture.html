@@ -215,6 +215,92 @@ h1 { color:white; border-bottom:1px solid #444; padding-bottom:10px; }
             <span class="command">dbt deps</span> (pour installer les packages)
         </p>
     </div>
+	
+	
+	
+	
+	
+	
+ 
+<!-- dbt_project.yml -->
+<!-- dbt_project.yml -->
+<div id="dbt_project" class="card">
+    <h1>dbt_project.yml</h1>
+    <p class="description">Fichier de configuration principal du projet dbt. Définit chemins, matériel par défaut, variables et packages.</p>
+
+    <pre><code>name: 'my_dbt_project'
+# Version de la configuration dbt
+config-version: 2
+
+models:
+  my_dbt_project:
+    # Configuration par défaut pour les modèles staging - matérialisés en vues
+    stg:
+      +materialized: view
+      +schema: staging
+    # Configuration pour les modèles intermédiaires - tables ou ephemeral
+    intermediate:
+      +materialized: ephemeral
+      +schema: intermediate
+    # Configuration pour les marts finaux - matérialisés en tables
+    marts:
+      +materialized: table
+      +schema: analytics
+
+# Variables globales utilisables dans tout le projet avec {{ var('tax_rate') }}
+vars:
+  tax_rate: 0.15
+  payment_methods: ['visa', 'paypal']
+
+# Packages dbt externes (comme dbt-utils)
+packages:
+  - package: dbt-labs/dbt_utils
+    version: 1.1.1
+</code></pre>
+
+    <p><strong>Utilisation des configurations :</strong></p>
+    <ul>
+        <li>stg_orders.sql sera créé comme une vue dans le schéma <code>staging</code></li>
+        <li>revenue_summary.sql sera créé comme une table dans le schéma <code>analytics</code></li>
+        <li>intermediate_cleaning.sql sera ephemeral (injecté inline)</li>
+        <li>Variable utilisable : <code>{{ var('tax_rate') }}</code> dans n'importe quel modèle</li>
+    </ul>
+
+	<p>Commandes associées :<br>
+		<span class="command">dbt run --select stg_orders</span><br>
+		<span class="command">dbt run --select revenue_summary</span><br>
+		<span class="command">dbt deps</span> (pour installer les packages)
+	</p>
+
+	<p>📌 Note : Le fichier <code>dbt_project.yml</code> ne génère pas les sources. 
+	Les tables brutes sont définies dans le dossier <code>sources/*.yml</code>.</p>
+
+
+ 
+   
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- profiles.yml -->
     <div id="profiles" class="card">
