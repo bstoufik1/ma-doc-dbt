@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lexique & Piges dbt</title>
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --sidebar-color: #252526;
+            --text-color: #cccccc;
+            --accent-color: #4ec9b0; /* Une couleur différente pour différencier la page */
+            --code-bg: #2d2d2d;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: var(--sidebar-color);
+            border-right: 1px solid #333;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .btn-home {
+            display: block;
+            background-color: #007acc;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .tree-item {
+            cursor: pointer;
+            padding: 8px;
+            color: #9cdcfe;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+        }
+
+        .tree-item:hover { background-color: #37373d; }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .card {
+            background-color: var(--sidebar-color);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        h1 { color: white; margin-top: 0; }
+        h2 { color: var(--accent-color); }
+        .tag {
+            background: #3e3e3e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <a href="index.html" class="btn-home">🏠 Retour à l'accueil</a>
+        <h2 style="font-size: 14px; color: #888;">MÉMENTO DBT</h2>
+        <a href="#concepts" class="tree-item">📌 Concepts Clés</a>
+        <a href="#commandes" class="tree-item">💻 Commandes Utiles</a>
+        <a href="#best-practices" class="tree-item">✅ Best Practices</a>
+    </div>
+
+    <div class="main-content">
+        <div id="concepts" class="card">
+            <h1>Concepts de base</h1>
+            <p><strong>Dbt (Data Build Tool)</strong> permet de transformer les données à l'intérieur de l'entrepôt (Warehouse) en utilisant simplement du SQL.</p>
+            <ul>
+                <li><span class="tag">Models</span> : Fichiers .sql contenant tes requêtes SELECT.</li>
+                <li><span class="tag">Materialization</span> : La façon dont la table est créée (table, view, incremental, ephemeral).</li>
+                <li><span class="tag">Tests</span> : Vérification de la qualité des données (unique, not_null).</li>
+            </ul>
+        </div>
+
+        <div id="commandes" class="card">
+            <h1>Commandes indispensables</h1>
+            <pre style="background: #000; padding: 15px; border-radius: 5px; color: #4ec9b0;">
+dbt run          # Exécute tous les modèles
+dbt test         # Lance les tests de données
+dbt seed         # Charge les fichiers CSV
+dbt docs generate # Génère la doc officielle</pre>
+        </div>
+
+        <div id="best-practices" class="card">
+            <h1>Bonnes Pratiques</h1>
+            <p>1. Toujours utiliser <span class="tag">{{ ref('nom_du_modele') }}</span> pour créer le lignage.</p>
+            <p>2. Un modèle = Un fichier SQL.</p>
+            <p>3. Documenter les colonnes dans un fichier YAML.</p>
+        </div>
+    </div>
+
+</body>
+</html>
