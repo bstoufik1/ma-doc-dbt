@@ -111,8 +111,25 @@ h1 { color:white; border-bottom:1px solid #444; padding-bottom:10px; }
     <div class="tree-item folder">📁 snapshots</div>
     <a href="#snapshot_orders" class="tree-item file" style="margin-left:15px">📄 orders_snapshot.sql</a>
 
+   
+
+
     <div class="tree-item folder">📁 seeds</div>
-    <a href="#seed_countries" class="tree-item file" style="margin-left:15px">📄 countries.csv</a>
+     
+		<div style="margin-left:15px">
+			<a href="#seed_countries_csv" class="tree-item file">📄 countries.csv</a>
+			<a href="#seed_countries_yml" class="tree-item file">📄 countries.yml</a>
+			<a href="#seed_currencies_csv" class="tree-item file">📄 currencies.csv</a>
+			<a href="#seed_currencies_yml" class="tree-item file">📄 currencies.yml</a>
+		</div>
+	
+
+
+
+
+
+
+
 
     <div class="tree-item folder">📁 macros</div>
     <a href="#macro_multiply" class="tree-item file" style="margin-left:15px">📄 my_macros.sql</a>
@@ -425,60 +442,264 @@ h1 { color:white; border-bottom:1px solid #444; padding-bottom:10px; }
         </div>
     </div>
 
-    <!-- seeds/countries.csv -->
-    <div id="seed_countries" class="card">
-        <h1>countries.csv (Seed)</h1>
-        <p class="description">
-            Table de référence statique importée depuis un fichier CSV.<br>
-            Utilisée pour les valeurs fixes ou lookup (ex: liste de pays, codes postaux, etc.).
-        </p>
-        <pre><code>id,country_name,country_code
+
+
+
+
+
+
+
+
+
+<!-- seeds/countries.csv -->
+
+<!-- seeds/countries.csv -->
+<div id="seed_countries_csv" class="card">
+    <h1>countries.csv (Seed)</h1>
+    <p class="description">
+        Table de référence statique importée depuis un fichier CSV.<br>
+        Utilisée pour les valeurs fixes ou lookup (ex: liste de pays, codes postaux, etc.).
+    </p>
+    <pre><code>id,country_name,country_code
 1,France,FR
 2,United States,US
 3,Japan,JP</code></pre>
 
-        <div class="code-section">
-            <div class="code-block">
-                <h4>Tests YAML associés</h4>
-                <pre><code># seeds/countries.yml
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0; border-left:4px solid #4ec9b0;">
+        <p style="margin:0; color:#cccccc; font-size:14px;">
+            <strong>Voir aussi :</strong> 
+            <a href="#seed_countries_yml" style="color:#4ec9b0; text-decoration:underline; cursor:pointer;">countries.yml</a> 
+            (fichier YAML associé dans seeds/)
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Commandes dbt associées</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt seed --select countries</span>
+                <span class="command-desc">— importe le fichier CSV dans le warehouse</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt seed --full-refresh --select countries</span>
+                <span class="command-desc">— réimporte le seed en supprimant la table existante</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt test --select seed:countries</span>
+                <span class="command-desc">— exécute les tests définis dans le YAML pour ce seed</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt build --select seed:countries</span>
+                <span class="command-desc">— combine l'importation et l'exécution des tests en un seul run</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- seeds/countries.yml -->
+<!-- seeds/countries.yml -->
+<div id="seed_countries_yml" class="card">
+    <h1>countries.yml (Seed YAML)</h1>
+    <p class="description">
+        Fichier YAML associé à <code>countries.csv</code>. Définit les tests et la documentation.<br>
+        <span style="color:#4ec9b0; display:block; margin-top:5px;">✅ Bonne pratique dbt : YAML dans seeds/ au même niveau que le CSV !</span>
+    </p>
+    
+    <div class="code-section">
+        <div class="code-block">
+            <pre><code># seeds/countries.yml
 version: 2
 
 seeds:
-  - name: countries
+  - name: countries    <span class="comment" style="color:#ff6b6b; font-weight:bold;"># ⚠️ IMPORTANT : doit être le nom EXACT du fichier CSV</span>
+    <span class="comment" style="color:#ff6b6b; font-weight:bold;"># ✅ CORRECT : "countries" (sans .csv) car fichier = countries.csv</span>
+    <span class="comment" style="color:#ff6b6b; font-weight:bold;"># ❌ INCORRECT : "countries_" ou "country" ou "pays"</span>
     description: "Liste des pays et codes"
     columns:
+      - name: id
+        description: "Identifiant unique"
+        tests:
+          - not_null
+          - unique
       - name: country_code
+        description: "Code ISO à 2 lettres"
         tests:
           - not_null
           - unique
       - name: country_name
+        description: "Nom complet du pays"
         tests:
           - not_null</code></pre>
-            </div>
         </div>
+    </div>
 
-        <div class="commands-section">
-            <h4>Commandes dbt associées</h4>
-            <div class="command-list">
-                <div class="command-item">
-                    <span class="command">dbt seed --select countries</span>
-                    <span class="command-desc">— importe le fichier CSV dans le warehouse</span>
-                </div>
-                <div class="command-item">
-                    <span class="command">dbt seed --full-refresh --select countries</span>
-                    <span class="command-desc">— réimporte le seed en supprimant la table existante</span>
-                </div>
-                <div class="command-item">
-                    <span class="command">dbt test --select seed:countries</span>
-                    <span class="command-desc">— exécute les tests définis dans le YAML pour ce seed</span>
-                </div>
-                <div class="command-item">
-                    <span class="command">dbt build --select seed:countries</span>
-                    <span class="command-desc">— combine l'importation et l'exécution des tests en un seul run</span>
-                </div>
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0; border-left:4px solid #ff6b6b;">
+        <h4 style="color:#ff6b6b; margin-top:0; font-size:14px;">🚨 Règle cruciale dbt</h4>
+        <p style="margin:8px 0; color:#cccccc; font-size:14px;">
+            <strong>Le <code>name:</code> dans le YAML DOIT correspondre exactement au nom du fichier CSV :</strong>
+        </p>
+        <pre style="background:#1a1a1a; padding:10px; border-radius:4px; margin:10px 0;"><code># ✅ CORRECT
+countries.csv   →   name: countries
+
+# ❌ INCORRECT (ne fonctionnera pas)
+countries.csv   →   name: countries_
+countries.csv   →   name: country
+countries.csv   →   name: pays</code></pre>
+        <p style="margin:8px 0; color:#cccccc; font-size:14px;">
+            <strong>Astuce :</strong> Utilisez le nom du fichier CSV sans l'extension <code>.csv</code>
+        </p>
+    </div>
+
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0;">
+        <p style="margin:0; color:#cccccc; font-size:14px;">
+            <strong>Structure seeds/ :</strong> 
+            <code>countries.csv</code> ↔ <code>countries.yml</code> (même dossier, même nom racine)
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Impact des tests YAML</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt test --select seed:countries</span>
+                <span class="command-desc">— Vérifie not_null, unique sur les colonnes</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt docs generate</span>
+                <span class="command-desc">— Génère la documentation avec les descriptions</span>
             </div>
         </div>
     </div>
+</div>
+
+
+
+<!-- seeds/currencies.csv -->
+<div id="seed_currencies_csv" class="card">
+    <h1>currencies.csv (Seed)</h1>
+    <p class="description">
+        Second exemple de seed : table des devises. Illustre le pattern "1 CSV = 1 YAML".
+    </p>
+    
+    <div class="code-section">
+        <div class="code-block">
+            <h4>📄 Fichier CSV</h4>
+            <pre><code>currency_code,currency_name,symbol
+EUR,Euro,€
+USD,US Dollar,$
+JPY,Yen,¥</code></pre>
+        </div>
+    </div>
+
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0; border-left:4px solid #4ec9b0;">
+        <p style="margin:0; color:#cccccc; font-size:14px;">
+            <strong>Voir aussi :</strong> 
+            <a href="#seed_currencies_yml" style="color:#4ec9b0; text-decoration:underline; cursor:pointer;">currencies.yml</a> 
+            (son fichier YAML associé)
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Commandes dbt associées</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt seed --select currencies</span>
+                <span class="command-desc">— importe currencies.csv</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt test --select seed:currencies</span>
+                <span class="command-desc">— exécute les tests de currencies.yml</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt seed</span>
+                <span class="command-desc">— importe TOUS les seeds du projet</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- seeds/currencies.yml -->
+<div id="seed_currencies_yml" class="card">
+    <h1>currencies.yml (Seed YAML)</h1>
+    <p class="description">
+        Fichier YAML associé à <code>currencies.csv</code>. Définit les tests pour la table des devises.
+    </p>
+    
+    <div class="code-section">
+        <div class="code-block">
+            <pre><code># seeds/currencies.yml
+version: 2
+
+seeds:
+  - name: currencies
+    description: "Table des devises"
+    columns:
+      - name: currency_code
+        description: "Code ISO de la devise"
+        tests:
+          - not_null
+          - unique
+      - name: currency_name
+        description: "Nom complet de la devise"
+        tests:
+          - not_null
+      - name: symbol
+        description: "Symbole monétaire"
+        tests:
+          - not_null</code></pre>
+        </div>
+    </div>
+
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0;">
+        <h4 style="color:#dcb67a; margin-top:0; font-size:14px;">🎯 Règle d'or dbt pour les seeds</h4>
+        <p style="margin:0; color:#cccccc; font-size:14px;">
+            <strong>1 CSV dans seeds/ = 1 YAML dans seeds/</strong> (même nom, même dossier)<br>
+            Ex: <code>currencies.csv</code> → <code>currencies.yml</code>
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Tests automatiques</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt test --select seed:currencies</span>
+                <span class="command-desc">— Vérifie l'intégrité des données devises</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt build --select seed:currencies</span>
+                <span class="command-desc">— Importe currencies.csv + exécute ses tests</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- macros/my_macros.sql -->
     <div id="macro_multiply" class="card">
