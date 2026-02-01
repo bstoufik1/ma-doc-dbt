@@ -214,74 +214,23 @@ h1 { color:white; border-bottom:1px solid #444; padding-bottom:10px; }
             <span class="command">dbt run --select revenue_summary</span><br>
             <span class="command">dbt deps</span> (pour installer les packages)
         </p>
+		
+		<p>📌 Note : Le fichier <code>dbt_project.yml</code> ne génère pas les sources. 
+			Les tables brutes sont définies dans le dossier <code>sources/*.yml</code>.</p>
+	
+	
     </div>
 	
 	
 	
 	
 	
+	 
+
 	
- 
-<!-- dbt_project.yml -->
-<!-- dbt_project.yml -->
-<div id="dbt_project" class="card">
-    <h1>dbt_project.yml</h1>
-    <p class="description">Fichier de configuration principal du projet dbt. Définit chemins, matériel par défaut, variables et packages.</p>
-
-    <pre><code>name: 'my_dbt_project'
-# Version de la configuration dbt
-config-version: 2
-
-models:
-  my_dbt_project:
-    # Configuration par défaut pour les modèles staging - matérialisés en vues
-    stg:
-      +materialized: view
-      +schema: staging
-    # Configuration pour les modèles intermédiaires - tables ou ephemeral
-    intermediate:
-      +materialized: ephemeral
-      +schema: intermediate
-    # Configuration pour les marts finaux - matérialisés en tables
-    marts:
-      +materialized: table
-      +schema: analytics
-
-# Variables globales utilisables dans tout le projet avec {{ var('tax_rate') }}
-vars:
-  tax_rate: 0.15
-  payment_methods: ['visa', 'paypal']
-
-# Packages dbt externes (comme dbt-utils)
-packages:
-  - package: dbt-labs/dbt_utils
-    version: 1.1.1
-</code></pre>
-
-    <p><strong>Utilisation des configurations :</strong></p>
-    <ul>
-        <li>stg_orders.sql sera créé comme une vue dans le schéma <code>staging</code></li>
-        <li>revenue_summary.sql sera créé comme une table dans le schéma <code>analytics</code></li>
-        <li>intermediate_cleaning.sql sera ephemeral (injecté inline)</li>
-        <li>Variable utilisable : <code>{{ var('tax_rate') }}</code> dans n'importe quel modèle</li>
-    </ul>
-
-	<p>Commandes associées :<br>
-		<span class="command">dbt run --select stg_orders</span><br>
-		<span class="command">dbt run --select revenue_summary</span><br>
-		<span class="command">dbt deps</span> (pour installer les packages)
-	</p>
-
-	<p>📌 Note : Le fichier <code>dbt_project.yml</code> ne génère pas les sources. 
-	Les tables brutes sont définies dans le dossier <code>sources/*.yml</code>.</p>
 
 
  
-   
-</div>
-
-
-
 
 
 
@@ -321,13 +270,63 @@ packages:
     </div>
 
     <!-- stg_orders.sql -->
-    <div id="stg_orders" class="card">
-        <h1>stg_orders.sql</h1>
-        <p class="description">Modèle <strong>staging</strong> : nettoie et prépare les commandes brutes pour les transformations.</p>
-        <pre><code><span class="comment">-- Récupération des commandes brutes</span>
-<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> {{ source('sales','orders') }}</code></pre>
-        <p>Commande : <span class="command">dbt run --select stg_orders</span></p>
+<div id="stg_orders" class="card">
+    <h1>models/staging/stg_orders.sql</h1>
+    <p class="description">
+        Modèle <strong>staging</strong> : Nettoyage des commandes et enrichissement via le référentiel pays (Seed).
+    </p>
+
+    <div class="code-section">
+        <div class="code-block">
+            <h4>Code SQL du modèle</h4>
+            <pre><code><span class="keyword">with</span> orders_source <span class="keyword">as</span> (
+    <span class="comment">-- 1. On appelle la SOURCE brute (SQL externe)</span>
+    <span class="keyword">select</span> * <span class="keyword">from</span> {{ source(<span class="string">'sales'</span>, <span class="string">'orders'</span>) }}
+),
+
+countries_seed <span class="keyword">as</span> (
+    <span class="comment">-- 2. On appelle le SEED (CSV local chargé via dbt seed)</span>
+    <span class="keyword">select</span> * <span class="keyword">from</span> {{ ref(<span class="string">'countries'</span>) }}
+),
+
+final <span class="keyword">as</span> (
+    <span class="keyword">select</span>
+        o.order_id,
+        o.amount,
+        o.order_date,
+        c.country_name <span class="comment">-- Ajout du nom du pays issu du CSV</span>
+    <span class="keyword">from</span> orders_source o
+    <span class="keyword">left join</span> countries_seed c <span class="keyword">on</span> o.country_code = c.country_code
+)
+
+<span class="keyword">select</span> * <span class="keyword">from</span> final</code></pre>
+        </div>
     </div>
+
+    <div style="background:#1b1b1b; padding:15px; border-radius:8px; margin:20px 0; border-left:4px solid #569cd6; font-size:13px; line-height:1.5;">
+        <h4 style="margin-top:0; color:#569cd6; font-size:14px; text-transform:uppercase;">📖 Comment dbt "lit" ces fichiers ?</h4>
+        <ul style="color:#bbb; padding-left:20px; margin-bottom:10px;">
+            <li><strong>{{ source('sales', 'orders') }} :</strong> dbt cherche dans ton YAML <code>sources/</code> pour trouver l'adresse réelle de la table brute.</li>
+            <li><strong>{{ ref('countries') }} :</strong> dbt pointe vers la table qu'il a lui-même créée à partir de ton fichier CSV (via la commande <code>dbt seed</code>).</li>
+        </ul>
+        <p style="margin:0; color:#888; font-style:italic; font-size:12px;">
+            Note : On utilise <strong>ref()</strong> pour les seeds car dbt "possède" la table, alors qu'on utilise <strong>source()</strong> pour ce qui vient de l'extérieur.
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Commandes associées</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt run --select stg_orders</span>
+                <span class="command-desc">— Compile et exécute uniquement ce modèle</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
     <!-- stg_customers.sql -->
     <div id="stg_customers" class="card">
@@ -451,86 +450,108 @@ dbt test --select test_type:singular</code></pre>
 </div>
 
 
-    <!-- sources/sales.yml -->
-    <div id="sources_sales" class="card">
-        <h1>sources/sales.yml</h1>
-        <p class="description">Définition des sources avec contrôle de fraîcheur (<strong>freshness</strong>) et tests d'intégrité des colonnes.</p>
-        
-        <div class="code-section">
-            <div class="code-block">
-                <h4>Configuration complète des sources</h4>
-                <pre><code><span class="keyword">sources:</span>
+
+
+
+<!-- sources/sales.yml -->
+<div id="sources_sales" class="card">
+    <h1>sources/sales.yml</h1>
+    <p class="description">Définition des sources avec contrôle de fraîcheur (<strong>freshness</strong>) et tests d'intégrité des colonnes.</p>
+
+    <div class="code-section">
+        <div class="code-block">
+            <h4>1. Configuration Standard (Même Schéma)</h4>
+            <pre><code><span class="keyword">sources:</span>
   - <span class="keyword">name:</span> sales
+    <span class="keyword">database:</span> raw_data_prod
+    <span class="keyword">schema:</span> sales_force      <span class="comment"># ✅ S'applique à orders ET customers par défaut</span>
     <span class="keyword">description:</span> <span class="string">"Sources principales liées aux ventes"</span>
+    
     <span class="keyword">tables:</span>
       - <span class="keyword">name:</span> orders
-        <span class="keyword">description:</span> <span class="string">"Table des commandes brutes"</span>
         <span class="keyword">freshness:</span>
-          <span class="comment"># Avertissement si pas de mise à jour depuis 12h</span>
-          <span class="keyword">warn_after:</span>
-            <span class="keyword">count:</span> 12
-            <span class="keyword">period:</span> hour
-          <span class="comment"># Erreur si pas de mise à jour depuis 24h</span>
-          <span class="keyword">error_after:</span>
-            <span class="keyword">count:</span> 24
-            <span class="keyword">period:</span> hour
-        <span class="keyword">tests:</span>
-          - <span class="keyword">not_null:</span>
-              <span class="keyword">column_name:</span> order_id
-              <span class="keyword">severity:</span> error   <span class="comment"># L'ID de commande ne doit jamais être NULL</span>
-          - <span class="keyword">unique:</span>
-              <span class="keyword">column_name:</span> order_id
-              <span class="keyword">severity:</span> error   <span class="comment"># Chaque commande doit être unique</span>
-          - <span class="keyword">relationships:</span>
-              <span class="keyword">column_name:</span> customer_id
-              <span class="keyword">to:</span> ref('stg_customers')
-              <span class="keyword">field:</span> customer_id
-              <span class="keyword">severity:</span> warn    <span class="comment"># Vérifie que chaque commande a un client valide</span>
+          <span class="keyword">warn_after:</span> {<span class="keyword">count:</span> 12, <span class="keyword">period:</span> hour}
+        <span class="keyword">columns:</span>
+          - <span class="keyword">name:</span> order_id
+            <span class="keyword">tests:</span> [unique, not_null]
+
       - <span class="keyword">name:</span> customers
-        <span class="keyword">description:</span> <span class="string">"Table des clients"</span>
-        <span class="keyword">freshness:</span>
-          <span class="keyword">warn_after:</span>
-            <span class="keyword">count:</span> 12
-            <span class="keyword">period:</span> hour
-          <span class="keyword">error_after:</span>
-            <span class="keyword">count:</span> 24
-            <span class="keyword">period:</span> hour
-        <span class="keyword">tests:</span>
-          - <span class="keyword">not_null:</span>
-              <span class="keyword">column_name:</span> customer_id
-              <span class="keyword">severity:</span> error   <span class="comment"># L'ID client ne doit jamais être NULL</span>
-          - <span class="keyword">unique:</span>
-              <span class="keyword">column_name:</span> customer_id
-              <span class="keyword">severity:</span> error   <span class="comment"># Chaque client doit être unique</span></code></pre>
-            </div>
+        <span class="keyword">columns:</span>
+          - <span class="keyword">name:</span> customer_id
+            <span class="keyword">tests:</span> [unique, not_null]</code></pre>
         </div>
-        
-        <div class="commands-section">
-            <h4>Commandes dbt associées</h4>
-            <div class="command-list">
-                <div class="command-item">
-                    <span class="command">dbt source freshness</span>
-                    <span class="command-desc">— vérifie la fraîcheur des données (warn_after / error_after)</span>
-                </div>
-                <div class="command-item">
-                    <span class="command">dbt test --select source:sales.*</span>
-                    <span class="command-desc">— exécute tous les tests définis sur les colonnes des sources</span>
-                </div>
-                <div class="command-item">
-                    <span class="command">dbt test --select source:sales.orders</span>
-                    <span class="command-desc">— teste uniquement la table orders</span>
-                </div>
-                <div class="command-item">
-                    <span class="command">dbt test --select source:sales.customers</span>
-                    <span class="command-desc">— teste uniquement la table customers</span>
-                </div>
-                <div class="command-item">
-                    <span class="command">dbt build --select source:sales.*</span>
-                    <span class="command-desc">— construit toutes les sources et exécute tests/freshness en un seul run</span>
-                </div>
+
+        <div class="code-block" style="margin-top: 20px; border-top: 1px dashed #444; padding-top: 20px;">
+            <h4 style="color: #4ec9b0;">2. Cas Avancé : Flexibilité des Schémas</h4>
+            <pre><code><span class="keyword">sources:</span>
+  - <span class="keyword">name:</span> external_app
+    <span class="keyword">schema:</span> main_schema
+    <span class="keyword">tables:</span>
+      - <span class="keyword">name:</span> users
+      - <span class="keyword">name:</span> logs
+        <span class="keyword">schema:</span> archive_logs <span class="comment"># 🚀 On change de schéma uniquement pour cette table</span></code></pre>
+            
+   
+
+            <div style="background: rgba(78, 201, 176, 0.1); padding: 15px; border-left: 3px solid #4ec9b0; margin-top: 10px; font-size: 13px; color: #e0e0e0; line-height: 1.6;">
+                <strong style="color: #4ec9b0;">🤔 Est-ce que les tables doivent avoir le même schéma ?</strong><br>
+                La réponse courte est : <strong>Généralement oui</strong>, si elles proviennent du même système source, mais dbt te donne la <strong>flexibilité</strong> de faire autrement si nécessaire (en utilisant la clé <code>schema:</code> au niveau de la table).
+                <br><br>
+                <strong style="color: #4ec9b0;">📂 Comment organiser tes fichiers YAML ?</strong><br>
+                • <strong>Dans le même fichier :</strong> Si les deux schémas appartiennent au même univers métier (ex: l'application "Sales"), tu les mets dans le même fichier <code>sales.yml</code>.<br>
+                • <strong>Dans des fichiers séparés :</strong> Si les schémas n'ont rien à voir (ex: un pour le Marketing, un pour la Finance), la bonne pratique dbt est de créer deux fichiers : <code>marketing.yml</code> et <code>finance.yml</code>.
+            </div>
+
+			
+			
+			
+			
+        </div>
+    </div>
+
+    <div class="commands-section">
+        <h4>Commandes dbt associées</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt source freshness</span>
+                <span class="command-desc">— vérifie la fraîcheur des données</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt build --select source:sales.*</span>
+                <span class="command-desc">— freshness + tests en un seul run</span>
             </div>
         </div>
     </div>
+
+    <div style="background:#1b1b1b; padding:15px; border-radius:8px; margin-top:25px; border-left:4px solid #007acc; font-size:12px; line-height:1.5; color:#aaa;">
+        <h4 style="margin-top:0; color:#007acc; font-size:13px; text-transform:uppercase;">💡 Note Expert : Sources vs Seeds</h4>
+        <p style="margin-bottom:10px;">
+            <strong>Dans les Sources (sources/*.yml) :</strong> On liste les colonnes des tables brutes existantes. Pas besoin de tout lister, seulement ce qu'on veut tester ou documenter.
+        </p>
+        <p style="margin:0;">
+            <strong>Dans les Seeds (seeds/*.yml) :</strong> On liste les colonnes de tes fichiers CSV locaux pour définir les types et l'intégrité de tes données "fixes".
+        </p>
+    </div>
+</div>   
+   
+   
+
+
+
+
+
+
+
+
+
+
+   
+   
+   
+   
+   
+   
+   
 
     <!-- snapshots/orders_snapshot.sql -->
     <div id="snapshot_orders" class="card">
@@ -753,6 +774,29 @@ countries.csv   →   name: pays</code></pre>
             </div>
         </div>
     </div>
+	
+	
+	<div style="background:#1b1b1b; padding:15px; border-radius:8px; margin:20px 0; border-left:4px solid #6a9955; font-size:13px; line-height:1.6;">
+    <h4 style="margin-top:0; color:#6a9955; font-size:14px; text-transform:uppercase; letter-spacing:1px;">💡 L'œil de l'expert : Pourquoi n'y a-t-il pas de redondance ?</h4>
+    <p style="margin-bottom:10px; color:#cccccc;">
+        On ne vérifie <strong>jamais</strong> les mêmes colonnes dans les sources et les seeds car leurs missions diffèrent :
+    </p>
+    <ul style="margin:0; padding-left:20px; color:#bbb;">
+        <li><strong>Le Seed (seeds/) :</strong> C'est le <u>propriétaire</u>. La donnée "naît" ici via ton CSV local. On teste pour éviter les erreurs de saisie manuelle.</li>
+        <li><strong>La Source (sources/) :</strong> C'est la <u>connexion</u>. La donnée existe déjà ailleurs (CRM, ERP). On teste pour s'assurer que le système externe nous envoie des données propres.</li>
+    </ul>
+    <p style="margin-top:10px; font-style:italic; color:#888; font-size:12px;">
+        Règle d'or : Si c'est un CSV local → Seed. Si c'est une table SQL externe → Source.
+    </p>
+</div>
+	
+	
+	
+	
+	
+	
+	
+	
 </div>
 
 
