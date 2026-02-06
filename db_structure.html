@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation dbt Project - Complet</title>
+<style>
+:root {
+    --bg-color: #1e1e1e;
+    --sidebar-color: #252526;
+    --text-color: #cccccc;
+    --accent-color: #007acc;
+    --code-bg: #2d2d2d;
+    --comment-color: #6a9955;
+    --keyword-color: #569cd6;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+.sidebar {
+    width: 300px;
+    background-color: var(--sidebar-color);
+    border-right: 1px solid #333;
+    overflow-y: auto;
+    padding: 10px;
+    flex-shrink: 0;
+}
+.sidebar h2 { font-size:14px; text-transform:uppercase; padding-left:10px; color:#888; }
+.tree-item { cursor:pointer; padding:4px 8px; border-radius:4px; display:block; text-decoration:none; color:var(--text-color); font-family:'Courier New',Courier,monospace; font-size:13px; white-space:nowrap;}
+.tree-item:hover { background-color:#37373d; }
+.folder { font-weight:bold; color:#dcb67a; margin-top:5px; }
+.file { margin-left:15px; color:#9cdcfe; }
+.main-content { flex-grow:1; padding:40px; overflow-y:auto; width:100%; }
+.card { background-color: var(--sidebar-color); padding:20px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.3); display:none; }
+.card.active { display:block; }
+pre { background-color:var(--code-bg); padding:15px; border-radius:5px; overflow-x:auto; border-left:4px solid var(--accent-color); }
+code { color:#ce9178; }
+.comment { color: var(--comment-color); }
+.keyword { color: var(--keyword-color); }
+h1 { color:white; border-bottom:1px solid #444; padding-bottom:10px; }
+.description { margin-bottom:20px; line-height:1.6; }
+.command { color:#4ec9b0; font-family:monospace; background-color:#1b1b1b; padding:2px 5px; border-radius:4px; }
+
+.code-section { margin: 20px 0; }
+.code-block { background-color: var(--code-bg); border-radius: 8px; padding: 15px; border-left: 4px solid var(--accent-color); overflow-x: auto; }
+.code-block h4 { margin-top: 0; color: #4ec9b0; font-size: 14px; margin-bottom: 10px; }
+.string { color: #ce9178; }
+.commands-section { margin-top: 25px; padding-top: 15px; border-top: 1px solid #444; }
+.commands-section h4 { color: #dcb67a; margin-bottom: 10px; }
+.command-list { display: flex; flex-direction: column; gap: 8px; }
+.command-item { display: flex; align-items: flex-start; gap: 10px; padding: 5px 0; }
+.command-desc { color: #cccccc; font-size: 14px; line-height: 1.4; flex-grow: 1; }
+
+/* Styles pour les sections spéciales */
+.warning { color: #ff6b6b; background-color: rgba(255,107,107,0.1); padding:2px 6px; border-radius:4px; font-size:13px; }
+.syntax-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+.syntax-item { background: #2d2d2d; padding: 12px; border-radius: 8px; border-left: 4px solid; }
+.syntax-item.error { border-left-color: #ff6b6b; }
+.syntax-item.success { border-left-color: #4ec9b0; }
+.syntax-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.syntax-badge { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+.error .syntax-badge { background: #ff6b6b; color: white; }
+.success .syntax-badge { background: #4ec9b0; color: #1e1e1e; }
+.practice-card { background: #2d2d2d; padding: 15px; border-radius: 8px; border-left: 4px solid #007acc; }
+.practice-card h4 { color: #dcb67a; margin-top: 0; margin-bottom: 10px; }
+.practice-card ul { margin: 0; padding-left: 20px; }
+.practice-card li { margin-bottom: 5px; font-size: 14px; }
+.best-practices-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+.step-list { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
+.step-item { display: flex; gap: 15px; align-items: flex-start; padding: 12px; background: #2d2d2d; border-radius: 8px; border-left: 4px solid #4ec9b0; }
+.step-number { background: #4ec9b0; color: #1e1e1e; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+.step-content { flex-grow: 1; }
+.step-content strong { color: #9cdcfe; display: block; margin-bottom: 5px; }
+.step-content p { margin: 0; font-size: 14px; color: #cccccc; }
+</style>
+</head>
+<body>
+<div class="sidebar">
+     
+	  <h2><a href="index.html" class="tree-item file">🏠 Retour Accueil</a></h2>
+    <h2>📁 my_dbt_project</h2>
+    <a href="#dbt_project" class="tree-item file">📄 dbt_project.yml</a>
+    <a href="#profiles" class="tree-item file">📄 profiles.yml</a>
+    
+    <div class="tree-item folder">📁 models</div>
+    <div style="margin-left:15px">
+        <div class="tree-item folder">📁 stg</div>
+        <a href="#stg_orders" class="tree-item file">📄 stg_orders.sql</a>
+        <a href="#stg_customers" class="tree-item file">📄 stg_customers.sql</a>
+        
+        <div class="tree-item folder">📁 intermediate</div>
+        <a href="#int_cleaning" class="tree-item file">📄 intermediate_cleaning.sql</a>
+        <a href="#int_agg" class="tree-item file">📄 intermediate_agg.sql</a>
+        
+        <div class="tree-item folder">📁 marts</div>
+        <a href="#final_report" class="tree-item file">📄 final_report.sql</a>
+        <a href="#revenue_summary" class="tree-item file">📄 revenue_summary.sql</a>
+
+        <div class="tree-item folder">📁 schema</div>
+        <a href="#orders_columns" class="tree-item file">📄 orders_columns.yml</a>
+        <a href="#customers_columns" class="tree-item file">📄 customers_columns.yml</a>
+    </div>
+
+    <div class="tree-item folder">📁 sources</div>
+    <a href="#sources_sales" class="tree-item file" style="margin-left:15px">📄 sales.yml</a>
+
+    <div class="tree-item folder">📁 snapshots</div>
+    <a href="#snapshot_orders" class="tree-item file" style="margin-left:15px">📄 orders_snapshot.sql</a>
+
+   
+
+
+    <!-- AJOUT: Section tests -->
+  
+
+		<div class="tree-item folder">📁 tests</div>
+		<div style="margin-left:15px">
+			<a href="#test_orders_amount_positive" class="tree-item file">📄 orders_amount_positive.sql</a>
+			<a href="#test_customers_email_valid" class="tree-item file">📄 customers_email_valid.sql</a>
+		</div>
+
+
+
+
+
+
+
+    <div class="tree-item folder">📁 seeds</div>
+     
+		<div style="margin-left:15px">
+			<a href="#seed_countries_csv" class="tree-item file">📄 countries.csv</a>
+			<a href="#seed_countries_yml" class="tree-item file">📄 countries.yml</a>
+			<a href="#seed_currencies_csv" class="tree-item file">📄 currencies.csv</a>
+			<a href="#seed_currencies_yml" class="tree-item file">📄 currencies.yml</a>
+		</div>
+	
+
+
+
+
+
+
+
+
+    <div class="tree-item folder">📁 macros</div>
+    <a href="#macro_multiply" class="tree-item file" style="margin-left:15px">📄 my_macros.sql</a>
+
+    <div class="tree-item folder">📁 analyses</div>
+    <a href="#customer_analysis" class="tree-item file" style="margin-left:15px">📄 customer_analysis.sql</a>
+
+    <div class="tree-item folder">📁 CI/CD</div>
+    <div style="margin-left:15px">
+        <a href="#cicd_state" class="tree-item file">📄 state-based-selection</a>
+        <a href="#cicd_workflow" class="tree-item file">📄 workflow.yml</a>
+        <a href="#cicd_best_practices" class="tree-item file">📄 best-practices.md</a>
+    </div>
+</div>
+
+<div class="main-content" id="content-area">
+    <div id="welcome" class="card active">
+        <h1>Bienvenue dans ton Projet dbt</h1>
+        <p class="description">Clique sur un fichier pour voir son contenu, son explication, son type et la commande dbt associée.</p>
+    </div>
+
+    <!-- dbt_project.yml -->
+    <div id="dbt_project" class="card">
+        <h1>dbt_project.yml</h1>
+        <p class="description">Fichier de configuration principal du projet dbt. Définit chemins, matériel par défaut, variables et packages.</p>
+        <pre><code><span class="keyword">name:</span> 'my_dbt_project'
+<span class="comment"># Version de la configuration dbt</span>
+<span class="keyword">config-version:</span> 2
+
+<span class="keyword">models:</span>
+  <span class="keyword">my_dbt_project:</span>
+    <span class="comment"># Configuration par défaut pour les modèles staging - matérialisés en vues</span>
+    <span class="keyword">stg:</span>
+      <span class="keyword">+materialized:</span> view
+      <span class="keyword">+schema:</span> staging
+    
+    <span class="comment"># Configuration pour les modèles intermédiaires - tables ou ephemeral</span>
+    <span class="keyword">intermediate:</span>
+      <span class="keyword">+materialized:</span> ephemeral
+      <span class="keyword">+schema:</span> intermediate
+    
+    <span class="comment"># Configuration pour les marts finaux - matérialisés en tables</span>
+    <span class="keyword">marts:</span>
+      <span class="keyword">+materialized:</span> table
+      <span class="keyword">+schema:</span> analytics
+
+<span class="comment"># Variables globales utilisables dans tout le projet avec {{ var('tax_rate') }}</span>
+<span class="keyword">vars:</span>
+  tax_rate: 0.15
+  payment_methods: ['visa', 'paypal']
+
+<span class="comment"># Packages dbt externes (comme dbt-utils)</span>
+<span class="keyword">packages:</span>
+  - package: dbt-labs/dbt_utils
+    version: 1.1.1</code></pre>
+        
+        <p><strong>Utilisation des configurations :</strong></p>
+        <ul>
+            <li><code>stg_orders.sql</code> sera créé comme une vue dans le schéma <code>staging</code></li>
+            <li><code>revenue_summary.sql</code> sera créé comme une table dans le schéma <code>analytics</code></li>
+            <li><code>intermediate_cleaning.sql</code> sera ephemeral (injecté inline)</li>
+            <li>Variable utilisable : <code>{{ var('tax_rate') }}</code> dans n'importe quel modèle</li>
+        </ul>
+        
+        <p>Commandes associées :<br>
+            <span class="command">dbt run --select stg_orders</span><br>
+            <span class="command">dbt run --select revenue_summary</span><br>
+            <span class="command">dbt deps</span> (pour installer les packages)
+        </p>
+		
+		<p>📌 Note : Le fichier <code>dbt_project.yml</code> ne génère pas les sources. 
+			Les tables brutes sont définies dans le dossier <code>sources/*.yml</code>.</p>
+	
+	
+    </div>
+	
+	
+	
+	
+	
+	 
+
+	
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- profiles.yml -->
+    <div id="profiles" class="card">
+        <h1>profiles.yml</h1>
+        <p class="description">Configuration de connexion au warehouse (Snowflake, BigQuery, Redshift...).</p>
+        <pre><code>my_dbt_project:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: xxxxx
+      user: user
+      password: ****
+      role: ANALYST
+      database: ANALYTICS
+      warehouse: WH
+      schema: dbt</code></pre>
+    </div>
+
+    <!-- stg_orders.sql -->
+<div id="stg_orders" class="card">
+    <h1>models/staging/stg_orders.sql</h1>
+    <p class="description">
+        Modèle <strong>staging</strong> : Nettoyage des commandes et enrichissement via le référentiel pays (Seed).
+    </p>
+
+    <div class="code-section">
+        <div class="code-block">
+            <h4>Code SQL du modèle</h4>
+            <pre><code><span class="keyword">with</span> orders_source <span class="keyword">as</span> (
+    <span class="comment">-- 1. On appelle la SOURCE brute (SQL externe)</span>
+    <span class="keyword">select</span> * <span class="keyword">from</span> {{ source(<span class="string">'sales'</span>, <span class="string">'orders'</span>) }}
+),
+
+countries_seed <span class="keyword">as</span> (
+    <span class="comment">-- 2. On appelle le SEED (CSV local chargé via dbt seed)</span>
+    <span class="keyword">select</span> * <span class="keyword">from</span> {{ ref(<span class="string">'countries'</span>) }}
+),
+
+final <span class="keyword">as</span> (
+    <span class="keyword">select</span>
+        o.order_id,
+        o.amount,
+        o.order_date,
+        c.country_name <span class="comment">-- Ajout du nom du pays issu du CSV</span>
+    <span class="keyword">from</span> orders_source o
+    <span class="keyword">left join</span> countries_seed c <span class="keyword">on</span> o.country_code = c.country_code
+)
+
+<span class="keyword">select</span> * <span class="keyword">from</span> final</code></pre>
+        </div>
+    </div>
+
+    <div style="background:#1b1b1b; padding:15px; border-radius:8px; margin:20px 0; border-left:4px solid #569cd6; font-size:13px; line-height:1.5;">
+        <h4 style="margin-top:0; color:#569cd6; font-size:14px; text-transform:uppercase;">📖 Comment dbt "lit" ces fichiers ?</h4>
+        <ul style="color:#bbb; padding-left:20px; margin-bottom:10px;">
+            <li><strong>{{ source('sales', 'orders') }} :</strong> dbt cherche dans ton YAML <code>sources/</code> pour trouver l'adresse réelle de la table brute.</li>
+            <li><strong>{{ ref('countries') }} :</strong> dbt pointe vers la table qu'il a lui-même créée à partir de ton fichier CSV (via la commande <code>dbt seed</code>).</li>
+        </ul>
+        <p style="margin:0; color:#888; font-style:italic; font-size:12px;">
+            Note : On utilise <strong>ref()</strong> pour les seeds car dbt "possède" la table, alors qu'on utilise <strong>source()</strong> pour ce qui vient de l'extérieur.
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Commandes associées</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt run --select stg_orders</span>
+                <span class="command-desc">— Compile et exécute uniquement ce modèle</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <!-- stg_customers.sql -->
+    <div id="stg_customers" class="card">
+        <h1>stg_customers.sql</h1>
+        <pre><code><span class="comment">-- Nettoyage des clients bruts</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> {{ source('sales','customers') }}</code></pre>
+        <p>Commande : <span class="command">dbt run --select stg_customers</span></p>
+    </div>
+
+    <!-- intermediate_cleaning.sql -->
+    <div id="int_cleaning" class="card">
+        <h1>intermediate_cleaning.sql</h1>
+        <p class="description">Modèle <strong>ephemeral</strong> : injecté inline dans le modèle final. N'apparaît pas comme table ou vue.</p>
+        <pre><code>{{ config(materialized=<span class="keyword">'ephemeral'</span>) }}
+<span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> {{ ref('stg_orders') }}
+<span class="keyword">WHERE</span> amount &gt; 0</code></pre>
+        <p>Commande : <span class="command">dbt run --select final_report</span></p>
+    </div>
+
+    <!-- intermediate_agg.sql -->
+    <div id="int_agg" class="card">
+        <h1>intermediate_agg.sql</h1>
+        <p class="description">Table intermédiaire, somme des commandes par client.</p>
+        <pre><code>{{ config(materialized=<span class="keyword">'table'</span>) }}
+<span class="keyword">SELECT</span> customer_id, SUM(amount) AS total
+<span class="keyword">FROM</span> {{ ref('intermediate_cleaning') }}
+<span class="keyword">GROUP BY</span> customer_id</code></pre>
+        <p>Commande : <span class="command">dbt run --select intermediate_agg</span></p>
+    </div>
+
+    <!-- final_report.sql -->
+    <div id="final_report" class="card">
+        <h1>final_report.sql</h1>
+        <p class="description">Modèle final qui expose les données nettoyées aux utilisateurs business. Généré comme vue.</p>
+        <pre><code><span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> {{ ref('intermediate_cleaning') }}</code></pre>
+        <p>Commande : <span class="command">dbt run --select final_report</span></p>
+    </div>
+
+    <!-- revenue_summary.sql -->
+    <div id="revenue_summary" class="card">
+        <h1>revenue_summary.sql</h1>
+        <p class="description">Modèle final dans le dossier <strong>marts</strong>. Calcule le revenu total et taxe pour chaque client.</p>
+        <pre><code>{{ config(materialized=<span class="keyword">'table'</span>) }}
+
+<span class="keyword">SELECT</span> 
+    o.customer_id,
+    <span class="comment">-- Utilisation de la macro multiply pour calculer le montant total</span>
+    {{ multiply('o.quantity', 'o.unit_price') }} AS total_amount,
+    <span class="comment">-- Calcul de la taxe (20%) avec la macro multiply</span>
+    {{ multiply('o.quantity', 'o.unit_price * 0.2') }} AS tax_amount
+<span class="keyword">FROM</span> {{ ref('intermediate_cleaning') }} o</code></pre>
+        
+        <p><strong>Explication :</strong></p>
+        <ul>
+            <li><code>{{ multiply('o.quantity', 'o.unit_price') }}</code> : Utilise la macro avec deux colonnes</li>
+            <li><code>{{ multiply('o.quantity', 'o.unit_price * 0.2') }}</code> : Utilise la macro avec une colonne et une expression</li>
+            <li>Le résultat après compilation sera : <code>(o.quantity * o.unit_price) AS total_amount</code></li>
+        </ul>
+        
+        <p>Commande : <span class="command">dbt run --select revenue_summary</span></p>
+    </div>
+
+<!-- schema/orders_columns.yml -->
+<div id="orders_columns" class="card">
+    <h1>orders_columns.yml</h1>
+    <p class="description">Tests des colonnes pour stg_orders.</p>
+    <pre><code>models:
+  - name: stg_orders
+    description: "Table des commandes enrichie pour dbt"
+    columns:
+      - name: customer_id
+        description: "Identifiant du client pour chaque commande"
+        tests:
+          - not_null
+          - unique
+      - name: amount
+        description: "Montant de la commande"
+        tests:
+          - not_null
+          - severity: warn</code></pre>
+    <p>Commande pour tester : <span class="command">dbt test --select stg_orders</span></p>
+
+    <!-- Test singulier dbt pour montant positif -->
+    <h2>orders_amount_positive.sql</h2>
+    <p>Test singulier dbt : vérifie que le montant des commandes est strictement positif.</p>
+    <pre><code>-- tests/orders_amount_positive.sql
+SELECT *
+FROM {{ ref('stg_orders') }}
+WHERE amount &lt;= 0
+
+Principe dbt :
+➜ Si cette requête retourne au moins une ligne → ❌ test en échec</code></pre>
+    <p>Commandes associées :</p>
+    <pre><code>dbt test --select orders_amount_positive
+dbt test --select test_type:singular</code></pre>
+</div>
+
+
+ <!-- schema/customers_columns.yml -->
+<div id="customers_columns" class="card">
+    <h1>customers_columns.yml</h1>
+    <pre><code>models:
+  - name: stg_customers
+    description: "Table des clients enrichie pour dbt"
+    columns:
+      - name: customer_id
+        description: "Identifiant unique du client"
+        tests:
+          - not_null
+          - unique
+      - name: email
+        description: "Email du client"
+        tests:
+          - not_null
+      - name: created_at
+        description: "Date de création du client"</code></pre>
+    <p>Commande pour tester : <span class="command">dbt test --select stg_customers</span></p>
+    <p>Source : <span class="source">sales.customers</span></p>
+</div>
+
+
+
+
+
+<!-- sources/sales.yml -->
+<div id="sources_sales" class="card">
+    <h1>sources/sales.yml</h1>
+    <p class="description">Définition des sources avec contrôle de fraîcheur (<strong>freshness</strong>) et tests d'intégrité des colonnes.</p>
+
+    <div class="code-section">
+        <div class="code-block">
+            <h4>1. Configuration Standard (Même Schéma)</h4>
+            <pre><code><span class="keyword">sources:</span>
+  - <span class="keyword">name:</span> sales
+    <span class="keyword">database:</span> raw_data_prod
+    <span class="keyword">schema:</span> sales_force      <span class="comment"># ✅ S'applique à orders ET customers par défaut</span>
+    <span class="keyword">description:</span> <span class="string">"Sources principales liées aux ventes"</span>
+    
+    <span class="keyword">tables:</span>
+      - <span class="keyword">name:</span> orders
+        <span class="keyword">freshness:</span>
+          <span class="keyword">warn_after:</span> {<span class="keyword">count:</span> 12, <span class="keyword">period:</span> hour}
+        <span class="keyword">columns:</span>
+          - <span class="keyword">name:</span> order_id
+            <span class="keyword">tests:</span> [unique, not_null]
+
+      - <span class="keyword">name:</span> customers
+        <span class="keyword">columns:</span>
+          - <span class="keyword">name:</span> customer_id
+            <span class="keyword">tests:</span> [unique, not_null]</code></pre>
+        </div>
+
+        <div class="code-block" style="margin-top: 20px; border-top: 1px dashed #444; padding-top: 20px;">
+            <h4 style="color: #4ec9b0;">2. Cas Avancé : Flexibilité des Schémas</h4>
+            <pre><code><span class="keyword">sources:</span>
+  - <span class="keyword">name:</span> external_app
+    <span class="keyword">schema:</span> main_schema
+    <span class="keyword">tables:</span>
+      - <span class="keyword">name:</span> users
+      - <span class="keyword">name:</span> logs
+        <span class="keyword">schema:</span> archive_logs <span class="comment"># 🚀 On change de schéma uniquement pour cette table</span></code></pre>
+            
+   
+
+            <div style="background: rgba(78, 201, 176, 0.1); padding: 15px; border-left: 3px solid #4ec9b0; margin-top: 10px; font-size: 13px; color: #e0e0e0; line-height: 1.6;">
+                <strong style="color: #4ec9b0;">🤔 Est-ce que les tables doivent avoir le même schéma ?</strong><br>
+                La réponse courte est : <strong>Généralement oui</strong>, si elles proviennent du même système source, mais dbt te donne la <strong>flexibilité</strong> de faire autrement si nécessaire (en utilisant la clé <code>schema:</code> au niveau de la table).
+                <br><br>
+                <strong style="color: #4ec9b0;">📂 Comment organiser tes fichiers YAML ?</strong><br>
+                • <strong>Dans le même fichier :</strong> Si les deux schémas appartiennent au même univers métier (ex: l'application "Sales"), tu les mets dans le même fichier <code>sales.yml</code>.<br>
+                • <strong>Dans des fichiers séparés :</strong> Si les schémas n'ont rien à voir (ex: un pour le Marketing, un pour la Finance), la bonne pratique dbt est de créer deux fichiers : <code>marketing.yml</code> et <code>finance.yml</code>.
+            </div>
+
+			
+			
+			
+			
+        </div>
+    </div>
+
+    <div class="commands-section">
+        <h4>Commandes dbt associées</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt source freshness</span>
+                <span class="command-desc">— vérifie la fraîcheur des données</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt build --select source:sales.*</span>
+                <span class="command-desc">— freshness + tests en un seul run</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:#1b1b1b; padding:15px; border-radius:8px; margin-top:25px; border-left:4px solid #007acc; font-size:12px; line-height:1.5; color:#aaa;">
+        <h4 style="margin-top:0; color:#007acc; font-size:13px; text-transform:uppercase;">💡 Note Expert : Sources vs Seeds</h4>
+        <p style="margin-bottom:10px;">
+            <strong>Dans les Sources (sources/*.yml) :</strong> On liste les colonnes des tables brutes existantes. Pas besoin de tout lister, seulement ce qu'on veut tester ou documenter.
+        </p>
+        <p style="margin:0;">
+            <strong>Dans les Seeds (seeds/*.yml) :</strong> On liste les colonnes de tes fichiers CSV locaux pour définir les types et l'intégrité de tes données "fixes".
+        </p>
+    </div>
+</div>   
+   
+   
+
+
+
+
+
+
+
+
+
+
+   
+   
+   
+   
+   
+   
+   
+
+    <!-- snapshots/orders_snapshot.sql -->
+    <div id="snapshot_orders" class="card">
+        <h1>orders_snapshot.sql</h1>
+        <p class="description">Historisation SCD Type 2 des commandes pour suivre l'évolution des données dans le temps.</p>
+        
+        <pre><code>{% snapshot orders_snapshot %}
+{{ config(
+    target_schema='snapshots',
+    unique_key='order_id',
+    strategy='timestamp',
+    updated_at='updated_at'
+) }}
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> {{ source('sales', 'orders') }}
+{% endsnapshot %}</code></pre>
+        
+        <div style="background:#2d2d2d; padding:15px; border-radius:8px; margin:15px 0; border-left:4px solid #4ec9b0;">
+            <h4 style="color:#4ec9b0; margin-top:0; font-size:14px;">✅ Bonne pratique</h4>
+            <p style="margin:8px 0; color:#cccccc; font-size:14px;">
+                <strong>Utiliser <code>{{ source('sales', 'orders') }}</code> garantit un historique immuable.</strong><br>
+                Si on utilisait <code>{{ ref('stg_orders') }}</code> et que stg_orders change, on perdrait l'historique.
+            </p>
+        </div>
+        
+        <p style="margin-top:20px;">
+            <strong>Commande :</strong> 
+            <span class="command">dbt snapshot --select orders_snapshot</span>
+        </p>
+        
+        <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin-top:15px;">
+            <h4 style="color:#dcb67a; margin-top:0; font-size:14px;">💡 Bon à savoir</h4>
+            <ul style="margin:8px 0; padding-left:20px; color:#cccccc; font-size:14px;">
+                <li><strong>SCD Type 2</strong> = Crée une nouvelle ligne à chaque modification</li>
+                <li><strong>strategy='timestamp'</strong> = Détecte les changements via <code>updated_at</code></li>
+                <li><strong>unique_key</strong> = Identifie chaque enregistrement</li>
+                <li>Le snapshot ajoute automatiquement : <code>dbt_valid_from</code>, <code>dbt_valid_to</code>, <code>dbt_scd_id</code></li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+
+
+<!-- tests/orders_amount_positive.sql -->
+<div id="test_orders_amount_positive" class="card">
+    <h1>orders_amount_positive.sql</h1>
+    <p class="description">
+        Test singulier dbt : vérifie que le montant des commandes est strictement positif.
+    </p>
+
+    <pre><code><span class="comment">-- tests/orders_amount_positive.sql</span>
+<span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> {{ ref('stg_orders') }}
+<span class="keyword">WHERE</span> amount &lt;= 0</code></pre>
+
+    <p>
+        <strong>Principe dbt :</strong><br>
+        ➜ Si cette requête retourne au moins une ligne → ❌ test en échec
+    </p>
+
+    <p>Commandes associées :</p>
+    <span class="command">dbt test --select orders_amount_positive</span><br>
+    <span class="command">dbt test --select test_type:singular</span>
+</div>
+
+
+
+<!-- tests/customers_email_valid.sql -->
+<div id="test_customers_email_valid" class="card">
+    <h1>customers_email_valid.sql</h1>
+    <p class="description">
+        Test métier : contrôle la validité du format des emails clients.
+    </p>
+
+    <pre><code><span class="comment">-- tests/customers_email_valid.sql</span>
+<span class="keyword">SELECT</span> *
+<span class="keyword">FROM</span> {{ ref('stg_customers') }}
+<span class="keyword">WHERE</span> email <span class="keyword">NOT LIKE</span> '%@%'</code></pre>
+
+    <p>
+        <strong>Pourquoi un test singulier ?</strong>
+    </p>
+    <ul>
+        <li>Règle métier spécifique</li>
+        <li>Non couverte par un test générique dbt</li>
+    </ul>
+
+    <p>Commande associée :</p>
+    <span class="command">dbt test --select customers_email_valid</span>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- seeds/countries.csv -->
+
+<!-- seeds/countries.csv -->
+<div id="seed_countries_csv" class="card">
+    <h1>countries.csv (Seed)</h1>
+    <p class="description">
+        Table de référence statique importée depuis un fichier CSV.<br>
+        Utilisée pour les valeurs fixes ou lookup (ex: liste de pays, codes postaux, etc.).
+    </p>
+    <pre><code>id,country_name,country_code
+1,France,FR
+2,United States,US
+3,Japan,JP</code></pre>
+
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0; border-left:4px solid #4ec9b0;">
+        <p style="margin:0; color:#cccccc; font-size:14px;">
+            <strong>Voir aussi :</strong> 
+            <a href="#seed_countries_yml" style="color:#4ec9b0; text-decoration:underline; cursor:pointer;">countries.yml</a> 
+            (fichier YAML associé dans seeds/)
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Commandes dbt associées</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt seed --select countries</span>
+                <span class="command-desc">— importe le fichier CSV dans le warehouse</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt seed --full-refresh --select countries</span>
+                <span class="command-desc">— réimporte le seed en supprimant la table existante</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt test --select seed:countries</span>
+                <span class="command-desc">— exécute les tests définis dans le YAML pour ce seed</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt build --select seed:countries</span>
+                <span class="command-desc">— combine l'importation et l'exécution des tests en un seul run</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- seeds/countries.yml -->
+<!-- seeds/countries.yml -->
+<div id="seed_countries_yml" class="card">
+    <h1>countries.yml (Seed YAML)</h1>
+    <p class="description">
+        Fichier YAML associé à <code>countries.csv</code>. Définit les tests et la documentation.<br>
+        <span style="color:#4ec9b0; display:block; margin-top:5px;">✅ Bonne pratique dbt : YAML dans seeds/ au même niveau que le CSV !</span>
+    </p>
+    
+    <div class="code-section">
+        <div class="code-block">
+            <pre><code># seeds/countries.yml
+version: 2
+
+seeds:
+  - name: countries    <span class="comment" style="color:#ff6b6b; font-weight:bold;"># ⚠️ IMPORTANT : doit être le nom EXACT du fichier CSV</span>
+    <span class="comment" style="color:#ff6b6b; font-weight:bold;"># ✅ CORRECT : "countries" (sans .csv) car fichier = countries.csv</span>
+    <span class="comment" style="color:#ff6b6b; font-weight:bold;"># ❌ INCORRECT : "countries_" ou "country" ou "pays"</span>
+    description: "Liste des pays et codes"
+    columns:
+      - name: id
+        description: "Identifiant unique"
+        tests:
+          - not_null
+          - unique
+      - name: country_code
+        description: "Code ISO à 2 lettres"
+        tests:
+          - not_null
+          - unique
+      - name: country_name
+        description: "Nom complet du pays"
+        tests:
+          - not_null</code></pre>
+        </div>
+    </div>
+
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0; border-left:4px solid #ff6b6b;">
+        <h4 style="color:#ff6b6b; margin-top:0; font-size:14px;">🚨 Règle cruciale dbt</h4>
+        <p style="margin:8px 0; color:#cccccc; font-size:14px;">
+            <strong>Le <code>name:</code> dans le YAML DOIT correspondre exactement au nom du fichier CSV :</strong>
+        </p>
+        <pre style="background:#1a1a1a; padding:10px; border-radius:4px; margin:10px 0;"><code># ✅ CORRECT
+countries.csv   →   name: countries
+
+# ❌ INCORRECT (ne fonctionnera pas)
+countries.csv   →   name: countries_
+countries.csv   →   name: country
+countries.csv   →   name: pays</code></pre>
+        <p style="margin:8px 0; color:#cccccc; font-size:14px;">
+            <strong>Astuce :</strong> Utilisez le nom du fichier CSV sans l'extension <code>.csv</code>
+        </p>
+    </div>
+
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0;">
+        <p style="margin:0; color:#cccccc; font-size:14px;">
+            <strong>Structure seeds/ :</strong> 
+            <code>countries.csv</code> ↔ <code>countries.yml</code> (même dossier, même nom racine)
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Impact des tests YAML</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt test --select seed:countries</span>
+                <span class="command-desc">— Vérifie not_null, unique sur les colonnes</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt docs generate</span>
+                <span class="command-desc">— Génère la documentation avec les descriptions</span>
+            </div>
+        </div>
+    </div>
+	
+	
+	<div style="background:#1b1b1b; padding:15px; border-radius:8px; margin:20px 0; border-left:4px solid #6a9955; font-size:13px; line-height:1.6;">
+    <h4 style="margin-top:0; color:#6a9955; font-size:14px; text-transform:uppercase; letter-spacing:1px;">💡 L'œil de l'expert : Pourquoi n'y a-t-il pas de redondance ?</h4>
+    <p style="margin-bottom:10px; color:#cccccc;">
+        On ne vérifie <strong>jamais</strong> les mêmes colonnes dans les sources et les seeds car leurs missions diffèrent :
+    </p>
+    <ul style="margin:0; padding-left:20px; color:#bbb;">
+        <li><strong>Le Seed (seeds/) :</strong> C'est le <u>propriétaire</u>. La donnée "naît" ici via ton CSV local. On teste pour éviter les erreurs de saisie manuelle.</li>
+        <li><strong>La Source (sources/) :</strong> C'est la <u>connexion</u>. La donnée existe déjà ailleurs (CRM, ERP). On teste pour s'assurer que le système externe nous envoie des données propres.</li>
+    </ul>
+    <p style="margin-top:10px; font-style:italic; color:#888; font-size:12px;">
+        Règle d'or : Si c'est un CSV local → Seed. Si c'est une table SQL externe → Source.
+    </p>
+</div>
+	
+	
+	
+	
+	
+	
+	
+	
+</div>
+
+
+
+<!-- seeds/currencies.csv -->
+<div id="seed_currencies_csv" class="card">
+    <h1>currencies.csv (Seed)</h1>
+    <p class="description">
+        Second exemple de seed : table des devises. Illustre le pattern "1 CSV = 1 YAML".
+    </p>
+    
+    <div class="code-section">
+        <div class="code-block">
+            <h4>📄 Fichier CSV</h4>
+            <pre><code>currency_code,currency_name,symbol
+EUR,Euro,€
+USD,US Dollar,$
+JPY,Yen,¥</code></pre>
+        </div>
+    </div>
+
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0; border-left:4px solid #4ec9b0;">
+        <p style="margin:0; color:#cccccc; font-size:14px;">
+            <strong>Voir aussi :</strong> 
+            <a href="#seed_currencies_yml" style="color:#4ec9b0; text-decoration:underline; cursor:pointer;">currencies.yml</a> 
+            (son fichier YAML associé)
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Commandes dbt associées</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt seed --select currencies</span>
+                <span class="command-desc">— importe currencies.csv</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt test --select seed:currencies</span>
+                <span class="command-desc">— exécute les tests de currencies.yml</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt seed</span>
+                <span class="command-desc">— importe TOUS les seeds du projet</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- seeds/currencies.yml -->
+<div id="seed_currencies_yml" class="card">
+    <h1>currencies.yml (Seed YAML)</h1>
+    <p class="description">
+        Fichier YAML associé à <code>currencies.csv</code>. Définit les tests pour la table des devises.
+    </p>
+    
+    <div class="code-section">
+        <div class="code-block">
+            <pre><code># seeds/currencies.yml
+version: 2
+
+seeds:
+  - name: currencies
+    description: "Table des devises"
+    columns:
+      - name: currency_code
+        description: "Code ISO de la devise"
+        tests:
+          - not_null
+          - unique
+      - name: currency_name
+        description: "Nom complet de la devise"
+        tests:
+          - not_null
+      - name: symbol
+        description: "Symbole monétaire"
+        tests:
+          - not_null</code></pre>
+        </div>
+    </div>
+
+    <div style="background:#2d2d2d; padding:12px; border-radius:6px; margin:15px 0;">
+        <h4 style="color:#dcb67a; margin-top:0; font-size:14px;">🎯 Règle d'or dbt pour les seeds</h4>
+        <p style="margin:0; color:#cccccc; font-size:14px;">
+            <strong>1 CSV dans seeds/ = 1 YAML dans seeds/</strong> (même nom, même dossier)<br>
+            Ex: <code>currencies.csv</code> → <code>currencies.yml</code>
+        </p>
+    </div>
+
+    <div class="commands-section">
+        <h4>Tests automatiques</h4>
+        <div class="command-list">
+            <div class="command-item">
+                <span class="command">dbt test --select seed:currencies</span>
+                <span class="command-desc">— Vérifie l'intégrité des données devises</span>
+            </div>
+            <div class="command-item">
+                <span class="command">dbt build --select seed:currencies</span>
+                <span class="command-desc">— Importe currencies.csv + exécute ses tests</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- macros/my_macros.sql -->
+    <div id="macro_multiply" class="card">
+        <h1>🎯 Focus Macro : multiply()</h1>
+        <p class="description">Comprendre la différence entre l'exécution <strong>Jinja</strong> (compilation dbt) et l'exécution <strong>SQL</strong> (dans l'entrepôt de données).</p>
+        
+        <div class="code-section">
+            <div class="code-block" style="border-left: 4px solid #ff6b6b;">
+                <h4>🚨 L'ERREUR CLASSIQUE</h4>
+                <pre><code>{% macro multiply(a, b) %}
+  <span class="comment">-- ❌ FAUX : Jinja tente de faire un calcul Python à la compilation</span>
+  {{ a * b }}
+{% endmacro %}</code></pre>
+                <p style="font-size: 12px; color: #ff6b6b;">Erreur : <i>TypeError: can't multiply sequence by non-int</i></p>
+            </div>
+            
+            <div class="code-block" style="border-left: 4px solid #4ec9b0;">
+                <h4>✅ LA BONNE MÉTHODE</h4>
+                <pre><code>{% macro multiply(col_a, col_b) %}
+  <span class="comment">-- ✅ CORRECT : la macro écrit une expression SQL</span>
+  {{ col_a }} * {{ col_b }}
+{% endmacro %}</code></pre>
+                <p style="font-size: 12px; color: #4ec9b0;">Succès : génère <code>quantity * unit_price</code> dans le SQL</p>
+            </div>
+        </div>
+
+        <div class="example-section">
+            <h4>🔨 Utilisation et Compilation</h4>
+            <div class="code-block">
+                <pre><code><span class="comment">-- Dans revenue_summary.sql</span>
+SELECT
+  {{ multiply('quantity', 'unit_price') }} AS total
+FROM {{ ref('stg_orders') }}</code></pre>
+            </div>
+
+            <div style="margin-top: 10px; color: #888; text-align: center;">⬇️ dbt compile cela en ⬇️</div>
+
+            <div class="code-block" style="background: #1a1a1a;">
+                <pre><code><span class="comment">-- SQL envoyé au Warehouse</span>
+SELECT
+  quantity * unit_price AS total
+FROM analytics.stg_orders</code></pre>
+            </div>
+        </div>
+        
+        <div class="syntax-grid">
+            <div class="syntax-item error">
+                <div class="syntax-header">
+                    <span class="syntax-badge">❌</span>
+                    <code>{{ multiply(quantity, unit_price) }}</code>
+                </div>
+                <div class="syntax-desc">Cherche des variables Jinja, pas des colonnes SQL</div>
+            </div>
+            
+            <div class="syntax-item success">
+                <div class="syntax-header">
+                    <span class="syntax-badge">✅</span>
+                    <code>{{ multiply('quantity', 'unit_price') }}</code>
+                </div>
+                <div class="syntax-desc">Passe les noms de colonnes comme texte pour générer du SQL</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- analyses/customer_analysis.sql -->
+    <div id="customer_analysis" class="card">
+        <h1>customer_analysis.sql</h1>
+        <p class="description">Analyse ad-hoc pour exploration des données. Différence avec models/ : non matérialisée par défaut, utilisée pour des requêtes exploratoires.</p>
+        <pre><code><span class="keyword">SELECT</span> customer_id, COUNT(*) AS nb_orders
+<span class="keyword">FROM</span> {{ ref('stg_orders') }}
+<span class="keyword">GROUP BY</span> customer_id</code></pre>
+    </div>
+
+    <!-- Section CI/CD -->
+    <div id="cicd_state" class="card">
+        <h1>CI/CD & State-based selection</h1>
+        <p class="description">Permet de rebuild seulement les modèles, sources ou tests qui ont été modifiés depuis le dernier état enregistré, ainsi que leurs dépendances.</p>
+        <pre><code># Commande dbt pour exécuter les modèles modifiés et leurs enfants
+dbt build --state ./prod-state --select state:modified+</code></pre>
+        <p>
+            Explication : 
+            <ul>
+                <li><span class="command">./prod-state</span> : dossier contenant l'état précédent du projet (manifest.json, nodes, tests...). Il sert de référence pour comparer ce qui a changé.</li>
+                <li><span class="command">state:modified+</span> : sélectionne uniquement les modèles/sources/tests modifiés et leurs dépendances downstream.</li>
+                <li>Cette technique est très utile en CI/CD pour ne pas reconstruire tout le projet inutilement.</li>
+            </ul>
+        </p>
+    </div>
+
+    <!-- Section CI/CD Workflow -->
+    <div id="cicd_workflow" class="card">
+        <h1>📁 CI/CD - workflow.yml</h1>
+        <p class="description">Configuration GitHub Actions pour automatiser les tests et déploiements dbt en CI/CD.</p>
+        
+        <div class="code-section">
+            <div class="code-block">
+                <h4>🚀 Workflow GitHub Actions</h4>
+                <pre><code><span class="keyword">name:</span> dbt CI/CD Pipeline
+<span class="keyword">on:</span>
+  <span class="keyword">pull_request:</span>
+    <span class="keyword">branches:</span> [main]
+  <span class="keyword">push:</span>
+    <span class="keyword">branches:</span> [main]
+
+<span class="keyword">jobs:</span>
+  <span class="keyword">dbt-tests:</span>
+    <span class="keyword">runs-on:</span> ubuntu-latest
+    <span class="keyword">steps:</span>
+      - <span class="keyword">uses:</span> actions/checkout@v3
+      
+      - <span class="keyword">name:</span> Setup dbt
+        <span class="keyword">uses:</span> dbt-labs/dbt-action@v1
+        <span class="keyword">with:</span>
+          dbt-version: '1.5'
+          
+      - <span class="keyword">name:</span> Download prod-state artifacts
+        <span class="keyword">run:</span> |
+          aws s3 sync s3://dbt-artifacts/prod-state/ ./prod-state/
+          
+      - <span class="keyword">name:</span> Run changed models only
+        <span class="keyword">run:</span> dbt build --state ./prod-state --select state:modified+
+        
+      - <span class="keyword">name:</span> Upload new artifacts
+        <span class="keyword">run:</span> |
+          aws s3 sync ./target/ s3://dbt-artifacts/prod-state/</code></pre>
+            </div>
+        </div>
+        
+        <div class="commands-section">
+            <h4>📋 Étapes du workflow</h4>
+            <div class="step-list">
+                <div class="step-item">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <strong>Checkout du code</strong>
+                        <p>Récupère la dernière version du code depuis Git</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <strong>Téléchargement de l'état</strong>
+                        <p>Récupère le dossier <code>prod-state/</code> depuis le stockage (S3, GCS, etc.)</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <strong>Exécution incrémentale</strong>
+                        <p><code>dbt build --state ./prod-state --select state:modified+</code></p>
+                        <p>Exécute seulement ce qui a changé</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <strong>Sauvegarde du nouvel état</strong>
+                        <p>Upload le nouveau <code>target/</code> pour la prochaine exécution</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section CI/CD Best Practices -->
+    <div id="cicd_best_practices" class="card">
+        <h1>📁 CI/CD - best-practices.md</h1>
+        <p class="description">Bonnes pratiques et patterns recommandés pour les pipelines dbt en CI/CD.</p>
+        
+        <div class="best-practices-grid">
+            <div class="practice-card">
+                <h4>🎯 State Management</h4>
+                <ul>
+                    <li><strong>Toujours utiliser --state</strong> en CI/CD</li>
+                    <li>Stockez <code>manifest.json</code> avec les artefacts</li>
+                    <li>Versionnez l'état avec chaque déploiement</li>
+                </ul>
+            </div>
+            
+            <div class="practice-card">
+                <h4>🔒 Sécurité</h4>
+                <ul>
+                    <li>Utilisez des secrets pour les credentials</li>
+                    <li>Ne commitez jamais <code>profiles.yml</code></li>
+                    <li>Limitez les permissions IAM/RBAC</li>
+                </ul>
+            </div>
+            
+            <div class="practice-card">
+                <h4>⚡ Performance</h4>
+                <ul>
+                    <li><code>state:modified+</code> pour les runs incrémentaux</li>
+                    <li>Cachez les téléchargements de packages</li>
+                    <li>Parallélisez les tests avec <code>--threads</code></li>
+                </ul>
+            </div>
+            
+            <div class="practice-card">
+                <h4>📊 Monitoring</h4>
+                <ul>
+                    <li>Loggez les durées d'exécution</li>
+                    <li>Alertes sur les échecs de freshness</li>
+                    <li>Suivez les métriques de qualité des données</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="code-section">
+            <div class="code-block">
+                <h4>🚨 Exemple de configuration sécurisée</h4>
+                <pre><code><span class="comment"># .github/workflows/dbt.yml</span>
+<span class="keyword">env:</span>
+  DBT_PROFILES_DIR: ./
+  DBT_CLOUD_PROJECT_ID: ${{ secrets.DBT_CLOUD_PROJECT_ID }}
+  DBT_CLOUD_JOB_ID: ${{ secrets.DBT_CLOUD_JOB_ID }}
+  DBT_CLOUD_TOKEN: ${{ secrets.DBT_CLOUD_TOKEN }}
+
+<span class="keyword">jobs:</span>
+  <span class="keyword">dbt-run:</span>
+    <span class="keyword">environment:</span> production
+    <span class="keyword">permissions:</span>
+      id-token: write
+      contents: read</code></pre>
+            </div>
+        </div>
+        
+        <div class="commands-section">
+            <h4>🔧 Commandes CI/CD avancées</h4>
+            <div class="command-list">
+                <div class="command-item">
+                    <span class="command">dbt parse</span>
+                    <span class="command-desc">— Parse le projet sans exécution (validation rapide)</span>
+                </div>
+                <div class="command-item">
+                    <span class="command">dbt ls --select state:modified</span>
+                    <span class="command-desc">— Liste les modèles modifiés sans exécution</span>
+                </div>
+                <div class="command-item">
+                    <span class="command">dbt docs generate --no-compile</span>
+                    <span class="command-desc">— Génère la documentation sans recompilation</span>
+                </div>
+                <div class="command-item">
+                    <span class="command">dbt clean</span>
+                    <span class="command-desc">— Nettoie le dossier target/ entre les runs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Affichage dynamique des cartes
+document.querySelectorAll('.tree-item.file').forEach(item=>{
+    item.addEventListener('click',function(e){
+        const targetId=this.getAttribute('href').substring(1);
+        document.querySelectorAll('.card').forEach(card=>card.classList.remove('active'));
+        const targetCard=document.getElementById(targetId);
+        if(targetCard) targetCard.classList.add('active');
+    });
+});
+</script>
+</body>
+</html>

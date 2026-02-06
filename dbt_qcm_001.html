@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dbt QCM - Fondamentaux</title>
+    <style>
+        :root {
+            --bg: #0d1117; 
+            --card: #161b22; 
+            --txt: #c9d1d9; 
+            --border: #30363d;
+            --level-green: #2ea043;
+            --level-orange: #f0883e;
+            --level-red: #ff4500;
+            --cmd-main: #2ea043;
+            --cmd-args: #58a6ff;
+            --hl-red: #ff7b72;
+            --green-ans: #238636;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg); color: var(--txt); line-height: 1.4; 
+            margin: 0; display: flex; /* Layout en deux colonnes */
+        }
+
+        /* --- SIDEBAR MENU --- */
+        .sidebar {
+            width: 300px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 { color: var(--level-red); font-size: 1.1rem; margin-bottom: 20px; text-align: center; }
+
+        .menu-item {
+            display: block;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background: #21262d;
+            color: var(--txt);
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover { background: #30363d; transform: translateX(5px); border-color: #8b949e; }
+
+        .sub-menu {
+            display: flex;
+            flex-direction: column;
+            margin-left: 15px;
+            padding-left: 10px;
+            border-left: 2px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .sub-item { font-size: 0.8rem !important; padding: 8px 10px !important; margin: 2px 0 !important; }
+
+        /* Style pour indiquer la page actuelle */
+        .active-page {
+            border-color: var(--level-orange) !important;
+            color: var(--level-orange) !important;
+            background: rgba(240, 136, 62, 0.1) !important;
+            font-weight: bold;
+        }
+
+        summary { list-style: none; outline: none; }
+        summary::-webkit-details-marker { display: none; }
+
+        /* --- CONTENU QCM --- */
+        .container { flex: 1; max-width: 800px; margin: 0 auto; padding: 30px; }
+
+        h1 { text-align: center; color: var(--level-red); font-size: 1.8rem; margin-bottom: 20px; }
+
+        .intro { 
+            background: var(--card); padding: 12px; border-radius: 6px; border: 1px solid var(--level-red);
+            margin-bottom: 25px; font-size: 0.9rem; text-align: center;
+        }
+
+        .q-card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 12px; 
+            padding: 20px; margin-bottom: 20px; 
+        }
+
+        .q-head, .q-head_orange, .q-head_green { font-weight: bold; font-size: 0.85rem; display: block; text-transform: uppercase; margin-bottom: 10px; }
+        .q-head { color: var(--level-red); }
+        .q-head_orange { color: var(--level-orange); }
+        .q-head_green { color: var(--level-green); }
+
+        .q-txt { font-weight: 600; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .opt { background: #21262d; padding: 12px; margin: 8px 0; border-radius: 6px; font-size: 0.95rem; border: 1px solid transparent; }
+        
+        code { background: #000; padding: 2px 5px; border-radius: 4px; font-family: monospace; color: var(--txt); }
+        .cmd { color: var(--cmd-main); font-weight: bold; }
+        .arg { color: var(--cmd-args); }
+        .hl { color: var(--hl-red); font-weight: bold; }
+
+        .ans { 
+            display: none; margin-top: 15px; padding: 15px; font-size: 0.9rem;
+            background: rgba(35, 134, 54, 0.05); border-left: 4px solid var(--green-ans); border-radius: 4px;
+        }
+
+        .btn { 
+            background: none; border: 1px solid var(--level-orange); color: var(--level-orange); 
+            border-radius: 20px; cursor: pointer; font-size: 0.85rem; margin-top: 10px; padding: 6px 18px; font-weight: bold;
+        }
+        .btn:hover { background: var(--level-orange); color: #fff; }
+
+        .footer { text-align: center; font-size: 0.8rem; padding: 30px; border-top: 1px solid var(--border); margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>📂 NAVIGATION</h2>
+        <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
+        <a href="piege_dbt.html" class="menu-item">📙 Voir la Pige dbt</a>
+
+        <details class="menu-dropdown" open>
+            <summary class="menu-item" style="cursor: pointer;">✅ Questions d'Entraînement</summary>
+            <div class="sub-menu">
+                <a href="dbt_qcm_001.html" class="menu-item sub-item active-page">📝 QCM 1 : Fondamentaux</a>
+                <a href="dbt_qcm_002.html" class="menu-item sub-item">🚀 QCM 2 : Expert & Hard Mode</a>
+                <a href="dbt_qcm_003.html" class="menu-item sub-item">🔄 QCM 3 : Incremental</a>
+                <a href="dbt_qcm_004.html" class="menu-item sub-item">🤖 QCM 4 : CI/CD</a>
+                <a href="dbt_qcm_005.html" class="menu-item sub-item">📸 QCM 5 : Snapshots</a>
+                <a href="dbt_qcm_006.html" class="menu-item sub-item">🔧 QCM 6 : Macros</a>
+            </div>
+        </details>
+    </div>
+
+    <div class="container">
+        <h1>🧠 dbt QCM 1 : Fondamentaux 🔥</h1>
+        <div class="intro">Module focus sur les commandes de base et le cycle de vie des sources/modèles.</div>
+
+        <div class="q-card">
+            <span class="q-head_orange">QCM 1️⃣ — SOURCE vs MODEL</span>
+            <span class="q-txt">Quelles commandes s’exécutent SUR UNE SOURCE ?</span>
+            <div class="opt">A. <code><span class="cmd">dbt</span> <span class="arg">test --select source:raw.customers</span></code></div>
+            <div class="opt">B. <code><span class="cmd">dbt</span> <span class="arg">run --select source:raw.customers</span></code></div>
+            <div class="opt">C. <code><span class="cmd">dbt</span> <span class="arg">source freshness --select source:raw.customers</span></code></div>
+            <div class="opt">D. <code><span class="cmd">dbt</span> <span class="arg">build --select source:raw.customers</span></code></div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponses : A, C, D</strong>
+                <p>Les sources n’ont jamais de SQL exécuté directement par dbt (pas de <b>run</b>). On les teste, on vérifie leur fraîcheur, ou on utilise <b>build</b> qui englobe les tests.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_green">QCM 2️⃣ — STATE SELECTION</span>
+            <span class="q-txt">Effet exact de : <code><span class="cmd">dbt</span> <span class="arg">build --select state:modified+</span></code> ?</span>
+            <div class="opt">A. Exécute uniquement les modèles modifiés</div>
+            <div class="opt">B. Exécute les modèles modifiés + leurs enfants</div>
+            <div class="opt">C. Exécute les modèles modifiés + leurs parents</div>
+            <div class="opt">D. Inclut les tests liés aux modèles sélectionnés</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponses : B, D</strong>
+                <p>Le <b>+</b> après signifie "downstream" (enfants). <b>build</b> garantit l'exécution et le test ensemble.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>Réseau :</strong> Freebox-49010A active ✅<br>
+            <em>Préparation Certification dbt Core</em>
+        </div>
+    </div>
+
+<script>
+    function t(b) {
+        var a = b.nextElementSibling;
+        a.style.display = (a.style.display === 'block') ? 'none' : 'block';
+        b.innerText = (a.style.display === 'block') ? 'Masquer' : 'Vérifier';
+    }
+</script>
+
+</body>
+</html>

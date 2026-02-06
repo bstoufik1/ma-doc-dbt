@@ -1,934 +1,525 @@
-<!-- 
-  FICHIER: Documentation Expert dbt - Version Optimisée
-  BUT: Révision certification dbt sans redondance
-  STRUCTURE: Sidebar + Cards avec système de composants réutilisables
--->
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Expert dbt - Documentation Optimisée</title>
+<title>⚡ dbt Mastery - Expert Mode</title>
 
 <style>
-    /* ============================================
-       VARIABLES CSS UNIFIÉES
-    ============================================ */
     :root {
-        /* Couleurs principales */
         --bg-color: #0d1117;
         --sidebar-color: #161b22;
         --text-color: #c9d1d9;
         --text-secondary: #8b949e;
-        
-        /* Couleurs sémantiques */
         --accent: #58a6ff;
         --success: #3fb950;
         --warning: #d29922;
         --error: #f85149;
         --border: #30363d;
-        
-        /* Composants */
-        --card-bg: #161b22;
-        --code-bg: #0d1117;
         --hover-bg: #21262d;
     }
 
-    /* ============================================
-       STYLES DE BASE
-    ============================================ */
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body { 
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+        font-family: -apple-system, system-ui, sans-serif; 
         background-color: var(--bg-color); 
         color: var(--text-color);
-        line-height: 1.6;
-        display: flex; 
-        height: 100vh; 
-        overflow: hidden; 
+        display: flex; height: 100vh; overflow: hidden; 
     }
 
-    /* ============================================
-       SIDEBAR OPTIMISÉ
-    ============================================ */
+    /* --- SIDEBAR --- */
     .sidebar { 
         width: 280px; 
         background-color: var(--sidebar-color); 
         border-right: 1px solid var(--border);
         padding: 1.5rem;
         flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
+        display: flex; flex-direction: column; gap: 1rem;
+        overflow-y: auto;
     }
 
-    .sidebar-header {
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .nav-section {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .nav-title {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        color: var(--text-secondary);
-        letter-spacing: 0.05em;
-        margin-bottom: 0.5rem;
-    }
+    .sidebar-header { padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+    .nav-section { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
+    .nav-title { font-size: 0.75rem; text-transform: uppercase; color: var(--warning); letter-spacing: 0.05em; margin-bottom: 0.4rem; font-weight: bold; }
 
     .nav-link {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.5rem 0.75rem;
-        color: var(--text-color);
-        text-decoration: none;
-        border-radius: 6px;
-        font-size: 0.9rem;
-        transition: all 0.2s;
+        display: flex; align-items: center; gap: 0.75rem;
+        padding: 0.6rem 0.8rem; color: var(--text-color);
+        text-decoration: none; border-radius: 6px;
+        font-size: 0.9rem; transition: 0.2s;
     }
 
-    .nav-link:hover,
-    .nav-link.active {
-        background-color: var(--hover-bg);
-        color: white;
-    }
+    .nav-link:hover, .nav-link.active { background-color: var(--hover-bg); color: white; }
+    .nav-icon { width: 1.2rem; text-align: center; }
 
-    .nav-icon {
-        font-size: 1.1rem;
-        width: 1.5rem;
-        text-align: center;
-    }
-
-    /* ============================================
-       CONTENU PRINCIPAL
-    ============================================ */
-    .main-content { 
-        flex: 1;
-        padding: 2rem;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    /* ============================================
-       COMPOSANTS RÉUTILISABLES
-    ============================================ */
+    /* --- CONTENU --- */
+    .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
+    .card { background-color: #161b22; border: 1px solid var(--border); border-radius: 12px; padding: 2rem; display: none; }
+    .card.active { display: block; animation: fadeIn 0.3s ease; }
     
-    /* Card générique */
-    .card {
-        background-color: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 2rem;
-        display: none;
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    .card.active {
-        display: block;
-        animation: fadeIn 0.3s ease;
-    }
+    /* --- TABLE STYLES (MATRICE) --- */
+    .matrix-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; background: #0d1117; }
+    .matrix-table th, .matrix-table td { border: 1px solid var(--border); padding: 10px; text-align: center; }
+    .matrix-table th { background: #21262d; color: var(--accent); position: sticky; top: 0; }
+    .matrix-table td.command { text-align: left; font-weight: bold; color: var(--success); }
+    .matrix-table td.comment { text-align: left; color: var(--text-secondary); min-width: 200px; }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Badge */
-    .badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-    }
-
-    .badge-primary { background-color: var(--accent); color: white; }
-    .badge-success { background-color: var(--success); color: white; }
-    .badge-warning { background-color: var(--warning); color: black; }
-    .badge-error { background-color: var(--error); color: white; }
-
-    /* Grid pour les comparaisons */
-    .grid-2 {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-        margin: 1.5rem 0;
-    }
-
-    /* Bloc d'information */
-    .info-block {
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        margin: 1rem 0;
-    }
-
-    .info-block.info { border-left: 4px solid var(--accent); }
-    .info-block.success { border-left: 4px solid var(--success); }
-    .info-block.warning { border-left: 4px solid var(--warning); }
-    .info-block.error { border-left: 4px solid var(--error); }
-
-    /* Bloc de code */
-    pre {
-        background-color: var(--code-bg);
-        padding: 1.25rem;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        overflow-x: auto;
-        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-        font-size: 0.875rem;
-        line-height: 1.6;
-        margin: 1rem 0;
-    }
-
-    code {
-        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-        font-size: 0.875em;
-        padding: 0.2em 0.4em;
-        background-color: rgba(110, 118, 129, 0.4);
-        border-radius: 6px;
-    }
-
-    pre code {
-        padding: 0;
-        background: transparent;
-    }
-
-    /* Styles syntaxiques */
-    .keyword { color: #ff7b72; }
-    .string { color: #a5d6ff; }
-    .comment { color: #8b949e; font-style: italic; }
-    .function { color: #d2a8ff; }
-    .number { color: #79c0ff; }
-
-    /* ============================================
-       TYPOGRAPHIE
-    ============================================ */
-    h1 {
-        font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: white;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin: 1.5rem 0 1rem;
-        color: white;
-    }
-
-    h3 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin: 1.25rem 0 0.75rem;
-    }
-
-    p {
-        margin-bottom: 1rem;
-        color: var(--text-secondary);
-    }
-
-    ul, ol {
-        margin: 1rem 0;
-        padding-left: 1.5rem;
-    }
-
-    li {
-        margin-bottom: 0.5rem;
-        color: var(--text-secondary);
-    }
-
-    /* ============================================
-       COMPOSANTS SPÉCIFIQUES
-    ============================================ */
-    
-    /* Comparaison ref() vs this() */
-    .comparison-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-        margin: 2rem 0;
-    }
-
-    .comparison-card {
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-    }
-
-    .comparison-card.ref {
-        border-top: 4px solid var(--accent);
-    }
-
-    .comparison-card.this {
-        border-top: 4px solid var(--success);
-    }
-
-    .comparison-header {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-    }
-
-    /* Métaphore */
-    .metaphor-block {
-        background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        margin: 1.5rem 0;
-    }
-
-    .metaphor-title {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--warning);
-        margin-bottom: 1rem;
-    }
-
-    /* Exemple interdit */
-    .forbidden-example {
-        background: linear-gradient(135deg, #1c2128 0%, #0d1117 100%);
-        padding: 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid var(--error);
-        margin: 1.5rem 0;
-    }
-
-    /* ============================================
-       RESPONSIVE
-    ============================================ */
-    @media (max-width: 1024px) {
-        .comparison-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .grid-2 {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 768px) {
-        body {
-            flex-direction: column;
-        }
-        
-        .sidebar {
-            width: 100%;
-            height: auto;
-            flex-direction: row;
-            overflow-x: auto;
-            gap: 1rem;
-        }
-        
-        .nav-section {
-            flex-direction: row;
-            align-items: center;
-        }
-        
-        .nav-title {
-            display: none;
-        }
-        
-        .main-content {
-            padding: 1rem;
-        }
-    }
+    .info-block { padding: 1rem; border-radius: 8px; border-left: 4px solid var(--accent); background: #0d1117; margin: 1rem 0; }
+    h1 { margin-bottom: 1rem; font-size: 1.8rem; }
+    h2 { color: var(--warning); margin-top: 1.5rem; }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR OPTIMISÉ -->
 <aside class="sidebar">
     <div class="sidebar-header">
-        <h2 style="color: white; font-size: 1.25rem;">⚡ dbt Mastery</h2>
+        <h2 style="color: white; font-size: 1.2rem;">⚡ dbt Mastery</h2>
     </div>
     
     <nav class="nav-section">
         <div class="nav-title">Navigation</div>
-        <a href="#welcome" class="nav-link active">
-            <span class="nav-icon">🏠</span>
-            <span>Dashboard</span>
-        </a>
+        <a href="#welcome" class="nav-link active"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
     </nav>
     
     <nav class="nav-section">
-        <div class="nav-title">Configurations</div>
-        <a href="#hierarchy" class="nav-link">
-            <span class="nav-icon">📈</span>
-            <span>Hiérarchie</span>
-        </a>
-        <a href="#vars_priority" class="nav-link">
-            <span class="nav-icon">🔑</span>
-            <span>Variables</span>
-        </a>
+        <div class="nav-title">Explications</div>
+        <a href="#hierarchy" class="nav-link"><span class="nav-icon">📈</span><span>Hiérarchie</span></a>
+        <a href="#vars" class="nav-link"><span class="nav-icon">🔑</span><span>Variables</span></a>
+        <a href="#this_ref" class="nav-link"><span class="nav-icon">🔗</span><span>ref() vs this</span></a>
+        <a href="#matrix" class="nav-link"><span class="nav-icon">📋</span><span>Matrice commandes dbt</span></a>
     </nav>
     
     <nav class="nav-section">
-        <div class="nav-title">Modélisation</div>
-        <a href="#incremental" class="nav-link">
-            <span class="nav-icon">🟢</span>
-            <span>is_incremental()</span>
-        </a>
-        <a href="#ephemeral" class="nav-link">
-            <span class="nav-icon">👻</span>
-            <span>Éphémères</span>
-        </a>
-        <a href="#this_ref" class="nav-link">
-            <span class="nav-icon">🔗</span>
-            <span>ref() vs this</span>
-        </a>
+        <div class="nav-title">Commandes dbt</div>
+        <a href="#state_selection" class="nav-link"><span class="nav-icon">🚀</span><span>State & Selection</span></a>
+        <a href="#incremental" class="nav-link"><span class="nav-icon">🟢</span><span>is_incremental()</span></a>
     </nav>
     
     <nav class="nav-section">
-        <div class="nav-title">Qualité</div>
-        <a href="#tests_pitfalls" class="nav-link">
-            <span class="nav-icon">🚨</span>
-            <span>Tests</span>
-        </a>
-    </nav>
-    
-    <nav class="nav-section">
-        <div class="nav-title">CI/CD</div>
-        <a href="#state_selection" class="nav-link">
-            <span class="nav-icon">🚀</span>
-            <span>State & Selection</span>
-        </a>
+        <div class="nav-title">Pièges</div>
+        <a href="#ephemeral" class="nav-link"><span class="nav-icon">👻</span><span>Éphémères</span></a>
+        <a href="#tests_pitfalls" class="nav-link"><span class="nav-icon">🚨</span><span>Tests & Pitfalls</span></a>
     </nav>
 </aside>
 
-<!-- CONTENU PRINCIPAL -->
 <main class="main-content">
     
-    <!-- CARD: Dashboard -->
     <article id="welcome" class="card active">
         <h1>Guide Expert dbt</h1>
-        <p>Documentation optimisée pour la certification dbt - Version condensée sans redondance.</p>
-        
-        <div class="info-block warning">
-            <strong>Règle fondamentale :</strong> "La configuration la plus proche du modèle l'emporte toujours."
-        </div>
-        
-        <div class="grid-2">
-            <div class="info-block">
-                <h3>📊 Statistiques</h3>
-                <ul>
-                    <li><strong>7 concepts clés</strong> couverts</li>
-                    <li><strong>0 redondance</strong> dans le code</li>
-                    <li><strong>100% compatible</strong> certification</li>
-                </ul>
-            </div>
-            
-            <div class="info-block">
-                <h3>🎯 Objectifs</h3>
-                <ul>
-                    <li>Comprendre les hiérarchies de configuration</li>
-                    <li>Maîtriser ref() vs this</li>
-                    <li>Éviter les pièges courants</li>
-                    <li>Optimiser les workflows CI/CD</li>
-                </ul>
-            </div>
-        </div>
-    </article>
-    
-    <!-- CARD: Hiérarchie -->
-    <article id="hierarchy" class="card">
-        <h1>Hiérarchie des Configurations dbt</h1>
-        <p>Ordre de priorité décroissante pour toute configuration (materialized, schema, etc.) :</p>
-        
-        <div class="comparison-grid">
-            <div class="comparison-card">
-                <div class="comparison-header">
-                    <span class="badge badge-error">1</span>
-                    <h3>Fichier .sql</h3>
-                </div>
-                <p>Configuration la plus spécifique, directement dans le modèle.</p>
-                <pre><code><span class="comment">{{</span> <span class="function">config</span>(
-    <span class="string">materialized</span>=<span class="string">'table'</span>,
-    <span class="string">schema</span>=<span class="string">'marts'</span>
-) <span class="comment">}}</span></code></pre>
-                <p><strong>Priorité maximale</strong> - Écrase toutes les autres configurations.</p>
-            </div>
-            
-            <div class="comparison-card">
-                <div class="comparison-header">
-                    <span class="badge badge-warning">2</span>
-                    <h3>schema.yml</h3>
-                </div>
-                <p>Configuration par modèle dans les fichiers YAML.</p>
-                <pre><code><span class="comment"># schema.yml</span>
-<span class="string">models:</span>
-  - <span class="string">name:</span> fct_orders
-    <span class="string">config:</span>
-      <span class="string">materialized:</span> incremental</code></pre>
-                <p><strong>Priorité moyenne</strong> - Surcharge dbt_project.yml.</p>
-            </div>
-            
-            <div class="comparison-card">
-                <div class="comparison-header">
-                    <span class="badge badge-primary">3</span>
-                    <h3>dbt_project.yml</h3>
-                </div>
-                <p>Configuration globale ou par dossier.</p>
-                <pre><code><span class="comment"># dbt_project.yml</span>
-<span class="string">models:</span>
-  <span class="string">my_project:</span>
-    <span class="string">marts:</span>
-      <span class="string">+materialized:</span> table</code></pre>
-                <p><strong>Priorité faible</strong> - Valeur par défaut.</p>
-            </div>
-            
-            <div class="comparison-card">
-                <div class="comparison-header">
-                    <span class="badge badge-success">4</span>
-                    <h3>Profiles.yml</h3>
-                </div>
-                <p>Configuration par environnement (dev/prod).</p>
-                <pre><code><span class="comment"># profiles.yml</span>
-<span class="string">my_project:</span>
-  <span class="string">target:</span> prod
-  <span class="string">outputs:</span>
-    <span class="string">prod:</span>
-      <span class="string">schema:</span> prod_dbt</code></pre>
-                <p><strong>Priorité minimale</strong> - Paramètres d'exécution.</p>
-            </div>
-        </div>
-        
-        <div class="info-block info">
-            <p><strong>💡 Règle mnémotechnique :</strong> "Plus c'est proche du SELECT, plus c'est puissant."</p>
-        </div>
-    </article>
-    
-    <!-- CARD: ref() vs this -->
-    <article id="this_ref" class="card">
-        <h1>ref() vs this : La Différence Essentielle</h1>
-        
-        <div class="info-block warning">
-            <p><strong>⚠️ Attention :</strong> Ces deux macros servent des objectifs complètement différents et ne sont pas interchangeables.</p>
-        </div>
-        
-        <!-- Comparaison côte à côte -->
-        <div class="comparison-grid">
-            <div class="comparison-card ref">
-                <div class="comparison-header">
-                    <span class="badge badge-primary">ref()</span>
-                    <h3>Dépendance Externe</h3>
-                </div>
-                
-                <p><strong>Objectif :</strong> Créer un lien vers un autre modèle dbt.</p>
-                
-                <ul>
-                    <li>✅ Définit l'ordre d'exécution</li>
-                    <li>✅ Construit le lineage</li>
-                    <li>✅ Portable entre environnements</li>
-                    <li>✅ Utilisable partout</li>
-                </ul>
-                
-                <pre><code><span class="comment">-- models/marts/fct_sales.sql</span>
-<span class="keyword">SELECT</span> *
-<span class="keyword">FROM</span> <span class="comment">{{</span> <span class="function">ref</span>(<span class="string">'stg_orders'</span>) <span class="comment">}}</span>
-<span class="comment">-- ↑ Dépend de models/stg/stg_orders.sql</span></code></pre>
-                
-                <div class="info-block success">
-                    <p><strong>Bon usage :</strong> Toujours utiliser <code>ref()</code> pour référencer d'autres modèles.</p>
-                </div>
-            </div>
-            
-            <div class="comparison-card this">
-                <div class="comparison-header">
-                    <span class="badge badge-success">this</span>
-                    <h3>Auto-Référence</h3>
-                </div>
-                
-                <p><strong>Objectif :</strong> Référencer le modèle actuel en construction.</p>
-                
-                <ul>
-                    <li>✅ Pour les modèles incrémentaux</li>
-                    <li>✅ Pour comparer avec l'état existant</li>
-                    <li>❌ Jamais pour d'autres modèles</li>
-                    <li>❌ Seulement dans le modèle courant</li>
-                </ul>
-                
-                <pre><code><span class="comment">-- models/marts/fct_sales.sql</span>
-<span class="keyword">WHERE</span> created_at > (
-    <span class="keyword">SELECT</span> <span class="function">MAX</span>(created_at)
-    <span class="keyword">FROM</span> <span class="comment">{{</span> <span class="keyword">this</span> <span class="comment">}}</span>
-    <span class="comment">-- ↑ La table fct_sales existante</span>
-)</code></pre>
-                
-                <div class="info-block error">
-                    <p><strong>Interdit :</strong> <code>{{ ref(this) }}</code> → Boucle infinie !</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Métaphore pédagogique -->
-        <div class="metaphor-block">
-            <div class="metaphor-title">
-                <span>💡</span>
-                <h3>Métaphore du Chantier Naval</h3>
-            </div>
-            
-            <p>Imaginez que vous construisez un bateau (votre modèle dbt) :</p>
-            
-            <div class="grid-2">
-                <div>
-                    <h4>ref('blueprints')</h4>
-                    <p>« J'ai besoin des plans (stg_orders) de l'architecte pour construire mon bateau. »</p>
-                    <p><em>→ Dépendance externe nécessaire</em></p>
-                </div>
-                
-                <div>
-                    <h4>{{ this }}</h4>
-                    <p>« Je vérifie ce que j'ai déjà construit sur CE bateau pour savoir où continuer. »</p>
-                    <p><em>→ Référence à l'état actuel</em></p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Exemple complet -->
-        <h2>Exemple Canonique : Modèle Incrémental</h2>
-        
-        <pre><code><span class="comment">{{ config(materialized='incremental', unique_key='order_id') }}</span>
-
-<span class="keyword">SELECT</span>
-    order_id,
-    customer_id,
-    amount,
-    created_at
-<span class="keyword">FROM</span> <span class="comment">{{</span> <span class="function">ref</span>(<span class="string">'stg_orders'</span>) <span class="comment">}}</span>
-<span class="comment">-- ↑ Dépendance VERS un autre modèle</span>
-
-<span class="comment">{% if is_incremental() %}</span>
-<span class="keyword">WHERE</span> created_at > (
-    <span class="keyword">SELECT</span> <span class="function">MAX</span>(created_at)
-    <span class="keyword">FROM</span> <span class="comment">{{</span> <span class="keyword">this</span> <span class="comment">}}</span>
-    <span class="comment">-- ↑ Référence À SOI-MÊME (table existante)</span>
-)
-<span class="comment">{% endif %}</span></code></pre>
-        
-        <div class="info-block info">
-            <p><strong>Résumé :</strong> <code>ref()</code> pour les autres, <code>this</code> pour soi-même. Jamais l'inverse.</p>
-        </div>
-    </article>
-    
-    <!-- CARD: Variables -->
-    <article id="vars_priority" class="card">
-        <h1>Priorité des Variables var()</h1>
-        <p>L'ordre de résolution quand une variable est définie à plusieurs endroits :</p>
-        
-        <div class="grid-2">
-            <div class="info-block error">
-                <h3>🏆 1. Ligne de commande</h3>
-                <pre><code>dbt run --vars '{<span class="string">"tax_rate"</span>: <span class="number">0.2</span>}'</code></pre>
-                <p><strong>Toujours prioritaire</strong> - Écrase toutes les autres définitions.</p>
-            </div>
-            
-            <div class="info-block warning">
-                <h3>🥈 2. dbt_project.yml</h3>
-                <pre><code><span class="comment"># dbt_project.yml</span>
-<span class="string">vars:</span>
-  <span class="string">tax_rate:</span> <span class="number">0.25</span></code></pre>
-                <p><strong>Priorité moyenne</strong> - Surcharge les valeurs par défaut.</p>
-            </div>
-            
-            <div class="info-block">
-                <h3>🥉 3. Valeur par défaut</h3>
-                <pre><code><span class="comment">{{ var('tax_rate', 0.3) }}</span></code></pre>
-                <p><strong>Dernier recours</strong> - Utilisée seulement si absente ailleurs.</p>
-            </div>
-            
-            <div class="info-block success">
-                <h3>📝 Exemple complet</h3>
-                <pre><code><span class="comment">-- Résolution : 0.2 (ligne de commande gagne)</span>
-<span class="keyword">SELECT</span> amount * <span class="comment">{{</span> <span class="function">var</span>(<span class="string">'tax_rate'</span>, <span class="number">0.3</span>) <span class="comment">}}</span>
-<span class="comment">-- Devient : SELECT amount * 0.2</span></code></pre>
-            </div>
-        </div>
-    </article>
-    
-    <!-- CARD: Éphémères -->
-    <article id="ephemeral" class="card">
-        <h1>Modèles Éphémères</h1>
-        
-        <div class="info-block error">
-            <h3>🚫 Le Piège Principal</h3>
-            <p>Les modèles éphémères <strong>ne créent JAMAIS d'objet physique</strong> dans la base de données.</p>
-        </div>
-        
-        <div class="grid-2">
-            <div class="info-block">
-                <h3>👻 Ce qu'ils sont</h3>
-                <p>Des CTEs (Common Table Expressions) injectés dans les modèles downstream.</p>
-                <pre><code><span class="comment">-- models/stg/stg_customers.sql</span>
-<span class="comment">{{ config(materialized='ephemeral') }}</span>
-
-<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> raw.customers</code></pre>
-            </div>
-            
-            <div class="info-block">
-                <h3>🔍 Ce qu'ils ne sont PAS</h3>
-                <ul>
-                    <li>❌ Pas de table physique</li>
-                    <li>❌ Pas de vue matérialisée</li>
-                    <li>❌ Pas visible dans INFORMATION_SCHEMA</li>
-                    <li>❌ Pas de permissions à gérer</li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="info-block warning">
-            <h3>💡 Cas d'usage recommandé</h3>
-            <p>Uniquement pour :</p>
-            <ul>
-                <li>Transformations simples réutilisables</li>
-                <li>Éviter la duplication de code</li>
-                <li>Quand les performances ne sont pas critiques</li>
-                <li>Dans les environnements de développement</li>
-            </ul>
-        </div>
-    </article>
-    
-    <!-- CARD: Tests -->
-    <article id="tests_pitfalls" class="card">
-        <h1>Pièges des Tests dbt</h1>
-        
-        <div class="grid-2">
-            <div class="info-block error">
-                <h3>🚨 accepted_values ≠ not_null</h3>
-                <p>Le test <code>accepted_values</code> <strong>ignore complètement les NULL</strong>.</p>
-                
-                <pre><code><span class="comment"># schema.yml - ❌ INCOMPLET</span>
-<span class="string">tests:</span>
-  - <span class="string">accepted_values:</span>
-      <span class="string">values:</span> [<span class="string">'active'</span>, <span class="string">'inactive'</span>]
-<span class="comment">-- NULL passerait ce test !</span></code></pre>
-                
-                <pre><code><span class="comment"># schema.yml - ✅ CORRECT</span>
-<span class="string">tests:</span>
-  - <span class="string">not_null</span>
-  - <span class="string">accepted_values:</span>
-      <span class="string">values:</span> [<span class="string">'active'</span>, <span class="string">'inactive'</span>]</code></pre>
-            </div>
-            
-            <div class="info-block">
-                <h3>⚡ dbt run vs dbt test</h3>
-                <p>Ces commandes sont <strong>complètement indépendantes</strong>.</p>
-                
-                <div class="grid-2">
-                    <div>
-                        <h4>dbt run</h4>
-                        <ul>
-                            <li>✅ Construit les modèles</li>
-                            <li>✅ Exécute le SQL</li>
-                            <li>❌ Ne lance AUCUN test</li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4>dbt test</h4>
-                        <ul>
-                            <li>✅ Exécute les tests</li>
-                            <li>✅ Vérifie la qualité</li>
-                            <li>❌ Ne construit RIEN</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <pre><code><span class="comment"># Pour tout faire :</span>
-dbt build  <span class="comment"># = run + test + seed + snapshot</span></code></pre>
-            </div>
-        </div>
-    </article>
-    
-    <!-- CARD: Incremental -->
-    <article id="incremental" class="card">
-        <h1>is_incremental() - Comportement</h1>
-        
-        <div class="grid-2">
-            <div class="info-block">
-                <h3>🔄 Logique de base</h3>
-                <pre><code><span class="comment">{{ config(materialized='incremental') }}</span>
-
-<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> source_table
-
-<span class="comment">{% if is_incremental() %}</span>
-<span class="comment">-- Exécuté si la table existe déjà</span>
-<span class="keyword">WHERE</span> id <span class="keyword">NOT IN</span> (<span class="keyword">SELECT</span> id <span class="keyword">FROM</span> <span class="comment">{{</span> <span class="keyword">this</span> <span class="comment">}}</span>)
-<span class="comment">{% endif %}</span></code></pre>
-                
-                <ul>
-                    <li><strong>Premier run :</strong> <code>is_incremental() = FALSE</code></li>
-                    <li><strong>Runs suivants :</strong> <code>is_incremental() = TRUE</code></li>
-                    <li><strong>Avec --full-refresh :</strong> <code>is_incremental() = FALSE</code></li>
-                </ul>
-            </div>
-            
-            <div class="info-block warning">
-                <h3>⚠️ --full-refresh</h3>
-                <p>Force la reconstruction complète, ignorant toute logique incrémentale.</p>
-                
-                <pre><code><span class="comment"># Reconstruit tout depuis zéro :</span>
-dbt run --select my_model --full-refresh</code></pre>
-                
-                <p><strong>Comportement :</strong></p>
-                <ol>
-                    <li>DROP la table existante</li>
-                    <li>Ignore le bloc <code>is_incremental()</code></li>
-                    <li>Recrée la table avec toutes les données</li>
-                </ol>
-            </div>
-        </div>
-        
-        <div class="info-block success">
-            <h3>🎯 Bonnes pratiques incremental</h3>
-            <ul>
-                <li>Toujours utiliser <code>unique_key</code> avec les merges</li>
-                <li>Configurer <code>on_schema_change</code> pour l'évolution</li>
-                <li>Utiliser <code>this</code> pour référencer la table existante</li>
-                <li>Tester avec et sans <code>--full-refresh</code></li>
-            </ul>
-        </div>
-    </article>
-    
-    <!-- CARD: State Selection -->
-    <article id="state_selection" class="card">
-        <h1>State Selection - CI/CD Optimisé</h1>
-        
+        <p>Utilisez le menu latéral pour naviguer dans les concepts clés de dbt.</p>
         <div class="info-block">
-            <h3>🎯 Objectif</h3>
-            <p>Exécuter uniquement ce qui a changé depuis la dernière version en production.</p>
-            
-            <pre><code><span class="comment"># Workflow CI/CD typique :</span>
-dbt run --state ./prod-artifacts --select state:modified+</code></pre>
-        </div>
-        
-        <div class="grid-2">
-            <div class="info-block success">
-                <h3>📊 Sélecteurs d'état</h3>
-                <ul>
-                    <li><code>state:modified</code> - Modèles modifiés</li>
-                    <li><code>state:new</code> - Nouveaux modèles</li>
-                    <li><code>state:modified+</code> - Modifiés + enfants</li>
-                    <li><code>+state:modified+</code> - Parents + modifiés + enfants</li>
-                </ul>
-            </div>
-            
-            <div class="info-block">
-                <h3>📁 Artifacts requis</h3>
-                <p>Le dossier d'état doit contenir :</p>
-                <ul>
-                    <li><code>manifest.json</code> - Structure du projet</li>
-                    <li><code>run_results.json</code> - Résultats précédents</li>
-                </ul>
-                
-                <pre><code><span class="comment"># Générer les artifacts :</span>
-dbt run
-dbt docs generate
-<span class="comment"># → Crée target/manifest.json</span></code></pre>
-            </div>
-        </div>
-        
-        <div class="info-block warning">
-            <h3>💡 Workflow CI/CD complet</h3>
-            
-            <pre><code><span class="comment"># 1. Production (main branch)</span>
-dbt run --target prod
-cp -r target/ prod-artifacts/
-
-<span class="comment"># 2. Feature branch (CI)</span>
-dbt run --state ./prod-artifacts --select state:modified+
-dbt test --state ./prod-artifacts --select state:modified+
-
-<span class="comment"># → Exécute seulement le delta</span></code></pre>
+            <strong>Réseau :</strong> Freebox-49010A active ✅
         </div>
     </article>
+
     
+	
+<article id="matrix" class="card">
+    <h1>🧩 Matrice complète des commandes dbt</h1>
+    <p>Vue exhaustive et exacte de l’impact réel des commandes dbt sur chaque type d’objet.</p>
+
+    <div style="overflow-x:auto;">
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th>Commande</th>
+                    <th>Models</th>
+                    <th>Sources</th>
+                    <th>Seeds</th>
+                    <th>Snapshots</th>
+                    <th>Tests</th>
+                    <th>Docs</th>
+                    <th>Macros</th>
+                    <th>Packages</th>
+                    <th>Écrit DB</th>
+                    <th>Compile SQL</th>
+                    <th>-m</th>
+                    <th>CI/CD</th>
+                    <th>Notes clés</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="command">dbt run</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>⚠️</td>
+                    <td class="comment">Exécute uniquement les modèles. Pas de tests, pas de snapshots.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt run -m</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>⚠️</td>
+                    <td class="comment">Exécution ciblée (model, +upstream, downstream, tags).</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt test</td>
+                    <td>❌</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td class="comment">Tests génériques + personnalisés. Aucune écriture DB.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt seed</td>
+                    <td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>⚠️</td>
+                    <td class="comment">Charge les CSV comme tables physiques.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt snapshot</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅</td><td>✅</td><td>❌</td><td>⚠️</td>
+                    <td class="comment">Historisation SCD2 avec gestion des versions.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt build</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td class="comment">Commande PROD recommandée (run + test + seed + snapshot).</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt compile</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td class="comment">Génère le SQL final sans toucher à la base.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt debug</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment">Valide profiles.yml, connexion DB, versions.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt deps</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>✅</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment">Télécharge les packages définis dans packages.yml.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt docs generate</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>✅</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>⚠️</td>
+                    <td class="comment">Génère catalog.json + lineage.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt show</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>✅</td><td>❌</td>
+                    <td class="comment">Preview rapide des données (lecture seule).</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt clean</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment">Supprime target/ et dbt_packages/.</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <h2>🧠 Règles fondamentales</h2>
+    <ul>
+        <li><strong>Sources</strong> : jamais exécutées, uniquement testées</li>
+        <li><strong>Seeds & Snapshots</strong> : jamais lancés par <code>dbt run</code></li>
+        <li><strong>dbt build</strong> : seule commande réellement PROD-safe</li>
+        <li><strong>Macros</strong> : toujours indirectes</li>
+    </ul>
+</article>
+f	
+	
+	
+	
+	
+	
+	
+
+    <article id="hierarchy" class="card"><h1>Hiérarchie des Configurations</h1>...</article>
+    
+	
+	
+	<article id="vars" class="card">
+    <h1>🔑 Variables dbt – Priorité & Maîtrise mentale</h1>
+
+    <p>
+        Les variables dbt sont une <strong>source majeure d’erreurs</strong> à l’examen.
+        Le piège n’est pas la syntaxe, mais <strong>la priorité et le contexte d’évaluation</strong>.
+    </p>
+
+    <div class="info-block">
+        🎯 <strong>Règle d’or examen :</strong><br>
+        Une variable est toujours évaluée <strong>au moment de la compilation</strong>, jamais à l’exécution SQL.
+    </div>
+
+    <h2>🧠 Modèle mental à retenir (Pyramide de priorité)</h2>
+
+    <pre style="background:#0d1117; padding:1rem; border:1px solid var(--border); border-radius:8px; color:#c9d1d9;">
+CLI --vars
+↑
+Environment variables (env_var)
+↑
+dbt_project.yml
+↑
+profiles.yml
+↑
+default dans var()
+    </pre>
+
+    <p>
+        👉 <strong>Plus c’est haut, plus ça écrase le reste</strong><br>
+        👉 <strong>CLI > YAML > defaults</strong>
+    </p>
+
+    <h2>📊 Matrice complète de priorité des variables</h2>
+
+    <div style="overflow-x:auto;">
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Syntaxe</th>
+                    <th>Priorité</th>
+                    <th>Contexte</th>
+                    <th>Cas d’usage typique</th>
+                    <th>Piège examen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="command">CLI</td>
+                    <td><code>dbt run --vars</code></td>
+                    <td>🥇 Max</td>
+                    <td>Runtime</td>
+                    <td>Override temporaire</td>
+                    <td class="comment">Écrase TOUT le reste</td>
+                </tr>
+
+                <tr>
+                    <td class="command">env_var()</td>
+                    <td><code>{{ env_var('VAR') }}</code></td>
+                    <td>🥈</td>
+                    <td>Compilation</td>
+                    <td>Secrets, env DEV/PROD</td>
+                    <td class="comment">Null si non défini</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt_project.yml</td>
+                    <td><code>vars:</code></td>
+                    <td>🥉</td>
+                    <td>Projet</td>
+                    <td>Config globale</td>
+                    <td class="comment">Scope projet uniquement</td>
+                </tr>
+
+                <tr>
+                    <td class="command">profiles.yml</td>
+                    <td><code>vars:</code></td>
+                    <td>4️⃣</td>
+                    <td>Environnement</td>
+                    <td>Variables par target</td>
+                    <td class="comment">Moins prioritaire que projet</td>
+                </tr>
+
+                <tr>
+                    <td class="command">Default</td>
+                    <td><code>var('x', 42)</code></td>
+                    <td>5️⃣</td>
+                    <td>Local</td>
+                    <td>Fallback sécurisé</td>
+                    <td class="comment">Utilisé seulement si absent</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>🧪 Exemples concrets (EXAMEN)</h2>
+
+    <h3>1️⃣ Variable avec valeur par défaut (SAFE)</h3>
+    <pre style="background:#0d1117; padding:1rem; border-radius:6px;">
+{{ var('country', 'FR') }}
+    </pre>
+    ✔️ Aucune erreur si absente  
+    ❌ Piège : croire que FR est écrasé automatiquement
+
+    <h3>2️⃣ Variable OBLIGATOIRE (piège fréquent)</h3>
+    <pre style="background:#0d1117; padding:1rem; border-radius:6px;">
+{{ var('run_date') }}
+    </pre>
+    ❌ Échec compilation si non fournie  
+    ✔️ Très souvent utilisé pour filtrage temporel
+
+    <h3>3️⃣ env_var avec fallback (BEST PRACTICE)</h3>
+    <pre style="background:#0d1117; padding:1rem; border-radius:6px;">
+{{ env_var('DBT_ENV', 'dev') }}
+    </pre>
+    ✔️ Examen-friendly  
+    ✔️ Zéro crash
+
+    <h2>🚨 Pièges classiques à l’examen</h2>
+
+    <ul>
+        <li>❌ Confondre <strong>var()</strong> et <strong>env_var()</strong></li>
+        <li>❌ Penser que profiles.yml écrase dbt_project.yml</li>
+        <li>❌ Oublier le fallback par défaut</li>
+        <li>❌ Croire que les vars sont évaluées à l’exécution SQL</li>
+        <li>❌ Utiliser des vars dans les sources.yml (INTERDIT)</li>
+    </ul>
+
+    <h2>✅ Checklist mentale avant de répondre à une question</h2>
+
+    <div class="info-block">
+        ✔️ Où la variable est-elle définie ?<br>
+        ✔️ Y a-t-il un fallback ?<br>
+        ✔️ Est-ce une var() ou env_var() ?<br>
+        ✔️ À quel moment est-elle évaluée ?<br>
+        ✔️ Est-ce que la CLI peut l’écraser ?
+    </div>
+
+    <h2>🏁 Résumé EXPERT (à mémoriser)</h2>
+
+    <ul>
+        <li><strong>CLI > env_var > dbt_project > profiles > default</strong></li>
+        <li>Les variables sont évaluées <strong>à la compilation</strong></li>
+        <li>Toute variable sans default peut faire échouer dbt</li>
+        <li>env_var est la norme PROD</li>
+    </ul>
+	
+	
+	
+	<h2>📘 Exemples YAML clés (CERTIF DBT)</h2>
+
+<p>
+Ces exemples couvrent <strong>90 % des questions pièges</strong> sur les variables à l’examen.
+Mémorise surtout <strong>le scope + la priorité</strong>.
+</p>
+
+<h3>1️⃣ Variable globale – <code>dbt_project.yml</code></h3>
+<pre style="background:#0d1117; padding:1rem; border-radius:6px;">
+vars:
+  country: "FR"
+  load_mode: "full"
+</pre>
+
+✔️ Disponible dans tout le projet  
+❌ Écrasée par CLI ou env_var
+
+---
+
+<h3>2️⃣ Variable par environnement – <code>profiles.yml</code></h3>
+<pre style="background:#0d1117; padding:1rem; border-radius:6px;">
+my_profile:
+  outputs:
+    prod:
+      type: snowflake
+      vars:
+        load_mode: "incremental"
+</pre>
+
+✔️ Dépend de la <code>target</code>  
+❌ Ne remplace PAS une var CLI
+
+---
+
+<h3>3️⃣ Variable via environnement (PROD standard)</h3>
+<pre style="background:#0d1117; padding:1rem; border-radius:6px;">
+{{ env_var('DBT_ENV', 'dev') }}
+</pre>
+
+✔️ Norme PROD  
+✔️ Compatible CI/CD  
+❌ Sans fallback → valeur <code>null</code>
+
+---
+
+<h3>4️⃣ Variable obligatoire (PIÈGE EXAMEN)</h3>
+<pre style="background:#0d1117; padding:1rem; border-radius:6px;">
+{{ var('run_date') }}
+</pre>
+
+❌ Échec compilation si absente  
+✔️ Typique pour les filtres temporels
+
+---
+
+<h3>5️⃣ Variable SAFE (BEST PRACTICE)</h3>
+<pre style="background:#0d1117; padding:1rem; border-radius:6px;">
+{{ var('country', 'FR') }}
+</pre>
+
+✔️ Aucun crash  
+✔️ Réponse attendue à l’examen
+
+---
+
+<div class="info-block">
+🧠 <strong>Raccourci mental EXAMEN :</strong><br>
+Si tu vois <code>var()</code> → cherche le <strong>fallback</strong><br>
+Si tu vois <code>env_var()</code> → pense <strong>PROD / CI</strong><br>
+Si tu vois <code>--vars</code> → <strong>priorité maximale</strong>
+</div>
+
+
+
+
+
+</article>
+
+
+
+
+
+
+
+    <article id="this_ref" class="card"><h1>ref() vs this</h1>...</article>
+    <article id="state_selection" class="card"><h1>State Selection</h1>...</article>
+    <article id="incremental" class="card"><h1>is_incremental()</h1>...</article>
+    <article id="ephemeral" class="card"><h1>Modèles Éphémères</h1>...</article>
+    <article id="tests_pitfalls" class="card"><h1>Pièges des Tests</h1>...</article>
+
 </main>
 
-<!-- SCRIPT DE NAVIGATION UNIFIÉ -->
 <script>
-    // Initialisation
     document.addEventListener('DOMContentLoaded', function() {
-        // Navigation entre les cartes
-        const navLinks = document.querySelectorAll('.nav-link');
+        const links = document.querySelectorAll('.nav-link');
         const cards = document.querySelectorAll('.card');
         
-        navLinks.forEach(link => {
+        links.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
-                
-                // Retirer la classe active de tous les liens
-                navLinks.forEach(l => l.classList.remove('active'));
-                
-                // Ajouter la classe active au lien cliqué
+                links.forEach(l => l.classList.remove('active'));
                 this.classList.add('active');
                 
-                // Masquer toutes les cartes
                 cards.forEach(card => card.classList.remove('active'));
-                
-                // Afficher la carte cible
-                const targetId = this.getAttribute('href').substring(1);
-                const targetCard = document.getElementById(targetId);
-                
-                if (targetCard) {
-                    targetCard.classList.add('active');
-                    
-                    // Scroll vers le haut du contenu
-                    document.querySelector('.main-content').scrollTop = 0;
-                }
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.classList.add('active');
             });
-        });
-        
-        // Highlight syntaxique basique
-        const codeBlocks = document.querySelectorAll('pre code');
-        codeBlocks.forEach(block => {
-            const html = block.innerHTML
-                .replace(/\b(SELECT|FROM|WHERE|JOIN|ON|GROUP BY|ORDER BY|HAVING|INSERT|UPDATE|DELETE|CREATE|DROP|ALTER|TABLE|VIEW|AS|AND|OR|NOT|IN|BETWEEN|LIKE|IS NULL|IS NOT NULL)\b/g, '<span class="keyword">$1</span>')
-                .replace(/'([^']+)'/g, '<span class="string">\'$1\'</span>')
-                .replace(/\b\d+(\.\d+)?\b/g, '<span class="number">$&</span>')
-                .replace(/\b(ref|config|var|this|is_incremental)\b/g, '<span class="function">$1</span>')
-                .replace(/--(.*)/g, '<span class="comment">--$1</span>');
-            
-            block.innerHTML = html;
-        });
-        
-        // Ajouter des raccourcis clavier
-        document.addEventListener('keydown', function(e) {
-            // Ctrl + 1-7 pour naviguer rapidement
-            if (e.ctrlKey && e.key >= '1' && e.key <= '7') {
-                const index = parseInt(e.key) - 1;
-                const links = Array.from(navLinks);
-                
-                if (links[index]) {
-                    links[index].click();
-                    e.preventDefault();
-                }
-            }
-            
-            // Escape pour revenir au dashboard
-            if (e.key === 'Escape') {
-                document.querySelector('a[href="#welcome"]').click();
-            }
         });
     });
 </script>

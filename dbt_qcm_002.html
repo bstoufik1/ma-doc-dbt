@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dbt QCM - Fondamentaux</title>
+    <style>
+        :root {
+            --bg: #0d1117; 
+            --card: #161b22; 
+            --txt: #c9d1d9; 
+            --border: #30363d;
+            --level-green: #2ea043;
+            --level-orange: #f0883e;
+            --level-red: #ff4500;
+            --cmd-main: #2ea043;
+            --cmd-args: #58a6ff;
+            --hl-red: #ff7b72;
+            --green-ans: #238636;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg); color: var(--txt); line-height: 1.4; 
+            margin: 0; display: flex; /* Layout en deux colonnes */
+        }
+
+        /* --- SIDEBAR MENU --- */
+        .sidebar {
+            width: 300px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 { color: var(--level-red); font-size: 1.1rem; margin-bottom: 20px; text-align: center; }
+
+        .menu-item {
+            display: block;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background: #21262d;
+            color: var(--txt);
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover { background: #30363d; transform: translateX(5px); border-color: #8b949e; }
+
+        .sub-menu {
+            display: flex;
+            flex-direction: column;
+            margin-left: 15px;
+            padding-left: 10px;
+            border-left: 2px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .sub-item { font-size: 0.8rem !important; padding: 8px 10px !important; margin: 2px 0 !important; }
+
+        .active-page {
+            border-color: var(--level-orange) !important;
+            color: var(--level-orange) !important;
+            background: rgba(240, 136, 62, 0.1) !important;
+            font-weight: bold;
+        }
+
+        summary { list-style: none; outline: none; }
+        summary::-webkit-details-marker { display: none; }
+
+        /* --- CONTENU QCM --- */
+        .container { flex: 1; max-width: 800px; margin: 0 auto; padding: 30px; }
+
+        h1 { text-align: center; color: var(--level-red); font-size: 1.8rem; margin-bottom: 20px; }
+
+        .intro { 
+            background: var(--card); padding: 12px; border-radius: 6px; border: 1px solid var(--level-red);
+            margin-bottom: 25px; font-size: 0.9rem; text-align: center;
+        }
+
+        .q-card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 12px; 
+            padding: 20px; margin-bottom: 20px; 
+        }
+
+        .q-head, .q-head_orange, .q-head_green { font-weight: bold; font-size: 0.85rem; display: block; text-transform: uppercase; margin-bottom: 10px; }
+        .q-head { color: var(--level-red); }
+        .q-head_orange { color: var(--level-orange); }
+        .q-head_green { color: var(--level-green); }
+
+        .q-txt { font-weight: 600; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .opt { background: #21262d; padding: 12px; margin: 8px 0; border-radius: 6px; font-size: 0.95rem; border: 1px solid transparent; }
+        
+        code { background: #000; padding: 2px 5px; border-radius: 4px; font-family: monospace; color: var(--txt); }
+        .cmd { color: var(--cmd-main); font-weight: bold; }
+        .arg { color: var(--cmd-args); }
+        .hl { color: var(--hl-red); font-weight: bold; }
+
+        .ans { 
+            display: none; margin-top: 15px; padding: 15px; font-size: 0.9rem;
+            background: rgba(35, 134, 54, 0.05); border-left: 4px solid var(--green-ans); border-radius: 4px;
+        }
+
+        .btn { 
+            background: none; border: 1px solid var(--level-orange); color: var(--level-orange); 
+            border-radius: 20px; cursor: pointer; font-size: 0.85rem; margin-top: 10px; padding: 6px 18px; font-weight: bold;
+        }
+        .btn:hover { background: var(--level-orange); color: #fff; }
+
+        .footer { text-align: center; font-size: 0.8rem; padding: 30px; border-top: 1px solid var(--border); margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>📂 NAVIGATION</h2>
+        <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
+        <a href="piege_dbt.html" class="menu-item">📙 Voir la Pige dbt</a>
+
+        <details class="menu-dropdown" open>
+            <summary class="menu-item" style="cursor: pointer;">✅ Questions d'Entraînement</summary>
+            <div class="sub-menu">
+                <a href="dbt_qcm_001.html" class="menu-item sub-item active-page">📝 QCM 1 : Fondamentaux</a>
+                <a href="dbt_qcm_002.html" class="menu-item sub-item">🚀 QCM 2  : EXAMEN BLANC FR</a>
+                <a href="dbt_qcm_003.html" class="menu-item sub-item">🔄 QCM 3 : Incremental</a>
+                <a href="dbt_qcm_004.html" class="menu-item sub-item">🤖 QCM 4 : CI/CD</a>
+                <a href="dbt_qcm_005.html" class="menu-item sub-item">📸 QCM 5 : Snapshots</a>
+                <a href="dbt_qcm_006.html" class="menu-item sub-item">🔧 QCM 6 : Macros</a>
+            </div>
+        </details>
+    </div>
+
+    <div class="container">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+        <h1>🧠 dbt QCM : Session 1-65 🔥</h1>
+        <div class="intro">Progression : 1 / 65. Focus sur la configuration des snapshots et le cycle de vie des objets.</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="q-card">
+            <span class="q-head_orange">Question 1 sur 65 — SOURCE CONFIG</span>
+            <span class="q-txt">Vous configurez une Source pour une table `raw_transactions`. La base est `raw_db` et le schéma est `public`. Quelle est la configuration la plus appropriée ?</span>
+            <div class="opt">A - name: raw_db | tables: name: raw_transactions</div>
+            <div class="opt">B - name: raw | database: raw_db | schema: public | tables: name: raw_transactions</div>
+            <div class="opt">C - name: raw_transactions | database: raw_db</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Le champ <code>name</code> de la source est un alias logique (ex: raw), alors que <code>database</code> et <code>schema</code> décrivent l'emplacement réel en base.</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 2 sur 65 — MODEL CONFIG</span>
+            <span class="q-txt">Quelle est une méthode valide pour configurer un modèle dans dbt ?</span>
+            <div class="opt">A - Utiliser le bloc <code>{{ config(...) }}</code> dans le fichier SQL.</div>
+            <div class="opt">B - Définir la configuration dans <code>dbt_project.yml</code>.</div>
+            <div class="opt">C - Utiliser un fichier YAML dans le dossier du modèle.</div>
+            <div class="opt">D - Toutes les réponses ci-dessus.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : D</strong>
+                <p>dbt offre une flexibilité totale : configuration en ligne (Jinja), centralisée (Project YAML) ou locale (Property YAML).</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 3 sur 65 — DBT RUN SELECTION</span>
+            <span class="q-txt">Quelle commande exécute le modèle <code>stg_orders</code> et tous ses parents (upstream) ?</span>
+            <div class="opt">A - <code>dbt run --select stg_orders+</code></div>
+            <div class="opt">B - <code>dbt run --select +stg_orders</code></div>
+            <div class="opt">C - <code>dbt run --models stg_orders*</code></div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Le signe <b>+</b> devant le nom du modèle signifie "inclure tous les parents". S'il est après, il signifie "inclure tous les enfants".</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 4 sur 65 — MATERIALIZATIONS</span>
+            <span class="q-txt">Quelle matérialisation crée une table physique qui est reconstruite de zéro à chaque exécution ?</span>
+            <div class="opt">A - view</div>
+            <div class="opt">B - table</div>
+            <div class="opt">C - incremental</div>
+            <div class="opt">D - ephemeral</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B - table</strong>
+                <p>Contrairement à <code>view</code>, la matérialisation <code>table</code> stocke les données physiquement. Contrairement à <code>incremental</code>, elle remplace toute la table à chaque run.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 5 sur 65 — SEEDING</span>
+            <span class="q-txt">Quelle commande charge les fichiers CSV du dossier <code>seeds/</code> dans la base de données ?</span>
+            <div class="opt">A - dbt upload</div>
+            <div class="opt">B - dbt run</div>
+            <div class="opt">C - dbt seed</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : C - dbt seed</strong>
+                <p>Les seeds sont idéaux pour les données statiques (listes de pays, codes postaux) qui ne changent pas souvent.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 6 sur 65 — DBT TEST</span>
+            <span class="q-txt">Que vérifie par défaut le test générique <code>relationships</code> ?</span>
+            <div class="opt">A - L'intégrité référentielle entre deux modèles.</div>
+            <div class="opt">B - Si une colonne contient des doublons.</div>
+            <div class="opt">C - Si une colonne contient des valeurs nulles.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p>Il vérifie que chaque valeur d'une colonne existe bien dans la colonne d'un autre modèle (similaire à une Foreign Key).</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 7 sur 65 — PROJECT STRUCTURE</span>
+            <span class="q-txt">Où dbt cherche-t-il le fichier <code>dbt_project.yml</code> ?</span>
+            <div class="opt">A - Dans le dossier <code>~/.dbt/</code></div>
+            <div class="opt">B - À la racine du dossier du projet dbt.</div>
+            <div class="opt">C - Dans le dossier <code>models/</code>.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>C'est le fichier "cerveau" du projet. Il doit impérativement être à la racine pour que dbt reconnaisse le dossier comme un projet valide.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 8 sur 65 — VIEW MATERIALIZATION</span>
+            <span class="q-txt">Quel est le principal avantage d'utiliser une matérialisation de type <code>view</code> ?</span>
+            <div class="opt">A - Les données sont stockées sur le disque.</div>
+            <div class="opt">B - Elle occupe moins d'espace de stockage et garantit des données toujours fraîches.</div>
+            <div class="opt">C - Elle est plus rapide à interroger qu'une table.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Une vue est une requête stockée. Elle ne consomme pas d'espace disque pour les données, mais peut être plus lente à l'interrogation car elle recalcule le SQL à chaque fois.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 9 sur 65 — SOURCE FRESHNESS</span>
+            <span class="q-txt">Quelle commande permet de vérifier si vos données sources sont à jour ?</span>
+            <div class="opt">A - dbt test</div>
+            <div class="opt">B - dbt source freshness</div>
+            <div class="opt">C - dbt run-fresh</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Cette commande compare le timestamp actuel avec la valeur maximale de la colonne <code>loaded_at_field</code> définie dans ton YAML.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 10 sur 65 — DOCS VIEWING</span>
+            <span class="q-txt">Quelle commande lance un serveur local pour visualiser la documentation dbt ?</span>
+            <div class="opt">A - dbt docs serve</div>
+            <div class="opt">B - dbt docs view</div>
+            <div class="opt">C - dbt docs generate</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p><code>dbt docs serve</code> ouvre généralement le port 8080 pour afficher l'interface interactive de documentation.</p>
+            </div>
+        </div>
+		
+		
+		
+
+<div class="q-card">
+            <span class="q-head_orange">Question 11 sur 65 — SNAPSHOTS</span>
+            <span class="q-txt">Quelle colonne dbt ajoute-t-il automatiquement à une table de snapshot pour gérer la validité historique ?</span>
+            <div class="opt">A - dbt_valid_from / dbt_valid_to</div>
+            <div class="opt">B - valid_start / valid_end</div>
+            <div class="opt">C - snapshot_at</div>
+            <div class="opt">D - row_version</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p>dbt utilise <code>dbt_valid_from</code> et <code>dbt_valid_to</code> pour créer une structure de type SCD Type 2 (Slowly Changing Dimensions). Une ligne active aura un <code>dbt_valid_to</code> à NULL.</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 12 sur 65 — INCREMENTAL MODELS</span>
+            <span class="q-txt">Quelle macro est utilisée dans un modèle incremental pour ne filtrer que les nouvelles données ?</span>
+            <div class="opt">A - <code>{{ is_new_run() }}</code></div>
+            <div class="opt">B - <code>{{ is_incremental() }}</code></div>
+            <div class="opt">C - <code>{{ should_append() }}</code></div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>La macro <code>is_incremental()</code> retourne TRUE uniquement si le modèle existe déjà en base, qu'il n'est pas lancé avec <code>--full-refresh</code>, et que sa matérialisation est bien 'incremental'.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 13 sur 65 — TESTS CUSTOM</span>
+            <span class="q-txt">Que se passe-t-il si un test dbt renvoie une ou plusieurs lignes ?</span>
+            <div class="opt">A - Le test réussit car il y a des données.</div>
+            <div class="opt">B - Le test échoue.</div>
+            <div class="opt">C - dbt ignore les résultats.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Dans dbt, un test SQL est conçu pour sélectionner les "erreurs". Si la requête <code>SELECT</code> retourne des résultats, cela signifie que des lignes violent la règle définie, donc le test échoue.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 14 sur 65 — DRY PRINCIPLE</span>
+            <span class="q-txt">Quel outil dbt utilise-t-il pour réutiliser du code SQL entre plusieurs modèles ?</span>
+            <div class="opt">A - Les variables d'environnement.</div>
+            <div class="opt">B - Les Macros (Jinja).</div>
+            <div class="opt">C - Le copier-coller.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B - Les Macros</strong>
+                <p>Les macros sont des fonctions SQL réutilisables définies dans le dossier <code>macros/</code>. Elles permettent de garder le projet "DRY" (Don't Repeat Yourself).</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 15 sur 65 — DAG DEPENDENCIES</span>
+            <span class="q-txt">Que signifie le sélecteur <code>dbt run --select stg_customers+</code> ?</span>
+            <div class="opt">A - Exécuter uniquement stg_customers.</div>
+            <div class="opt">B - Exécuter stg_customers et tous ses parents.</div>
+            <div class="opt">C - Exécuter stg_customers et tous ses enfants (downstream).</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : C</strong>
+                <p>Le <b>+</b> après le nom cible les modèles qui dépendent de celui-ci (la suite du graphique de lignage).</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 16 sur 65 — SCHEMA GENERATION</span>
+            <span class="q-txt">Comment dbt détermine-t-il le schéma cible par défaut ?</span>
+            <div class="opt">A - Dans <code>dbt_project.yml</code>.</div>
+            <div class="opt">B - Dans le fichier <code>profiles.yml</code> sous la clé <code>schema</code>.</div>
+            <div class="opt">C - Il utilise toujours le schéma 'public'.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Le profil définit la connexion. La valeur associée à <code>schema</code> dans le profil actif est le schéma de base où dbt écrira les modèles.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 17 sur 65 — DATA TYPES (Seeds)</span>
+            <span class="q-txt">Est-il possible de forcer le type d'une colonne lors d'un <code>dbt seed</code> ?</span>
+            <div class="opt">A - Non, c'est automatique.</div>
+            <div class="opt">B - Oui, dans <code>dbt_project.yml</code> sous la configuration <code>column_types</code>.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B - Oui</strong>
+                <p>On peut forcer un type (ex: transformer un ID numérique en String) pour éviter que d'éventuels zéros non significatifs ne disparaissent.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 18 sur 65 — DBT COMPILE</span>
+            <span class="q-txt">Quelle est la différence entre <code>dbt compile</code> et <code>dbt run</code> ?</span>
+            <div class="opt">A - <code>compile</code> exécute le SQL en base.</div>
+            <div class="opt">B - <code>compile</code> génère le code SQL final dans le dossier <code>target/</code> sans l'exécuter.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p><code>compile</code> transforme le code Jinja/SQL en SQL pur que tu peux copier-coller dans ton éditeur SQL pour déboguer.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 19 sur 65 — SOURCE FUNCTION</span>
+            <span class="q-txt">Quelle fonction Jinja utilisez-vous pour référencer une table source définie dans un YAML ?</span>
+            <div class="opt">A - <code>{{ ref() }}</code></div>
+            <div class="opt">B - <code>{{ source() }}</code></div>
+            <div class="opt">C - <code>{{ from() }}</code></div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>La fonction <code>source('nom_source', 'nom_table')</code> permet de créer le lien avec la configuration définie dans tes fichiers <code>.yml</code>.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 20 sur 65 — PACKAGE MANAGEMENT</span>
+            <span class="q-txt">Où sont installés les packages externes après un <code>dbt deps</code> ?</span>
+            <div class="opt">A - /node_modules/</div>
+            <div class="opt">B - /dbt_packages/ (ou /dbt_modules/)</div>
+            <div class="opt">C - /macros/</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Le nom du dossier a évolué de <code>dbt_modules</code> vers <code>dbt_packages</code> dans les versions récentes de dbt Core.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 21 sur 65 — EPHEMERAL MATERIALIZATION</span>
+            <span class="q-txt">Un modèle éphémère apparaît-il dans l'explorateur d'objets de votre base de données ?</span>
+            <div class="opt">A - Oui, comme une table.</div>
+            <div class="opt">B - Oui, comme une vue.</div>
+            <div class="opt">C - Non, il n'existe que dans le code compilé de dbt.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : C</strong>
+                <p>Il est injecté comme une CTE (Common Table Expression) dans les modèles qui le référencent. Aucun objet physique n'est créé.</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 22 sur 65 — DESCRIPTION</span>
+            <span class="q-txt">Où doit-on placer les descriptions pour qu'elles apparaissent dans la documentation dbt ?</span>
+            <div class="opt">A - En commentaires SQL <code>--</code></div>
+            <div class="opt">B - Dans les fichiers YAML sous la clé <code>description:</code></div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>La documentation dbt est générée à partir des fichiers de propriétés YAML (Property files).</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 23 sur 65 — PROJECT CLEANING</span>
+            <span class="q-txt">Quelle commande supprime les artefacts (fichiers compilés, logs) du dossier <code>target/</code> ?</span>
+            <div class="opt">A - dbt delete</div>
+            <div class="opt">B - dbt clean</div>
+            <div class="opt">C - dbt reset</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B - dbt clean</strong>
+                <p>Cela permet de s'assurer qu'aucune ancienne version compilée ne vient fausser tes nouveaux runs.</p>
+            </div>
+        </div>
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+        <div class="q-card">
+            <span class="q-head_orange">QCM 2️⃣4️⃣ — SNAPSHOT CONFIG</span>
+            <span class="q-txt">Est-il possible de configurer des paramètres spécifiques aux snapshots (clés uniques, target database, etc.) dans le fichier <code>dbt_project.yml</code> ?</span>
+            <div class="opt">A. Vrai (True)</div>
+            <div class="opt">B. Faux (False)</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A - True</strong>
+                <p>Bien que l'on puisse configurer les snapshots directement dans leur bloc <code>{% snapshot %}</code>, on peut aussi centraliser ces réglages dans <code>dbt_project.yml</code> sous la clé <code>snapshots:</code>.</p>
+                
+<pre><code><span class="cmd">snapshots:</span>
+  <span class="arg">my_project:</span>
+    <span class="cmd">+target_schema:</span> snapshots
+    <span class="cmd">+strategy:</span> timestamp
+    <span class="cmd">+updated_at:</span> updated_at</code></pre>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_green">QCM 2️⃣5️⃣ — MATERIALIZATION SWAP</span>
+            <span class="q-txt">Si vous changez la matérialisation d'un modèle de <code>table</code> à <code>view</code>, que se passe-t-il lors du prochain <code>dbt run</code> ?</span>
+            <div class="opt">A. dbt supprime (drop) la table existante et crée la vue.</div>
+            <div class="opt">B. Une erreur est générée car dbt ne peut pas écraser une table par une vue.</div>
+            <div class="opt">C. dbt renomme la table et crée la vue à côté.</div>
+            <div class="opt">D. dbt ajoute les données à la table existante sans changer de type.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p>dbt gère intelligemment les changements de matérialisation. S'il détecte un objet existant en base qui ne correspond pas au nouveau type demandé, il exécute un <code>DROP</code> avant le <code>CREATE</code>.</p>
+                
+                <p><span class="hl">Attention :</span> Cela signifie que toutes les données précédemment stockées dans la table physique sont supprimées.</p>
+            </div>
+        </div>
+
+
+
+
+
+		<div class="q-card">
+            <span class="q-head_orange">Question 26 sur 65 — DBT BUILD</span>
+            <span class="q-txt">Quelle affirmation est vraie concernant la commande <code>dbt build</code> ?</span>
+            <div class="opt">A - Elle exécute uniquement les tests.</div>
+            <div class="opt">B - Elle exécute les seeds, les modèles, les snapshots et les tests dans l'ordre du DAG.</div>
+            <div class="opt">C - Elle génère uniquement la documentation.</div>
+            <div class="opt">D - Elle ne peut être utilisée qu'en environnement de développement.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p><code>dbt build</code> est la commande de production par excellence. Elle combine <code>run</code>, <code>test</code>, <code>seed</code>, et <code>snapshot</code>. Si un test échoue, les modèles enfants (downstream) ne sont pas exécutés.</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 27 sur 65 — GENERIC TESTS</span>
+            <span class="q-txt">Parmi ces tests, lequel n'est PAS un test "générique" (out-of-the-box) de dbt ?</span>
+            <div class="opt">A - unique</div>
+            <div class="opt">B - not_null</div>
+            <div class="opt">C - relationships</div>
+            <div class="opt">D - row_count_check</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : D</strong>
+                <p>Les 4 tests génériques inclus dans dbt Core sont : <code>unique</code>, <code>not_null</code>, <code>accepted_values</code> et <code>relationships</code>. <code>row_count_check</code> nécessiterait un package comme dbt-utils ou un test personnalisé.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 28 sur 65 — TARGET FOLDER</span>
+            <span class="q-txt">Quel fichier dbt utilise-t-il pour stocker l'état du projet et permettre la sélection par "state" ?</span>
+            <div class="opt">A - dbt_project.yml</div>
+            <div class="opt">B - manifest.json</div>
+            <div class="opt">C - schema.yml</div>
+            <div class="opt">D - profiles.yml</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Le fichier <code>target/manifest.json</code> contient la structure complète de ton DAG. C'est en comparant deux fichiers manifest (le courant vs celui de prod) que dbt identifie les changements (<code>state:modified</code>).</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 29 sur 65 — EPHEMERAL MODELS</span>
+            <span class="q-txt">Un modèle matérialisé en 'ephemeral' est :</span>
+            <div class="opt">A - Créé comme une table temporaire.</div>
+            <div class="opt">B - Créé comme une vue permanente.</div>
+            <div class="opt">C - Injecté comme une CTE dans les modèles qui le référencent.</div>
+            <div class="opt">D - Supprimé après 24 heures.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : C</strong>
+                <p>Les modèles éphémères n'existent pas physiquement dans la base de données. Ils simplifient ton schéma en étant intégrés directement dans le code SQL des modèles dépendants via une CTE (Common Table Expression).</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 30 sur 65 — PROJECT STRUCTURE</span>
+            <span class="q-txt">Où sont stockés par défaut les fichiers de "seeds" dans un projet dbt ?</span>
+            <div class="opt">A - /models/seeds/</div>
+            <div class="opt">B - /data/</div>
+            <div class="opt">C - /seeds/</div>
+            <div class="opt">D - /csv/</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : C</strong>
+                <p>Par défaut, dbt cherche les fichiers CSV à charger dans le répertoire <code>seeds/</code> à la racine du projet (configurable dans <code>dbt_project.yml</code>).</p>
+            </div>
+        </div>
+		
+		
+		
+		
+		
+		<div class="q-card">
+            <span class="q-head_orange">Question 31 sur 65 — SOURCE FRESHNESS</span>
+            <span class="q-txt">Quelle propriété est obligatoire dans le fichier <code>sources.yml</code> pour utiliser <code>dbt source freshness</code> ?</span>
+            <div class="opt">A - description</div>
+            <div class="opt">B - loaded_at_field</div>
+            <div class="opt">C - freshness_check: true</div>
+            <div class="opt">D - database</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B - loaded_at_field.</strong>
+                <p>Pour calculer la "fraîcheur", dbt a besoin de savoir quelle colonne contient le timestamp de mise à jour (ex: <code>updated_at</code>). Sans <code>loaded_at_field</code>, dbt ne peut pas comparer le temps écoulé.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 32 sur 65 — TEST SELECTION</span>
+            <span class="q-txt">Comment exécuter uniquement les tests définis sur vos sources ?</span>
+            <div class="opt">A - <code>dbt test --select source:*</code></div>
+            <div class="opt">B - <code>dbt run-test --sources</code></div>
+            <div class="opt">C - <code>dbt source test</code></div>
+            <div class="opt">D - <code>dbt test --models source</code></div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est A.</strong>
+                <p>La syntaxe <code>source:*</code> est le sélecteur standard pour cibler toutes les sources définies dans le projet.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 33 sur 65 — PROJECT VARIABLES</span>
+            <span class="q-txt">Où définissez-vous des variables globales accessibles dans tout le projet via la fonction <code>var()</code> ?</span>
+            <div class="opt">A - profiles.yml</div>
+            <div class="opt">B - packages.yml</div>
+            <div class="opt">C - dbt_project.yml</div>
+            <div class="opt">D - macros/vars.sql</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est C - dbt_project.yml.</strong>
+                <p>Les variables sont définies sous la clé <code>vars:</code> au niveau racine du fichier <code>dbt_project.yml</code>.</p>
+                <pre><code>vars:
+  start_date: '2023-01-01'</code></pre>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 34 sur 65 — DATA TESTS (Singular)</span>
+            <span class="q-txt">Où sont stockés les "Singular Tests" (tests SQL personnalisés) ?</span>
+            <div class="opt">A - /models/tests/</div>
+            <div class="opt">B - /macros/</div>
+            <div class="opt">C - /tests/</div>
+            <div class="opt">D - /analyses/</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est C - /tests/.</strong>
+                <p>Un test singulier est un fichier <code>.sql</code> dans le dossier <code>tests/</code>. S'il renvoie des lignes, le test échoue.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 35 sur 65 — DOCUMENTATION</span>
+            <span class="q-txt">Quelle commande dbt crée le fichier <code>index.html</code> de la documentation ?</span>
+            <div class="opt">A - dbt docs run</div>
+            <div class="opt">B - dbt docs generate</div>
+            <div class="opt">C - dbt compile</div>
+            <div class="opt">D - dbt build</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B - dbt docs generate.</strong>
+                <p>Cette commande compile le projet et interroge le catalogue de la base de données pour générer <code>manifest.json</code> et <code>catalog.json</code>.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 36 sur 65 — REF FUNCTION</span>
+            <span class="q-txt">Pourquoi est-il crucial d'utiliser <code>{{ ref('model_name') }}</code> au lieu du nom de table direct ?</span>
+            <div class="opt">A - Pour accélérer les requêtes SQL.</div>
+            <div class="opt">B - Pour permettre à dbt de construire le DAG et gérer l'ordre d'exécution.</div>
+            <div class="opt">C - Pour crypter le nom des tables.</div>
+            <div class="opt">D - C'est optionnel, c'est juste une convention.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>La fonction <code>ref()</code> crée la dépendance. Sans elle, dbt ne sait pas quel modèle doit être exécuté avant l'autre.</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 37 sur 65 — SEED UPDATE</span>
+            <span class="q-txt">Si vous modifiez une valeur dans un fichier CSV de seed, quelle commande met à jour la table en base ?</span>
+            <div class="opt">A - dbt run</div>
+            <div class="opt">B - dbt seed</div>
+            <div class="opt">C - dbt compile</div>
+            <div class="opt">D - dbt refresh</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B - dbt seed.</strong>
+                <p>Note : <code>dbt build</code> fonctionne aussi car il inclut l'étape seed.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 38 sur 65 — SCHEMA.YML</span>
+            <span class="q-txt">Dans quel fichier définit-on généralement les tests génériques (unique, not_null) ?</span>
+            <div class="opt">A - dbt_project.yml</div>
+            <div class="opt">B - Un fichier .yml dans le dossier /models/</div>
+            <div class="opt">C - profiles.yml</div>
+            <div class="opt">D - Dans le fichier .sql du modèle</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>On utilise des fichiers YAML (souvent nommés <code>schema.yml</code> ou <code>_models.yml</code>) à côté des fichiers SQL pour documenter et tester.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 39 sur 65 — TARGETS</span>
+            <span class="q-txt">Où sont définies les informations de connexion (hôte, utilisateur, mot de passe) ?</span>
+            <div class="opt">A - dbt_project.yml</div>
+            <div class="opt">B - profiles.yml</div>
+            <div class="opt">C - sources.yml</div>
+            <div class="opt">D - .env</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B - profiles.yml.</strong>
+                <p>Ce fichier est généralement situé en dehors du projet (dans <code>~/.dbt/</code>) pour des raisons de sécurité.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 40 sur 65 — SNAPSHOT STRATEGY</span>
+            <span class="q-txt">Quelle stratégie de snapshot est utilisée pour détecter les changements en comparant une liste de colonnes ?</span>
+            <div class="opt">A - timestamp</div>
+            <div class="opt">B - check</div>
+            <div class="opt">C - full_refresh</div>
+            <div class="opt">D - incremental</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B - check.</strong>
+                <p>La stratégie <code>check</code> compare les valeurs des colonnes listées dans <code>check_cols</code> pour voir si une ligne a été modifiée.</p>
+            </div>
+        </div>
+		
+		
+		
+		
+		<div class="q-card">
+            <span class="q-head_orange">Question 41 sur 65 — YAML ANCHORS</span>
+            <span class="q-txt">À quoi servent les "YAML anchors" (<code>&</code>) et "aliases" (<code>*</code>) dans vos fichiers de configuration dbt ?</span>
+            <div class="opt">A - À créer des liens hypertextes dans la documentation.</div>
+            <div class="opt">B - À éviter la répétition de configurations identiques (DRY - Don't Repeat Yourself).</div>
+            <div class="opt">C - À forcer l'ordre d'exécution des modèles.</div>
+            <div class="opt">D - À définir des variables d'environnement.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>Les ancres YAML permettent de définir un bloc de configuration une seule fois et de le réutiliser ailleurs dans le même fichier, ce qui est très utile pour les tests répétitifs sur plusieurs colonnes.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 42 sur 65 — SCHEMA TESTS vs DATA TESTS</span>
+            <span class="q-txt">Quelle est la différence principale entre un "Generic Test" et un "Singular Test" ?</span>
+            <div class="opt">A - Le Generic est en SQL, le Singular est en Python.</div>
+            <div class="opt">B - Le Generic est défini en YAML et réutilisable, le Singular est un fichier SQL spécifique à un cas unique.</div>
+            <div class="opt">C - Les Singular tests ne peuvent pas être exécutés en CI/CD.</div>
+            <div class="opt">D - Il n'y a aucune différence, ce sont deux noms pour la même chose.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>Un test <b>Generic</b> (ex: <code>unique</code>) est une macro paramétrable dans un YAML. Un test <b>Singular</b> est un script SQL dans le dossier <code>tests/</code> qui est "vrai" s'il ne retourne aucune ligne.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 43 sur 65 — EXPOSURES</span>
+            <span class="q-txt">À quoi sert un fichier <code>exposures.yml</code> dans dbt ?</span>
+            <div class="opt">A - À exposer les mots de passe de la base de données.</div>
+            <div class="opt">B - À définir des ressources externes (Dashboards, rapports BI, ML models) qui utilisent les modèles dbt.</div>
+            <div class="opt">C - À rendre le code source public sur GitHub.</div>
+            <div class="opt">D - À mesurer la performance des requêtes SQL.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>Les <b>Exposures</b> permettent de compléter le lignage (Lineage) en montrant quels outils de BI (Tableau, Looker, etc.) dépendent de quels modèles dbt.</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 44 sur 65 — PACKAGES</span>
+            <span class="q-txt">Après avoir ajouté un package dans <code>packages.yml</code>, quelle commande faut-il lancer ?</span>
+            <div class="opt">A - dbt run</div>
+            <div class="opt">B - dbt install</div>
+            <div class="opt">C - dbt deps</div>
+            <div class="opt">D - dbt update</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est C - dbt deps.</strong>
+                <p><code>dbt deps</code> télécharge les sources des packages depuis le hub dbt ou GitHub et les installe dans le dossier <code>dbt_packages/</code>.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 45 sur 65 — OVERRIDE MACROS</span>
+            <span class="q-txt">Comment dbt décide-t-il quelle macro utiliser si deux macros ont le même nom (une dans votre projet, une dans un package installé) ?</span>
+            <div class="opt">A - Il utilise celle du package.</div>
+            <div class="opt">B - Il utilise celle de votre projet local (priorité locale).</div>
+            <div class="opt">C - Il génère une erreur de compilation.</div>
+            <div class="opt">D - Il choisit de manière aléatoire.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>dbt privilégie toujours l'implémentation locale. Cela vous permet d'écraser (override) le comportement par défaut des macros d'un package sans modifier le code du package lui-même.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 46 sur 65 — SOURCE OVERRIDE</span>
+            <span class="q-txt">Dans <code>sources.yml</code>, à quoi sert la propriété <code>identifier</code> ?</span>
+            <div class="opt">A - À donner un nom unique au fichier YAML.</div>
+            <div class="opt">B - À mapper un nom logique dbt à un nom de table physique différent dans la base.</div>
+            <div class="opt">C - À identifier l'utilisateur qui a créé la source.</div>
+            <div class="opt">D - À définir la clé primaire de la table.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>Si votre table s'appelle <code>stg_orders_v1_final</code> en base, vous pouvez utiliser <code>identifier: stg_orders_v1_final</code> et garder un <code>name: orders</code> plus simple pour vos <code>{{ source('...', 'orders') }}</code>.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 47 sur 65 — JINJA WHITESPACE</span>
+            <span class="q-txt">En Jinja, que fait l'ajout d'un tiret (<code>-</code>) dans les balises (ex: <code>{{- ... -}}</code>) ?</span>
+            <div class="opt">A - Cela commente la ligne.</div>
+            <div class="opt">B - Cela supprime les espaces blancs (espaces, retours à la ligne) avant ou après la balise.</div>
+            <div class="opt">C - Cela indique une soustraction mathématique.</div>
+            <div class="opt">D - Cela rend la variable optionnelle.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>C'est essentiel pour générer un SQL propre et lisible sans avoir des centaines de lignes vides lors de l'utilisation de boucles <code>for</code> ou de conditions <code>if</code>.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 48 sur 65 — HOOKS</span>
+            <span class="q-txt">Lequel de ces "hooks" n'existe pas dans dbt ?</span>
+            <div class="opt">A - pre-run</div>
+            <div class="opt">B - on-run-start</div>
+            <div class="opt">C - pre-hook</div>
+            <div class="opt">D - on-run-end</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est A.</strong>
+                <p>Les hooks valides sont : <code>on-run-start</code> / <code>on-run-end</code> (au niveau projet) et <code>pre-hook</code> / <code>post-hook</code> (au niveau modèle).</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 49 sur 65 — ADAPTERS</span>
+            <span class="q-txt">Qu'est-ce qu'un "Adapter" dans le contexte de dbt Core ?</span>
+            <div class="opt">A - Un câble pour brancher son écran.</div>
+            <div class="opt">B - Le module qui traduit les commandes dbt en SQL spécifique à une base (Snowflake, BigQuery, etc.).</div>
+            <div class="opt">C - Un plugin pour Excel.</div>
+            <div class="opt">D - Une fonction Jinja pour changer le format des dates.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est B.</strong>
+                <p>Chaque base de données a son propre adapter (<code>dbt-snowflake</code>, <code>dbt-bigquery</code>, <code>dbt-postgres</code>) pour gérer les différences de syntaxe SQL.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 50 sur 65 — DEBUGGING</span>
+            <span class="q-txt">Où dbt écrit-il les logs détaillés des requêtes SQL envoyées à la base de données ?</span>
+            <div class="opt">A - Dans le terminal uniquement.</div>
+            <div class="opt">B - Dans <code>target/manifest.json</code>.</div>
+            <div class="opt">C - Dans <code>logs/dbt.log</code>.</div>
+            <div class="opt">D - Dans <code>dbt_project.yml</code>.</div>
+            <button class="btn" onclick="t(this)">Vérifier la réponse</button>
+            <div class="ans">
+                <strong>✅ La bonne réponse est C.</strong>
+                <p>Le fichier <code>logs/dbt.log</code> est l'outil ultime de debug. Il contient chaque requête SQL "compilée" envoyée par dbt à votre entrepôt de données.</p>
+            </div>
+        </div>
+		
+		
+		
+		<div class="q-card">
+            <span class="q-head_orange">Question 51 sur 65 — SNAPSHOT DESTINATION</span>
+            <span class="q-txt">Où dbt stocke-t-il les snapshots par défaut ?</span>
+            <div class="opt">A - Dans le même schéma que les modèles sources.</div>
+            <div class="opt">B - Dans le schéma spécifié par <code>target_schema</code> dans la configuration du snapshot.</div>
+            <div class="opt">C - Dans un fichier CSV local.</div>
+            <div class="opt">D - Dans le schéma public uniquement.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>La configuration <code>target_schema</code> est obligatoire pour un snapshot. dbt créera ce schéma s'il n'existe pas pour isoler les données historiques.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 52 sur 65 — TEST SEVERITY</span>
+            <span class="q-txt">Quelle option permet à un test dbt d'échouer sans arrêter l'exécution du pipeline (Pipeline continue malgré l'erreur) ?</span>
+            <div class="opt">A - severity: error</div>
+            <div class="opt">B - severity: warn</div>
+            <div class="opt">C - strict: false</div>
+            <div class="opt">D - ignore_failures: true</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B - severity: warn</strong>
+                <p>Par défaut, la sévérité est <code>error</code> (code retour 1). En utilisant <code>warn</code>, dbt affiche un avertissement orange mais le code retour reste 0, permettant au CI/CD de continuer.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 53 sur 65 — PROJECT DEPENDENCIES</span>
+            <span class="q-txt">Quel est le but principal de la fonction <code>source()</code> par rapport à <code>ref()</code> ?</span>
+            <div class="opt">A - <code>source()</code> est pour les tables déjà existantes, <code>ref()</code> est pour les modèles créés par dbt.</div>
+            <div class="opt">B - Il n'y a aucune différence technique.</div>
+            <div class="opt">C - <code>source()</code> permet d'écrire dans la base de données.</div>
+            <div class="opt">D - <code>ref()</code> est utilisé uniquement pour les fichiers CSV (seeds).</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p><code>source()</code> définit le point d'entrée des données brutes (Read-only). <code>ref()</code> définit la dépendance entre deux modèles gérés par dbt (Lineage).</p>
+                
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 54 sur 65 — MODEL ALIAS</span>
+            <span class="q-txt">Comment changer le nom final d'une table en base de données sans changer le nom du fichier <code>.sql</code> ?</span>
+            <div class="opt">A - En changeant le nom dans <code>dbt_project.yml</code>.</div>
+            <div class="opt">B - En utilisant la configuration <code>alias: nouveau_nom</code> dans le modèle.</div>
+            <div class="opt">C - Ce n'est pas possible dans dbt Core.</div>
+            <div class="opt">D - En renommant manuellement la table après le run.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>L'utilisation de <code>alias</code> permet d'avoir un nom de fichier technique (ex: <code>stg_orders_v2.sql</code>) tout en exposant une table propre aux utilisateurs (ex: <code>orders</code>).</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 55 sur 65 — ANALYSES FOLDER</span>
+            <span class="q-txt">À quoi servent les fichiers dans le dossier <code>analyses/</code> ?</span>
+            <div class="opt">A - Ce sont des modèles qui sont exécutés à chaque <code>dbt run</code>.</div>
+            <div class="opt">B - Ce sont des scripts SQL compilés par dbt (utilisant <code>ref</code>/<code>jinja</code>) mais non exécutés en base.</div>
+            <div class="opt">C - Ils servent à stocker les résultats des tests.</div>
+            <div class="opt">D - Ce sont des fichiers Python pour le Machine Learning.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Les <b>Analyses</b> sont utiles pour préparer des requêtes ad-hoc complexes qui bénéficient de la puissance de Jinja et des macros, sans pour autant polluer ton entrepôt avec de nouvelles tables.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 56 sur 65 — RUN RESULTS</span>
+            <span class="q-txt">Quel fichier JSON contient les informations de succès/échec et le temps d'exécution après une commande dbt ?</span>
+            <div class="opt">A - manifest.json</div>
+            <div class="opt">B - catalog.json</div>
+            <div class="opt">C - run_results.json</div>
+            <div class="opt">D - sources.json</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : C - run_results.json</strong>
+                <p>Ce fichier est généré à chaque exécution. Il est crucial pour monitorer la performance et alimenter des tableaux de bord de monitoring dbt.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 57 sur 65 — MACRO CONTEXT</span>
+            <span class="q-txt">Quelle variable Jinja permet de savoir si dbt est en train d'exécuter un modèle ou de simplement le compiler ?</span>
+            <div class="opt">A - flags.WHICH</div>
+            <div class="opt">B - execute</div>
+            <div class="opt">C - is_incremental()</div>
+            <div class="opt">D - target.name</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B - execute</strong>
+                <p><code>{% if execute %}</code> est une condition Jinja utilisée pour s'assurer qu'un bloc de code ne s'exécute que lors de la phase d'exécution réelle et non lors de l'analyse initiale du projet par dbt.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 58 sur 65 — CUSTOM SCHEMA</span>
+            <span class="q-txt">Par défaut, si vous spécifiez un <code>schema: marketing</code> pour un modèle, comment dbt nomme-t-il le schéma final ?</span>
+            <div class="opt">A - marketing</div>
+            <div class="opt">B - [target_schema]_marketing</div>
+            <div class="opt">C - dbt_marketing</div>
+            <div class="opt">D - public_marketing</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>C'est un comportement classique qui piège souvent : dbt concatène le schéma de ta cible (ex: <code>dev</code>) avec ton schéma personnalisé. Pour changer cela, il faut modifier la macro <code>generate_schema_name</code>.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 59 sur 65 — TESTS CUSTOM QUERIES</span>
+            <span class="q-txt">Que doit retourner une requête de test SQL personnalisée (singular test) pour être considérée comme un SUCCÈS ?</span>
+            <div class="opt">A - Une ligne avec la valeur 'success'.</div>
+            <div class="opt">B - Zéro ligne (un ensemble de résultats vide).</div>
+            <div class="opt">C - Le nombre total de lignes testées.</div>
+            <div class="opt">D - Une valeur booléenne TRUE.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Dans dbt, un test "cherche les erreurs". S'il trouve des lignes, ce sont des échecs. S'il n'en trouve aucune, tout va bien.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 60 sur 65 — DEFERRAL</span>
+            <span class="q-txt">Quelle fonctionnalité permet de ne lancer que les modèles modifiés en se référant aux modèles non-modifiés déjà existants en production ?</span>
+            <div class="opt">A - Partial Parsing</div>
+            <div class="opt">B - Defer (State Selection)</div>
+            <div class="opt">C - Incremental loading</div>
+            <div class="opt">D - Documentation caching</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B - Defer</strong>
+                <p>Le flag <code>--defer</code> permet de gagner un temps énorme en développement en évitant de reconstruire tout le projet localement.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 61 sur 65 — YML INHERITANCE</span>
+            <span class="q-txt">Une configuration définie dans <code>dbt_project.yml</code> peut-elle être écrasée par une configuration dans le bloc <code>config()</code> d'un modèle SQL ?</span>
+            <div class="opt">A - Oui, le bloc <code>config()</code> est prioritaire.</div>
+            <div class="opt">B - Non, le fichier YAML est toujours prioritaire.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A - Oui.</strong>
+                <p>La hiérarchie est : 1. Modèle SQL (<code>config()</code>), 2. Fichier YAML du dossier, 3. <code>dbt_project.yml</code>.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 62 sur 65 — PROJECT UPGRADE</span>
+            <span class="q-txt">Quelle commande permet de vérifier si votre version de dbt est à jour ?</span>
+            <div class="opt">A - dbt version</div>
+            <div class="opt">B - dbt --version</div>
+            <div class="opt">C - dbt check-version</div>
+            <div class="opt">D - Les options A et B sont correctes.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : D</strong>
+                <p>Les deux syntaxes affichent la version installée et comparent avec la dernière version stable disponible sur PyPi.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 63 sur 65 — YAML VALIDATION</span>
+            <span class="q-txt">Si vous faites une erreur d'indentation dans <code>schema.yml</code>, quand l'erreur sera-t-elle détectée ?</span>
+            <div class="opt">A - Lors de l'écriture (par le terminal).</div>
+            <div class="opt">B - Lors de la phase de "Parsing" au début de n'importe quelle commande dbt.</div>
+            <div class="opt">C - Uniquement lors du <code>dbt run</code>.</div>
+            <div class="opt">D - Uniquement lors du <code>dbt docs generate</code>.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>dbt analyse tous les fichiers YAML avant d'exécuter quoi que ce soit. Une erreur YAML bloque tout le projet dès le départ.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 64 sur 65 — TARGET CONTEXT</span>
+            <span class="q-txt">Que retourne <code>{{ target.name }}</code> ?</span>
+            <div class="opt">A - Le nom de la base de données.</div>
+            <div class="opt">B - Le nom du profil utilisé (ex: dev, prod) défini dans <code>profiles.yml</code>.</div>
+            <div class="opt">C - Le nom du dossier du projet.</div>
+            <div class="opt">D - Le nom de l'utilisateur système.</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>C'est très utile pour écrire du SQL conditionnel, par exemple pour limiter les données en <code>dev</code> mais pas en <code>prod</code>.</p>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">Question 65 sur 65 — FINAL WORKFLOW</span>
+            <span class="q-txt">Vous voulez : 1. Charger des CSV, 2. Les valider, 3. Générer la doc. Quel est l'ordre correct ?</span>
+            <div class="opt">A - run, test, seed, docs generate</div>
+            <div class="opt">B - seed, test, docs generate</div>
+            <div class="opt">C - seed, run, test, docs generate</div>
+            <div class="opt">D - test, seed, docs generate, run</div>
+            <button class="btn" onclick="t(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B (ou C selon le contexte)</strong>
+                <p>L'ordre logique est de charger (seed), valider les données brutes (test), transformer (run) puis documenter.</p>
+            </div>
+        </div>
+		
+		
+		
+ 
+		
+		
+		
+		
+		
+        <div class="footer">
+            <strong>Réseau :</strong> Freebox-49010A active ✅<br>
+            <em>Progression : 25/65 questions complétées</em>
+        </div>
+    </div>
+
+<script>
+    function t(b) {
+        var a = b.nextElementSibling;
+        a.style.display = (a.style.display === 'block') ? 'none' : 'block';
+        b.innerText = (a.style.display === 'block') ? 'Masquer' : 'Vérifier';
+    }
+</script>
+
+</body>
+</html>
