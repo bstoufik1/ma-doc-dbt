@@ -1,87 +1,42 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Documentation dbt</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #1e1e1e;
-            color: #cccccc;
-            margin: 0;
-            display: flex;
-        }
-        .sidebar {
-            width: 320px;
-            background-color: #252526;
-            height: 100vh;
-            border-right: 1px solid #333;
-            padding: 20px;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 40px;
-        }
-        h2 { color: #888; font-size: 14px; text-transform: uppercase; }
-        
-        /* Les liens vers tes pages */
-        .nav-link {
-            display: block;
-            padding: 12px;
-            margin-bottom: 10px;
-            background-color: #37373d;
-            color: #9cdcfe;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            border-left: 4px solid #007acc;
-        }
-        .nav-link:hover {
-            background-color: #45454d;
-            color: white;
-        }
-        .nav-link.special {
-            border-left-color: #ff9d00; /* Orange pour la pige */
-        }
-        .nav-link.arch {
-            border-left-color: #4ec9b0; /* Vert pour l'architecture */
-        }
-        .nav-link.qcm {
-            border-left-color: #c586c0; /* Violet pour QCM */
-        }
-    </style>
-</head>
-<body>
+<div class="menu-container">
+    <h2>📂 Menu Principal</h2>
+    
+    <a href="piege_dbt.html" class="menu-item">📙 Voir la Pige dbt</a>
+    <a href="dbt_BestPractices_Architecture.html" class="menu-item">🏗️ Architecture & Best Practices</a>
 
-    <div class="sidebar">
-        <h2>📂 Menu Principal</h2>
-        
-        <a href="piege_dbt.html" class="nav-link special">📙 Voir la Pige dbt</a>
-
-        <a href="dbt_BestPractices_Architecture.html" class="nav-link arch">🏗️ Architecture & Best Practices</a>
-        
-        <!-- LIEN CORRIGÉ VERS dbt_qcm.html -->
-        <a href="dbt_qcm.html" class="nav-link qcm">✅ Questions d'Entraînement (QCM)</a>
-        
-        <hr style="border: 0.5px solid #333; margin: 20px 0;">
-        
-        <a href="index.html" style="color: #666; text-decoration: none; font-size: 12px;">🏠 Retour Accueil</a>
-    </div>
-
-    <div class="main-content">
-        <h1>Ma Certification dbt</h1>
-        <p>Bienvenue sur mon espace de préparation. Utilise le menu à gauche pour naviguer entre mes fiches de révision.</p>
-        
-        <div style="background: #2d2d2d; padding: 20px; border-radius: 8px; border: 1px solid #444;">
-            <h3>Dernières mises à jour :</h3>
-            <ul>
-                <li><strong>Nouveau :</strong> Ajout de la section QCM d'entraînement</li>
-                <li>Ajout des bonnes pratiques d'architecture.</li>
-                <li>Mise à jour du lexique (Pige).</li>
-            </ul>
+    <details class="menu-dropdown">
+        <summary class="menu-item" style="cursor: pointer;">✅ Questions d'Entraînement (QCM)</summary>
+        <div class="sub-menu">
+            <a href="dbt_qcm.html" class="menu-item sub-item">📝 QCM 1 : Fondamentaux</a>
+            <a href="qcm_advanced.html" class="menu-item sub-item">🚀 QCM 2 : Expert & Hard Mode</a>
+            <a href="qcm_incremental.html" class="menu-item sub-item">🔄 QCM 3 : Stratégies Incrémentales</a>
+            <a href="qcm_cicd.html" class="menu-item sub-item">🤖 QCM 4 : CI/CD & State Aware</a>
+            <a href="qcm_snapshots.html" class="menu-item sub-item">📸 QCM 5 : Snapshots & SCD Type 2</a>
+            <a href="qcm_macros.html" class="menu-item sub-item">🔧 QCM 6 : Macros & Jinja</a>
         </div>
-    </div>
+    </details>
 
-</body>
-</html>
+    <hr>
+    <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
+</div>
+
+<style>
+    .sub-menu {
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px; /* Décale les sous-menus vers la droite */
+        border-left: 2px solid var(--border); /* Optionnel : petite ligne verticale */
+        padding-left: 10px;
+    }
+    .sub-item {
+        font-size: 0.9rem !important; /* Un peu plus petit pour la hiérarchie */
+        margin-bottom: 5px;
+    }
+    .menu-dropdown[open] summary {
+        color: var(--level-orange); /* Change la couleur quand c'est ouvert */
+        margin-bottom: 10px;
+    }
+    summary::-webkit-details-marker {
+        display: none; /* Cache la petite flèche par défaut si tu préfères */
+    }
+</style>
