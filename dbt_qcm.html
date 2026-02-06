@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dbt Hard Mode - Mastering</title>
+    <style>
+        :root {
+            --bg: #0d1117; 
+            --card: #161b22; 
+            --txt: #c9d1d9; 
+            --border: #30363d;
+            
+            /* Les 3 Niveaux */
+            --level-green: #2ea043;
+            --level-orange: #f0883e;
+            --level-red: #ff4500;
+            
+            /* Mise en lumière Commandes */
+            --cmd-main: #2ea043;  /* Vert pour dbt */
+            --cmd-args: #58a6ff;  /* Bleu pour arguments */
+            --hl-red: #ff7b72;    /* Rouge corail pour emphase */
+            
+            --green-ans: #238636;
+        }
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg); color: var(--txt); line-height: 1.4; margin: 0; padding: 10px;
+        }
+        .container { max-width: 700px; margin: 0 auto; }
+        h1 { text-align: center; color: var(--level-red); font-size: 1.6rem; margin: 10px 0; }
+        
+        .intro { 
+            background: var(--card); padding: 8px; border-radius: 6px; border: 1px solid var(--level-red);
+            margin-bottom: 15px; font-size: 0.85rem; text-align: center;
+        }
+
+        .q-card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 12px; 
+            padding: 15px; margin-bottom: 15px; 
+        }
+
+        /* --- STYLES DES TITRES (LES 3 NIVEAUX) --- */
+        .q-head { color: var(--level-red); font-weight: bold; font-size: 0.85rem; display: block; text-transform: uppercase; }
+        .q-head_orange { color: var(--level-orange); font-weight: bold; font-size: 0.85rem; display: block; text-transform: uppercase; }
+        .q-head_green { color: var(--level-green); font-weight: bold; font-size: 0.85rem; display: block; text-transform: uppercase; }
+
+        .q-txt { font-weight: 600; margin: 8px 0 12px 0; display: block; font-size: 1rem; }
+        .opt { background: #21262d; padding: 10px 12px; margin: 6px 0; border-radius: 6px; font-size: 0.9rem; }
+        
+        /* SYNTAX HIGHLIGHTING DANS CODE */
+        code { 
+            background: #000; padding: 2px 5px; border-radius: 4px; 
+            font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--txt);
+        }
+        .cmd { color: var(--cmd-main); font-weight: bold; }
+        .arg { color: var(--cmd-args); }
+        .hl { color: var(--hl-red); font-weight: bold; }
+
+        .ans { 
+            display: none; margin-top: 12px; padding: 12px; font-size: 0.85rem;
+            background: rgba(35, 134, 54, 0.05); border-left: 4px solid var(--green-ans); border-radius: 4px;
+        }
+        .trap { color: #8b949e; font-style: italic; display: block; margin-top: 8px; }
+
+        /* --- BOUTONS ADAPTATIFS --- */
+        .btn { 
+            background: none; border-radius: 20px; cursor: pointer; font-size: 0.8rem; 
+            margin-top: 10px; font-weight: bold; transition: 0.2s; padding: 5px 15px;
+        }
+        .q-head ~ .btn { border: 1px solid var(--level-red); color: var(--level-red); }
+        .q-head ~ .btn:hover { background: var(--level-red); color: #fff; }
+        .q-head_orange ~ .btn { border: 1px solid var(--level-orange); color: var(--level-orange); }
+        .q-head_orange ~ .btn:hover { background: var(--level-orange); color: #fff; }
+        .q-head_green ~ .btn { border: 1px solid var(--level-green); color: var(--level-green); }
+        .q-head_green ~ .btn:hover { background: var(--level-green); color: #fff; }
+
+        .footer { text-align: center; font-size: 0.8rem; padding: 20px; border-top: 1px solid var(--border); margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🧠 dbt — HARD MODE 🔥</h1>
+    <div class="intro">Plusieurs réponses possibles. Focus sur les pièges réels de production.</div>
+
+<div class="q-card">
+    <span class="q-head_orange">QCM 1️⃣ — SOURCE vs MODEL</span>
+    <span class="q-txt">Quelles commandes s’exécutent SUR UNE SOURCE ?</span>
+
+    <div class="opt">A. <code><span class="cmd">dbt</span> <span class="arg">test --select source:raw.customers</span></code></div>
+    <div class="opt">B. <code><span class="cmd">dbt</span> <span class="arg">run --select source:raw.customers</span></code></div>
+    <div class="opt">C. <code><span class="cmd">dbt</span> <span class="arg">source freshness --select source:raw.customers</span></code></div>
+    <div class="opt">D. <code><span class="cmd">dbt</span> <span class="arg">build --select source:raw.customers</span></code></div>
+
+    <button class="btn" onclick="t(this)">Vérifier</button>
+
+    <div class="ans">
+        <strong>✅ Réponses : A, C, D</strong>
+
+        <span class="trap">
+            🧠 <b>Pièges et explications détaillées :</b>
+            <ul>
+                <li><b>A — dbt test</b> : ✅ Valide une source, permet de vérifier les contraintes (<code>not_null</code>, <code>unique</code>) directement sur les tables externes. <b>Note examen :</b> Toujours ajouter <code>source:</code> pour tester une source, sinon dbt cherche un modèle et échoue.</li>
+                <li><b>B — dbt run</b> : ❌ Ne s’applique pas aux sources. <b>Erreur fréquente :</b> Run crée des objets (tables/vues) seulement pour les modèles dbt. Les sources sont externes, dbt ne peut rien exécuter dessus.</li>
+                <li><b>C — dbt source freshness</b> : ✅ Mesure la fraîcheur des données d’une source (SLA), permet de savoir si la table a été mise à jour récemment. <b>Astuce :</b> Utiliser après ingestion, mais ce n’est pas un test de contenu.</li>
+                <li><b>D — dbt build</b> : ✅ Inclut tout le pipeline dbt : run + test + snapshot + seed. Comme il inclut les tests, il peut être considéré comme “valide” pour les sources si des tests sont définis. <b>Attention :</b> Build est holistique, donc en dev utiliser <code>--select</code> pour cibler précisément la source ou le modèle.</li>
+            </ul>
+            💡 <b>Résumé rapide :</b> Les sources n’ont jamais de SQL exécuté directement ; <b>run</b> = modèles seulement, <b>test</b> et <b>source freshness</b> = vérification, <b>build</b> = tout inclus.
+        </span>
+    </div>
+</div>
+
+
+
+    <div class="q-card">
+        <span class="q-head">QCM 2️⃣ — STATE SELECTION</span>
+        <span class="q-txt">Effet exact de : <code><span class="cmd">dbt</span> <span class="arg">build --select state:modified+</span></code> ?</span>
+        <div class="opt">A. Exécute uniquement les modèles modifiés</div>
+        <div class="opt">B. Exécute les modèles modifiés + leurs enfants</div>
+        <div class="opt">C. Exécute les modèles modifiés + leurs parents</div>
+        <div class="opt">D. Inclut les tests liés aux modèles sélectionnés</div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+        <div class="ans">
+            <strong>✅ Réponses : B, D</strong>
+            <span class="trap">🧠 Piège : Le <b class="hl">+</b> après = <b class="arg">downstream</b>. Le <b class="cmd">build</b> couple l'exécution et le test, garantissant que les enfants ne tournent que si les parents modifiés sont valides.</span>
+        </div>
+    </div>
+
+    
+
+    <div class="q-card">
+        <span class="q-head">QCM 3️⃣ — INCREMENTAL</span>
+        <span class="q-txt">Quand le <code><span class="arg">--full-refresh</span></code> est-il réellement nécessaire ?</span>
+        <div class="opt">A. Changement de logique SQL (calcul, etc.)</div>
+        <div class="opt">B. Changement de la clé unique (<code><span class="hl">unique_key</span></code>)</div>
+        <div class="opt">C. Changement de filtre WHERE</div>
+        <div class="opt">D. Données corrompues ou décalage historique</div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+        <div class="ans">
+            <strong>✅ Réponses : B, D</strong>
+            <span class="trap">🧠 Piège : Changer la <b class="hl">unique_key</b> sans full-refresh crée des doublons car dbt ne sait plus quelles lignes "écraser" dans la table existante.</span>
+        </div>
+    </div>
+
+    <div class="q-card">
+        <span class="q-head_orange">QCM 4️⃣ — + vs @ (DAG)</span>
+        <span class="q-txt">Différence entre <code><span class="arg">+model</span></code> et <code><span class="arg">@model</span></code> ?</span>
+        <div class="opt">A. +model inclut les parents (upstream)</div>
+        <div class="opt">B. @model inclut les parents</div>
+        <div class="opt">C. @model inclut le modèle + parents + enfants</div>
+        <div class="opt">D. @model respecte l’état précédent</div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+        <div class="ans">
+            <strong>✅ Réponses : A, C, D</strong>
+            <span class="trap">🧠 Piège expert : <b class="hl">@</b> sélectionne le modèle, ses parents, et TOUT le lignage descendant de ces parents. C'est le sélecteur le plus large pour la sécurité.</span>
+        </div>
+    </div>
+
+    <div class="q-card">
+        <span class="q-head">QCM 5️⃣ — TESTS SILENCIEUX</span>
+        <span class="q-txt">Pourquoi un build peut "réussir" avec des données mauvaises ?</span>
+        <div class="opt">A. Tests absents</div>
+        <div class="opt">B. Tests configurés en 'warn'</div>
+        <div class="opt">C. Absence de flag <code><span class="arg">--warn-error</span></code></div>
+        <div class="opt">D. Tests désactivés par tags</div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+        <div class="ans">
+            <strong>✅ Réponses : A, B, C, D</strong>
+            <span class="trap">🧠 Piège : Par défaut, un test qui échoue en 'warning' ne bloque pas le build. Sans <b class="hl">--warn-error</b>, la CI passera au vert malgré l'alerte.</span>
+        </div>
+    </div>
+
+    <div class="q-card">
+        <span class="q-head_green">QCM 6️⃣ — FRESHNESS</span>
+        <span class="q-txt">Que mesure réellement <code><span class="cmd">source freshness</span></code> ?</span>
+        <div class="opt">A. La qualité intrinsèque des données</div>
+        <div class="opt">B. Le délai depuis la dernière ingestion</div>
+        <div class="opt">C. Le respect des SLAs de mise à jour</div>
+        <div class="opt">D. La présence de valeurs nulles</div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+        <div class="ans">
+            <strong>✅ Réponses : B, C</strong>
+            <span class="trap">🧠 Piège : La freshness ne regarde pas le contenu (nulls, types), mais uniquement le timestamp de la colonne chargée pour voir si l'ingestion est "fraîche".</span>
+        </div>
+    </div>
+
+    <div class="q-card">
+        <span class="q-head_green">QCM 7️⃣ — DBT LS</span>
+        <span class="q-txt">Quels filtres sont valides avec <code><span class="cmd">dbt</span> <span class="arg">ls</span></code> ?</span>
+        <div class="opt">A. <code><span class="arg">tag:nom_tag</span></code></div>
+        <div class="opt">B. <code><span class="arg">path:models/marts</span></code></div>
+        <div class="opt">C. <code><span class="arg">source:nom_source</span></code></div>
+        <div class="opt">D. <code><span class="arg">state:modified</span></code></div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+        <div class="ans">
+            <strong>✅ Réponses : A, B, C, D</strong>
+            <span class="trap">🧠 Piège : <b class="cmd">ls</b> accepte quasiment tous les sélecteurs de dbt run. C'est l'outil parfait pour tester ses sélecteurs avant de lancer un gros build en prod.</span>
+        </div>
+    </div>
+
+    <div class="q-card">
+        <span class="q-head">QCM 8️⃣ — SNAPSHOTS</span>
+        <span class="q-txt">Quelles actions peuvent CASSER un snapshot existant ?</span>
+        <div class="opt">A. Modifier la <code><span class="hl">unique_key</span></code></div>
+        <div class="opt">B. Modifier la <code><span class="hl">strategy</span></code> (check vs timestamp)</div>
+        <div class="opt">C. Modifier une colonne non suivie</div>
+        <div class="opt">D. Faire un <code><span class="arg">--full-refresh</span></code> sur le snapshot</div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+        <div class="ans">
+            <strong>✅ Réponses : A, B, D</strong>
+            <span class="trap">🧠 Règle : Un snapshot est un contrat historique. Changer la clé ou la stratégie corrompt le lignage des versions (SCD Type 2).</span>
+        </div>
+    </div>
+
+    <div class="q-card">
+        <span class="q-head_orange">QCM 9️⃣ — COMPILE VS RUN</span>
+        <span class="q-txt">Cas nécessitant <code><span class="cmd">dbt</span> <span class="arg">compile</span></code> plutôt que <code><span class="arg">run</span></code> ?</span>
+        <div class="opt">A. Debugger une macro complexe</div>
+        <div class="opt">B. Revue de code (PR) sans accès write au warehouse</div>
+        <div class="opt">C. Audit de sécurité du SQL généré</div>
+        <div class="opt">D. Création d'une table temporaire</div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+		
+	
+		
+		
+		
+		<div class="ans">
+    <strong>✅ Réponses : A, B, C</strong>
+    <span class="trap">
+        🧠 <strong>Conseil d'expert :</strong> 
+        <code>dbt compile</code> effectue la <em>transformation de template Jinja → SQL natif</em> 
+        et stocke le résultat dans le dossier <b class="arg">target/</b>. 
+        <br><br>
+        
+        📁 <strong>Ce que vous y trouverez :</strong>
+        <ul style="margin: 5px 0 0 20px; padding-left: 10px;">
+            <li><code>target/compiled/</code> : Le SQL final généré pour chaque modèle</li>
+            <li><code>target/run/</code> : Les manifestes et graphes de dépendance</li>
+            <li><code>target/graph_summary.json</code> : Vue d'ensemble du projet</li>
+        </ul>
+        
+        🔍 <strong>Cas d'usage critique :</strong>
+        C'est indispensable pour <em>auditer, déboguer ou valider</em> le code SQL que dbt 
+        enverrait à l'entrepôt, <u>sans exécuter la moindre requête</u>. 
+        
+        <br><br>
+        ⚡ <strong>Workflow pratique :</strong>
+        <code>dbt compile → inspect target/compiled/votre_modèle.sql → valider/ajuster</code>
+    </span>
+</div>
+
+
+
+    </div>
+
+    <div class="q-card">
+        <span class="q-head">QCM 🔟 — STRATÉGIE PROD SAFE</span>
+        <span class="q-txt">Corriger un bug critique avec impact minimal ?</span>
+        <div class="opt">A. <code><span class="cmd">dbt</span> <span class="arg">run</span></code> (complet)</div>
+        <div class="opt">B. <code><span class="cmd">dbt</span> <span class="arg">build --select state:modified+ --fail-fast --warn-error</span></code></div>
+        <div class="opt">C. <code><span class="cmd">dbt</span> <span class="arg">run --full-refresh</span></code></div>
+        <div class="opt">D. <code><span class="cmd">dbt</span> <span class="arg">build</span></code> (complet)</div>
+        <button class="btn" onclick="t(this)">Vérifier</button>
+        <div class="ans">
+            <strong>✅ Réponse : B</strong>
+            <span class="trap">🧠 Piège ultime : En prod, on utilise <b class="arg">state:modified+</b> pour isoler le changement et <b class="hl">fail-fast</b> pour s'arrêter au moindre pépin.</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <strong>Vérification réseau :</strong> Freebox-49010A active ✅<br>
+        <em>Expert Mode — dbt Core & Cloud certified</em>
+    </div>
+</div>
+
+<script>
+    function t(b) {
+        var a = b.nextElementSibling;
+        a.style.display = (a.style.display === 'block') ? 'none' : 'block';
+        b.innerText = (a.style.display === 'block') ? 'Masquer' : 'Vérifier';
+    }
+</script>
+
+</body>
+</html>
