@@ -1,42 +1,123 @@
-<div class="menu-container">
-    <h2>📂 Menu Principal</h2>
-    
-    <a href="piege_dbt.html" class="menu-item">📙 Voir la Pige dbt</a>
-    <a href="dbt_BestPractices_Architecture.html" class="menu-item">🏗️ Architecture & Best Practices</a>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Documentation dbt</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --txt: #c9d1d9;
+            --border: #30363d;
+            --accent: #ff4500;
+            --level-orange: #f0883e;
+        }
 
-    <details class="menu-dropdown">
-        <summary class="menu-item" style="cursor: pointer;">✅ Questions d'Entraînement (QCM)</summary>
-        <div class="sub-menu">
-            <a href="dbt_qcm.html" class="menu-item sub-item">📝 QCM 1 : Fondamentaux</a>
-            <a href="qcm_advanced.html" class="menu-item sub-item">🚀 QCM 2 : Expert & Hard Mode</a>
-            <a href="qcm_incremental.html" class="menu-item sub-item">🔄 QCM 3 : Stratégies Incrémentales</a>
-            <a href="qcm_cicd.html" class="menu-item sub-item">🤖 QCM 4 : CI/CD & State Aware</a>
-            <a href="qcm_snapshots.html" class="menu-item sub-item">📸 QCM 5 : Snapshots & SCD Type 2</a>
-            <a href="qcm_macros.html" class="menu-item sub-item">🔧 QCM 6 : Macros & Jinja</a>
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--txt);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR / MENU --- */
+        .sidebar {
+            width: 300px;
+            background-color: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h2 { color: var(--accent); font-size: 1.2rem; text-align: center; margin-bottom: 25px; }
+
+        .menu-item {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: #21262d;
+            color: var(--txt);
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-weight: 500;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background-color: #30363d;
+            border-color: #8b949e;
+            transform: translateX(5px);
+        }
+
+        /* --- SUB-MENU LOGIC --- */
+        summary { list-style: none; }
+        summary::-webkit-details-marker { display: none; }
+
+        .sub-menu {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+            border-left: 2px solid var(--border);
+            padding-left: 10px;
+            margin-bottom: 15px;
+        }
+
+        .sub-item {
+            font-size: 0.85rem !important;
+            padding: 8px 12px !important;
+            margin-bottom: 5px !important;
+            background: rgba(255, 255, 255, 0.03) !important;
+        }
+
+        .menu-dropdown[open] summary {
+            color: var(--level-orange);
+            border-color: var(--level-orange);
+            margin-bottom: 10px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content { flex: 1; padding: 40px; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+        .info-box { background: #1c2128; padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+        hr { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>📂 Menu Principal</h2>
+        
+        <a href="piege_dbt.html" class="menu-item">📙 Voir la Pige dbt</a>
+        <a href="dbt_BestPractices_Architecture.html" class="menu-item">🏗️ Architecture & Best Practices</a>
+
+        <details class="menu-dropdown">
+            <summary class="menu-item">✅ Questions d'Entraînement (QCM)</summary>
+            <div class="sub-menu">
+                <a href="dbt_qcm.html" class="menu-item sub-item">📝 QCM 1 : Fondamentaux</a>
+                <a href="qcm_advanced.html" class="menu-item sub-item">🚀 QCM 2 : Expert & Hard Mode</a>
+                <a href="qcm_incremental.html" class="menu-item sub-item">🔄 QCM 3 : Stratégies Incrémentales</a>
+                <a href="qcm_cicd.html" class="menu-item sub-item">🤖 QCM 4 : CI/CD & State Aware</a>
+                <a href="qcm_snapshots.html" class="menu-item sub-item">📸 QCM 5 : Snapshots & SCD Type 2</a>
+                <a href="qcm_macros.html" class="menu-item sub-item">🔧 QCM 6 : Macros & Jinja</a>
+            </div>
+        </details>
+
+        <hr>
+        <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
+    </div>
+
+    <div class="main-content">
+        <h1># Ma Certification dbt</h1>
+        <div class="info-box">
+            <p>Bienvenue sur mon espace de préparation. Cet outil regroupe mes fiches de révision et mes modules d'entraînement interactifs.</p>
+            <p><strong>Statut :</strong> En cours de révision (100% dbt Core & Cloud)</p>
         </div>
-    </details>
+    </div>
 
-    <hr>
-    <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
-</div>
-
-<style>
-    .sub-menu {
-        display: flex;
-        flex-direction: column;
-        margin-left: 20px; /* Décale les sous-menus vers la droite */
-        border-left: 2px solid var(--border); /* Optionnel : petite ligne verticale */
-        padding-left: 10px;
-    }
-    .sub-item {
-        font-size: 0.9rem !important; /* Un peu plus petit pour la hiérarchie */
-        margin-bottom: 5px;
-    }
-    .menu-dropdown[open] summary {
-        color: var(--level-orange); /* Change la couleur quand c'est ouvert */
-        margin-bottom: 10px;
-    }
-    summary::-webkit-details-marker {
-        display: none; /* Cache la petite flèche par défaut si tu préfères */
-    }
-</style>
+</body>
+</html>
