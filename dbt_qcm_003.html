@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>dbt QCM - Fondamentaux</title>
-    <style>
+   
+   <style>
         :root {
             --bg: #0d1117; 
             --card: #161b22; 
@@ -91,15 +92,63 @@
             padding: 20px; margin-bottom: 20px; 
         }
 
-        .q-head, .q-head_orange, .q-head_green { font-weight: bold; font-size: 0.85rem; display: block; text-transform: uppercase; margin-bottom: 10px; }
-        .q-head { color: var(--level-red); }
-        .q-head_orange { color: var(--level-orange); }
-        .q-head_green { color: var(--level-green); }
+.q-head, .q-head_orange, .q-head_green, .q-head_red {
+    font-weight: bold;
+    font-size: 0.85rem;
+    display: block;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    background: rgba(33, 38, 45, 0.8);
+    border-radius: 6px;
+    display: inline-block;
+    border-left: 4px solid;
+}
+
+.q-head { 
+    color: var(--level-red);
+    border-left-color: var(--level-red);
+}
+
+.q-head_orange { 
+    color: var(--level-orange);
+    border-left-color: var(--level-orange);
+}
+
+.q-head_green { 
+    color: var(--level-green);
+    border-left-color: var(--level-green);
+}
+
+.q-head_red { 
+    color: #ff6b6b; /* Rouge vif */
+    border-left-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
 
         .q-txt { font-weight: 600; margin-bottom: 15px; display: block; font-size: 1.1rem; }
         .opt { background: #21262d; padding: 12px; margin: 8px 0; border-radius: 6px; font-size: 0.95rem; border: 1px solid transparent; }
         
         code { background: #000; padding: 2px 5px; border-radius: 4px; font-family: monospace; color: var(--txt); }
+		
+		code {
+    background: linear-gradient(145deg, 
+        #1a1f26,  /* Gris foncé bleuté */
+        #161b22   /* Gris encore plus foncé */
+    );
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Menlo', 'Consolas', 'Roboto Mono', monospace;
+    color: var(--txt); /* #c9d1d9 (gris clair) selon ta variable */
+    border: 1px solid var(--border); /* #30363d (gris bordure) selon ta variable */
+    font-size: 0.9em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ombre noire à 20% d'opacité */
+    transition: all 0.2s ease;
+}
+		
+		
+		
+		
         .cmd { color: var(--cmd-main); font-weight: bold; }
         .arg { color: var(--cmd-args); }
         .hl { color: var(--hl-red); font-weight: bold; }
@@ -116,7 +165,49 @@
         .btn:hover { background: var(--level-orange); color: #fff; }
 
         .footer { text-align: center; font-size: 0.8rem; padding: 30px; border-top: 1px solid var(--border); margin-top: 40px; }
-    </style>
+    
+	
+	
+	
+	
+.separator-blue {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 40px 0; /* Espace au dessus et en dessous */
+}
+
+.separator-blue::before,
+.separator-blue::after {
+    content: '';
+    flex: 1;
+    border-bottom: 3px solid #007bff; /* Épaisseur et couleur de la ligne bleue */
+}
+
+.separator-blue span {
+    padding: 0 20px;
+    font-weight: bold;
+    color: #007bff;
+    font-family: sans-serif;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+ 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</style>
+	
+	
+	
 </head>
 <body>
 
@@ -125,17 +216,19 @@
         <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
         <a href="piege_dbt.html" class="menu-item">📙 Voir la Pige dbt</a>
 
-        <details class="menu-dropdown" open>
+		<details class="menu-dropdown" open>
             <summary class="menu-item" style="cursor: pointer;">✅ Questions d'Entraînement</summary>
             <div class="sub-menu">
                 <a href="dbt_qcm_001.html" class="menu-item sub-item active-page">📝 QCM 1 : Fondamentaux</a>
                 <a href="dbt_qcm_002.html" class="menu-item sub-item">🚀 EXAMEN BLANC FR</a>
 				<a href="dbt_qcm_004.html" class="menu-item sub-item">🚀 EXAMEN BLANC EN</a>
-                <a href="dbt_qcm_003.html" class="menu-item sub-item">🔄 QCM 3 : Incremental</a>
-                <a href="dbt_qcm_005.html" class="menu-item sub-item">📸 QCM 5 : Snapshots</a>
-                <a href="dbt_qcm_006.html" class="menu-item sub-item">🔧 QCM 6 : Macros</a>
+                <a href="dbt_qcm_003.html" class="menu-item sub-item">🎓 QCM LEARN.GETDB</a>
+                <a href="dbt_qcm_005.html" class="menu-item sub-item">⚠️ PIÈGES À ÉVITER</a>
+				
+                <a href="dbt_qcm_006.html" class="menu-item sub-item">🔧 QCM 6 : Autres</a>
             </div>
         </details>
+		
     </div>
 
     <div class="container">
@@ -164,8 +257,16 @@
 
 
 
+<div class="separator-blue">
+    <span>03_Jinja, Macros, and Packages (VS Code)</span>
+</div>
+
+
+
+
+
 <div class="q-card">
-            <span class="q-head_orange">JINJA FUNDAMENTALS</span>
+            <span class="q-head_green">QUESTION 1/65 :: JINJA FUNDAMENTALS</span>
             <span class="q-txt">What is the primary benefit of Jinja in a SQL workflow?</span>
             <div class="opt">A. To handle database connections</div>
             <div class="opt">B. To add security layers to SQL queries</div>
@@ -179,7 +280,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">JINJA SYNTAX</span>
+            <span class="q-head_green">QUESTION 2/65 ::JINJA SYNTAX</span>
             <span class="q-txt">Which of the following is a valid syntax for setting a variable in Jinja?</span>
             <div class="opt">A. {% set my_variable = "value" %}</div>
             <div class="opt">B. {% let my_variable = "value" %}</div>
@@ -193,7 +294,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">JINJA LOGIC</span>
+            <span class="q-head_green">QUESTION 3/65 ::JINJA LOGIC</span>
             <span class="q-txt">What will be the output of this Jinja block?
             <pre>{% set my_temperature = 80 %}
 {% if my_temperature > 70 %}
@@ -213,7 +314,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DBT STRUCTURE</span>
+            <span class="q-head_green">QUESTION 4/65 :: DBT STRUCTURE</span>
             <span class="q-txt">Where should macros be defined in a dbt project?</span>
             <div class="opt">A. In the "models" folder</div>
             <div class="opt">B. In the "analysis" folder</div>
@@ -227,7 +328,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">MACRO CALLS</span>
+            <span class="q-head_green">QUESTION 5/65 ::MACRO CALLS</span>
             <span class="q-txt">How would you call this macro <code>cents_to_dollars(column_name, decimal_places=2)</code> to convert the 'amount' column with 4 decimal places? (Select all that apply)</span>
             <div class="opt">A. {{ cents_to_dollars('amount', 4) }}</div>
             <div class="opt">B. {% cents_to_dollars('amount', 4) %}</div>
@@ -241,7 +342,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DBT BEST PRACTICES</span>
+            <span class="q-head_green">QUESTION 6/65 ::DBT BEST PRACTICES</span>
             <span class="q-txt">What is a potential drawback of using too many macros in a dbt project?</span>
             <div class="opt">A. It can drastically slow down query performance.</div>
             <div class="opt">B. It can make the code difficult to maintain.</div>
@@ -255,7 +356,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DBT PACKAGES</span>
+            <span class="q-head_green">QUESTION 7/65 ::DBT PACKAGES</span>
             <span class="q-txt">What is the primary function of a package in a dbt project?</span>
             <div class="opt">A. To manage database connections more efficiently</div>
             <div class="opt">B. To optimize query performance</div>
@@ -269,7 +370,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DBT COMMANDS</span>
+            <span class="q-head_green">QUESTION 8/65 ::DBT COMMANDS</span>
             <span class="q-txt">Which of the following commands is used to install a package in your dbt project?</span>
             <div class="opt">A. dbt install</div>
             <div class="opt">B. dbt deps</div>
@@ -283,7 +384,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DBT_UTILS</span>
+            <span class="q-head_green">QUESTION 9/65 ::DBT_UTILS</span>
             <span class="q-txt">What is a common use case for using the generate_surrogate_key macro from the dbt_utils package?</span>
             <div class="opt">A. To create a unique primary key by hashing a combination of columns</div>
             <div class="opt">B. To optimize the performance of SQL queries</div>
@@ -297,7 +398,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">ADVANCED JINJA</span>
+            <span class="q-head_green">QUESTION 10/65 ::ADVANCED JINJA</span>
             <span class="q-txt">What is the primary purpose of the run_query macro in dbt?</span>
             <div class="opt">A. To log the results of a SQL query</div>
             <div class="opt">B. To execute a SQL query against the warehouse and return the results</div>
@@ -311,7 +412,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DBT CONTEXT</span>
+            <span class="q-head_red">QUESTION 11/65 ::DBT CONTEXT</span>
             <span class="q-txt">In the context of advanced Jinja in dbt, what is the purpose of the execute variable?</span>
             <div class="opt">A. It is used to validate whether SQL code is executable</div>
             <div class="opt">B. It logs the execution time of SQL queries</div>
@@ -325,7 +426,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">ENVIRONMENT VARIABLES</span>
+            <span class="q-head_red">QUESTION 12/65 ::ENVIRONMENT VARIABLES</span>
             <span class="q-txt">Which of the following is the correct syntax for using environment variables within a macro?</span>
             <div class="opt">A. {% set env = env_var('VAR_NAME') %}</div>
             <div class="opt">B. {% set env = env-var('DBT_ENV_NAME') %}</div>
@@ -340,9 +441,16 @@
 		
 		
 		
+
+<div class="separator-blue">
+    <span>QMC 04_dbt Fundamentals (VS Code)</span>
+</div>
+
 		
+		
+
 <div class="q-card">
-            <span class="q-head_orange">ELT PROCESS</span>
+            <span class="q-head_green">QUESTION 13/65 ::ELT PROCESS</span>
             <span class="q-txt">dbt is part of which step of the Extract-Load-Transform (ELT) process?</span>
             <div class="opt">A. Extract</div>
             <div class="opt">B. Transform</div>
@@ -357,21 +465,39 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DATA STACK ROLE</span>
+            <span class="q-head_red">QUESTION 14/65 ::DATA STACK ROLE</span>
             <span class="q-txt">Which one of the following is true about dbt in the context of the modern data stack?</span>
             <div class="opt">A. dbt connects directly to your data platform to model data</div>
             <div class="opt">B. dbt stores and processes data directly</div>
             <div class="opt">C. dbt is responsible for moving data back into applications</div>
             <div class="opt">D. dbt connects to multiple data sources to move data into your platform</div>
             <button class="btn" onclick="t(this)">Vérifier</button>
-            <div class="ans">
-                <strong>✅ Réponse : A</strong>
-                <p>dbt ne stocke pas de données. Il se connecte à ta plateforme (Snowflake, BigQuery, etc.) et lui demande d'exécuter le code de modélisation.</p>
-            </div>
+				<div class="ans">
+								<strong>✅ Réponse : A</strong>
+								<hr>
+								<p><b>Explication détaillée :</b> dbt ne stocke pas de données. Il agit comme un chef d'orchestre qui se connecte à ta plateforme (Snowflake, BigQuery, Databricks, etc.) et lui demande d'exécuter le code de modélisation.</p>
+
+								
+
+								<h3>Pourquoi l'Option A est la seule vraie :</h3>
+								<ul>
+									<li><b>Architecture "Push-down" :</b> dbt ne traite rien sur ton ordinateur. Il envoie du SQL au warehouse, et c'est le warehouse qui utilise sa propre puissance de calcul pour transformer les données.</li>
+									<li><b>Transformation In-Situ :</b> dbt transforme les données là où elles dorment déjà.</li>
+								</ul>
+
+								<h3>Pourquoi l'Option D est un piège (EL vs T) :</h3>
+								<p>L'option D décrit l'<b>Ingestion</b> (le "E" et le "L" de ELT). Des outils comme Fivetran ou Airbyte déplacent les données depuis des sources externes (Salesforce, APIs) vers ton warehouse.</p>
+								<ul>
+									<li><b>L'ingestion (Option D) :</b> Amène les données brutes dans le warehouse.</li>
+									<li><b>dbt (Option A) :</b> Prend ces données brutes déjà présentes et les transforme en tables propres pour l'analyse.</li>
+								</ul>
+
+								<p><i>Rappel pour l'examen : dbt = Transformation uniquement. Il ne déplace pas les données et ne les stocke pas.</i></p>
+				</div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">ANALYTICS ENGINEERING</span>
+            <span class="q-head_green">QUESTION 15/65 ::ANALYTICS ENGINEERING</span>
             <span class="q-txt">Which of the following best describes analytics engineering?</span>
             <div class="opt">A. Analytics engineers manage and optimize data storage.</div>
             <div class="opt">B. Analytics engineers create clean, reliable data sets for analysis.</div>
@@ -385,7 +511,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DATA CONTROL PLANE</span>
+            <span class="q-head_green">QUESTION 16/65 ::DATA CONTROL PLANE</span>
             <span class="q-txt">Why is dbt described as the “data control plane”?</span>
             <div class="opt">A. Because it visualizes raw data in dashboards for business users.</div>
             <div class="opt">B. Because it coordinates how data is transformed, tested, and documented across systems.</div>
@@ -398,7 +524,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DEVELOPMENT ISOLATION</span>
+            <span class="q-head_green">QUESTION 17/65 ::DEVELOPMENT ISOLATION</span>
             <span class="q-txt">When working in dbt, which one of the following should always be unique for each dbt developer in development?</span>
             <div class="opt">A. Data platform</div>
             <div class="opt">B. Git repository</div>
@@ -412,7 +538,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DATA vs CODE STORAGE</span>
+            <span class="q-head_green">QUESTION 18/65 ::DATA vs CODE STORAGE</span>
             <span class="q-txt">Which one of the following is a true statement about dbt connections?</span>
             <div class="opt">A. Data is stored in the data platform and code is stored in dbt</div>
             <div class="opt">B. Data is stored in dbt and code is stored in the git repository</div>
@@ -425,7 +551,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">STAGING FUNCTIONS</span>
+            <span class="q-head_green">QUESTION 19/65 ::STAGING FUNCTIONS</span>
             <span class="q-txt">What are two functions of a staging model in dbt? (Select 2)</span>
             <div class="opt">A. Perform light transformations on your data set</div>
             <div class="opt">B. Connect to upstream sources using the source macro</div>
@@ -439,7 +565,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">MARTS FUNCTIONS</span>
+            <span class="q-head_green">QUESTION 20/65 ::MARTS FUNCTIONS</span>
             <span class="q-txt">What are two functions of a marts model in dbt? (Select 2)</span>
             <div class="opt">A. Reference upstream sources using the source macro</div>
             <div class="opt">B. Perform light transformations on the raw data set</div>
@@ -453,7 +579,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DAG VISUALIZATION</span>
+            <span class="q-head_green">QUESTION 21/65 ::DAG VISUALIZATION</span>
             <span class="q-txt">You are auditing your dbt project's DAG. Where will sources appear?</span>
             <div class="opt">A. Sources are the last node in a DAG, all the way to the right.</div>
             <div class="opt">B. Sources are the second node in a DAG, connected to the raw data.</div>
@@ -467,7 +593,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">SOURCE MACRO (PIÈGE YAML)</span>
+            <span class="q-head_green">QUESTION 22/65 ::SOURCE MACRO (PIÈGE YAML)</span>
             <span class="q-txt">How will you correctly select all from customers utilizing the source macro?
             <pre>sources:
   - name: tpch
@@ -484,7 +610,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">YAML DEBUGGING</span>
+            <span class="q-head_green">QUESTION 23/65 ::YAML DEBUGGING</span>
             <span class="q-txt">Actual table: <b>raw.jaffle_shop.orders</b>. Macro used: <code>{{ source('jaffle_shop', 'orders') }}</code>. 
             YAML: database: jaffle_shop | schema: raw. What is the problem?</span>
             <div class="opt">A. The macro call is incorrect</div>
@@ -497,25 +623,61 @@
         </div>		
 		
 		
-		
 	<div class="q-card">
-            <span class="q-head_orange">YAML SYNTAX ERROR</span>
-            <span class="q-txt">You have written the following source file, but are encountering a syntax error… What went wrong?
-            <pre>sources: - name: analytics database: raw schema: analytics tables: - name: agg_customer_orders__all_time</pre></span>
-            <div class="opt">A. The names of tables should come before the name of the source.</div>
-            <div class="opt">B. The line identifying the table is indented one tab too far.</div>
-            <div class="opt">C. The database and schema names should always match.</div>
-            <div class="opt">D. The "tables" key should be indented to match the indentation of the source name.</div>
+            <span class="q-head_green">QUESTION 24/65 : SOURCE YAML SYNTAX ERROR</span>
+            <span class="q-txt">You have written the following source file, but are encountering a syntax error… What went wrong?<br><br>
+            <code>sources:</code><br>
+            <code>&nbsp;&nbsp;- name: analytics</code><br>
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;database: raw</code><br>
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;schema: analytics</code><br>
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tables:</code><br>
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: agg_customer_orders__all_time</code>
+            </span>
+            
+            <div class="opt">A - The names of tables should come before the name of the source.</div>
+            <div class="opt">B - The line identifying the table is indented one tab too far.</div>
+            <div class="opt">C - The database and schema names should always match.</div>
+            <div class="opt">D - <b>The "tables" key should be indented to match the indentation of the source name.</b></div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
-            <div class="ans">
-                <strong>✅ Réponse : D</strong>
-                <p>En YAML, l'indentation est cruciale. La clé <code>tables:</code> doit être au même niveau que <code>name:</code>, <code>database:</code> et <code>schema:</code> à l'intérieur de l'élément de la liste <code>sources:</code>.</p>
-                
+<div class="ans">
+                <strong>✅ Answer: D</strong>
+                <hr>
+                <p><b>Detailed Explanation:</b> YAML is extremely sensitive to indentation. In dbt's source definitions, all properties belonging to a specific source must be at the same indentation level.</p>
+
+                <h3>❌ Syntaxe Incorrecte (Snippet de la question) :</h3>
+                <div class="code-block" style="background-color: #fdeaea; border-left: 5px solid #e74c3c;">
+                    <code>sources:</code><br>
+                    <code>&nbsp;&nbsp;- name: analytics</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;database: raw</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;schema: analytics</code><br>
+                    <code style="color: #e74c3c; font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tables: 🚩 (Erreur : trop d'espaces !)</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: agg_customer_orders</code>
+                </div>
+
+                <h3>✅ Syntaxe Corrigée :</h3>
+                <div class="code-block" style="background-color: #eafaf1; border-left: 5px solid #2ecc71;">
+                    <code>sources:</code><br>
+                    <code>&nbsp;&nbsp;- name: analytics</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;database: raw</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;schema: analytics</code><br>
+                    <code style="color: #27ae60; font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;tables: ✨ (Aligné avec name, database et schema)</code><br>
+                    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: agg_customer_orders</code>
+                </div>
+
+                <h3>Pourquoi l'Option D est correcte :</h3>
+                <ul>
+                    <li><b>Hierarchy Rule:</b> Under the <code>- name</code> property of a source, keys like <code>database</code>, <code>schema</code>, and <code>tables</code> are "siblings". They must be vertically aligned.</li>
+                    <li><b>The Error:</b> In the provided snippet, <code>tables:</code> is indented further right than <code>schema:</code>. YAML thinks <code>tables</code> is a child of the string "analytics".</li>
+                    <li><b>The Fix:</b> You must move <code>tables:</code> back to the left so it aligns perfectly with the other properties.</li>
+                </ul>
+
+                <p><i>💡 Conseil d'expert : Pour ne pas te tromper, vérifie toujours que les clés "parentes" (comme <b>tables:</b>) commencent au même niveau de colonne que les autres clés de configuration de la source.</i></p>
             </div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">SOURCE PURPOSE</span>
+            <span class="q-head_green">QUESTION 25/65 ::SOURCE PURPOSE</span>
             <span class="q-txt">What is the purpose of declaring a source in dbt?</span>
             <div class="opt">A. Tells dbt the pre-existing data to query from the data platform.</div>
             <div class="opt">B. Tells dbt what data to copy from the data platform into dbt.</div>
@@ -528,7 +690,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">SOURCE MACRO & IDENTIFIER</span>
+            <span class="q-head_green">QUESTION 26/65 ::SOURCE MACRO & IDENTIFIER</span>
             <span class="q-txt">A new model needs to reference <b>jaffle_orders_information_table</b>. How would you reference this using the source macro?
             <pre>sources:
   - name: jaffle_shop
@@ -539,55 +701,166 @@
             <div class="opt">B. {{ source('jaffle_shop_dataset', 'orders') }}</div>
             <div class="opt">C. {{ source('jaffle_shop', 'orders') }}</div>
             <button class="btn" onclick="t(this)">Vérifier</button>
-            <div class="ans">
-                <strong>✅ Réponse : C</strong>
-                <p>Même si le nom physique en base est complexe (identifier), dans dbt on utilise toujours le nom logique (name) défini dans le YAML : <code>source('jaffle_shop', 'orders')</code>.</p>
+<div class="ans">
+                <strong>✅ Answer: C</strong>
+                <hr>
+                
+                <h3>Explication détaillée :</h3>
+                <p>La fonction <code>source()</code> dans dbt utilise toujours les <b>noms logiques</b> définis dans ton fichier YAML, et non les noms réels des tables dans ta base de données.</p>
+
+                
+
+                <h3>🔍 Analyse du YAML :</h3>
+                <div class="code-block" style="background-color: #f4f4f4; padding: 10px; border-radius: 5px;">
+                    <code>- name: <span style="color: #27ae60; font-weight: bold;">orders</span> ✨ (Le nom que dbt utilise)</code><br>
+                    <code>&nbsp;&nbsp;identifier: <span style="color: #e67e22; font-weight: bold;">jaffle_orders_info...</span> 🔒 (Le vrai nom en base)</code>
+                </div>
+
+                <h3>Pourquoi l'Option C est la seule correcte :</h3>
+                <ul>
+                    <li><b>Abstraction :</b> L'intérêt de dbt est de pouvoir renommer une table en base (via l'<code>identifier</code>) sans avoir à modifier tous tes fichiers SQL. Tu pointes toujours vers le <code>name</code>.</li>
+                    <li><b>Syntaxe :</b> La macro <code>source()</code> attend deux arguments : <code>'source_name'</code> et <code>'table_name'</code> (le champ <i>name</i> du YAML).</li>
+                </ul>
+
+                <h3>⚠️ Attention aux pièges :</h3>
+                <ul>
+                    <li><b>Piège A (L'alias) :</b> Utiliser l'<code>identifier</code> directement dans la macro provoquera une erreur <i>"Source not found"</i> car dbt cherche la clé <i>name</i>.</li>
+                    <li><b>Piège B (L'invention) :</b> <code>jaffle_shop_dataset</code> n'existe pas dans la configuration fournie.</li>
+                </ul>
+
+                <p><i>💡 Rappel : L'<b>identifier</b> est comme un alias SQL mais pour ta base de données. dbt s'occupe de faire la traduction tout seul au moment de la compilation.</i></p>
             </div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DATA TESTING FEATURES</span>
+            <span class="q-head_green">QUESTION 27/65 ::DATA TESTING FEATURES</span>
             <span class="q-txt">Which is NOT a feature of data testing in dbt?</span>
             <div class="opt">A. Identify errors in my data pipelines when they occur.</div>
             <div class="opt">B. Create trust in the data products we share with stakeholders.</div>
             <div class="opt">C. Determine if the sql we wrote has done what we intended.</div>
             <div class="opt">D. Enable stakeholders to self-serve and understand how a model was built.</div>
             <button class="btn" onclick="t(this)">Vérifier</button>
-            <div class="ans">
-                <strong>✅ Réponse : D</strong>
-                <p>Les tests servent à la qualité technique et à la confiance. Le "self-serve" et la compréhension du modèle sont les rôles de la <b>Documentation</b> et du <b>Lineage</b>, pas des tests.</p>
-            </div>
-        </div>
+				<div class="ans">
+					<strong>✅ Answer: D</strong>
+					<hr>
+					<h3>Explication détaillée :</h3>
+					<p>Les tests dbt servent à valider la <b>qualité</b> et l'<b>intégrité</b> technique des données. Ils ne servent pas à expliquer la logique métier aux utilisateurs finaux.</p>
+                     
+					 <p>La phrase <i>"Enable stakeholders to self-serve and understand how a model was built"</i> se traduit par :</p>
+					    <blockquote style="background: #000; padding: 10px; border-radius: 5px; font-style: italic;">
+						« Permettre aux parties prenantes (utilisateurs métier) d'être autonomes et de comprendre comment un modèle a été construit. »
+						</blockquote>
 
-        <div class="q-card">
-            <span class="q-head_orange">TESTING SOURCES</span>
+					<h3>🔍 Pourquoi D est l'intrus :</h3>
+					<ul>
+						<li><b>Documentation vs Testing :</b> Le "Self-serve" et la compréhension du lignage (lineage) sont gérés par <code>dbt docs generate</code>.</li>
+						<li><b>Le rôle des tests (A, B, C) :</b> 
+							<br>✅ <b>A:</b> Détecter les doublons ou les nulls.
+							<br>✅ <b>B:</b> Garantir que les chiffres sont fiables pour le business.
+							<br>✅ <b>C:</b> Vérifier que nos transformations SQL (ex: un <code>left join</code>) n'ont pas créé de lignes fantômes.
+						</li>
+					</ul>
+					<p><i>💡 Retiens : Test = Qualité technique | Docs = Compréhension métier.</i></p>
+				</div>
+			</div>
+
+<div class="q-card">
+            <span class="q-head_green">QUESTION 28/65 : TESTING SOURCES</span>
             <span class="q-txt">YAML: A <code>unique</code> test is defined under <code>sources -> salesforce -> accounts -> account_id</code>. What test will run?</span>
+            
             <div class="opt">A. A unique test will be run on the accounts source table.</div>
             <div class="opt">B. A unique test will be run on the salesforce model.</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : A</strong>
-                <p>dbt peut tester les sources (données brutes) avant même de lancer les transformations. C'est une excellente pratique pour détecter des problèmes d'ingestion.</p>
+                <strong>✅ Answer: A</strong>
+                <hr>
+                
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « dbt peut tester les sources (données brutes) avant même de lancer les transformations. C'est une excellente pratique pour détecter des problèmes d'ingestion. »
+                </blockquote>
+
+                <h3>🔍 Analyse de la structure YAML :</h3>
+                <div class="code-block" style="background-color: #f8f9fa; border-left: 5px solid #3498db; padding: 10px; margin: 10px 0;">
+<code>sources:</code><br>
+<code>&nbsp;&nbsp;- name: salesforce <span style="color: #7f8c8d;"># &lt;-- Le nom de la source</span></code><br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;tables:</code><br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: accounts <span style="color: #27ae60; font-weight: bold;">✨ (C'est cette table qui est testée)</span></code><br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;columns:</code><br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: account_id</code><br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tests:</code><br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- unique <span style="color: #e67e22;">🚩 (Le test s'applique ici)</span></code>
+                </div>
+
+                
+
+                <h3>Pourquoi l'Option A est correcte :</h3>
+                <ul>
+                    <li><b>Source Testing :</b> Dans dbt, tester une source signifie que dbt va générer une requête SQL qui interroge directement la table brute dans ton warehouse (ex: Snowflake/BigQuery).</li>
+                    <li><b>Validation Précoce :</b> Cela permet de stopper le pipeline si les données injectées par ton outil d'ETL (comme Fivetran) sont corrompues, évitant ainsi de propager des erreurs dans tes modèles finaux.</li>
+                </ul>
+
+                <h3>⚠️ Le piège de l'Option B :</h3>
+                <p>Le mot <b>"model"</b> est réservé aux fichiers SQL que tu as créés dans le dossier <code>models/</code>. Une <b>"source"</b> représente des données que dbt ne contrôle pas encore (le "Raw data"). Un test sur une source ne s'appelle donc jamais un test sur un modèle.</p>
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">SHARED DOCUMENTATION</span>
-            <span class="q-txt">Several models have the same column. What documentation type guarantees these columns have a shared description?</span>
-            <div class="opt">A. Single-line string description</div>
-            <div class="opt">B. Multi-line string description</div>
-            <div class="opt">C. Doc block</div>
-            <div class="opt">D. Read-me file</div>
-            <button class="btn" onclick="t(this)">Vérifier</button>
-            <div class="ans">
-                <strong>✅ Réponse : C. Doc block</strong>
-                <p>Un <code>doc block</code> (défini dans un fichier .md) permet de centraliser une description et de la réutiliser partout avec <code>{{ doc('nom') }}</code>. C'est le principe DRY appliqué à la doc.</p>
-                [Image showing a dbt doc block definition and its reuse in multiple yaml files]
-            </div>
-        </div>
+			<div class="q-card">
+						<span class="q-head_green">QUESTION 29/65 : SHARED DOCUMENTATION</span>
+						<span class="q-txt">Several models have the same column. What documentation type guarantees these columns have a shared description?</span>
+						
+						<div class="opt">A. Single-line string description</div>
+						<div class="opt">B. Multi-line string description</div>
+						<div class="opt">C. Doc block</div>
+						<div class="opt">D. Read-me file</div>
+
+						<button class="btn" onclick="t(this)">Vérifier</button>
+						<div class="ans">
+							<strong>✅ Answer: C. Doc block</strong>
+							<hr>
+
+							<blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+								« Un doc block permet de centraliser une description dans un fichier .md et de la réutiliser partout. Si tu modifies la description une seule fois, elle se met à jour dans tous tes modèles. »
+							</blockquote>
+
+							[Image showing a dbt doc block definition and its reuse in multiple yaml files]
+
+							<h3>🛠️ Exemple concret :</h3>
+							
+							<p><b>1. Création de la description (fichier <code>descriptions.md</code>) :</b></p>
+							<div class="code-block" style="background-color: #f8f9fa; border-left: 5px solid #9b59b6; padding: 10px; margin-bottom: 15px;">
+			<code>{% docs <span style="color: #d35400;">shared_customer_id</span> %}</code><br>
+			<code>L'identifiant unique généré lors de la création du compte client.</code><br>
+			<code>{% enddocs %}</code>
+							</div>
+
+							<p><b>2. Réutilisation dans le YAML (fichier <code>models.yml</code>) :</b></p>
+							<div class="code-block" style="background-color: #f8f9fa; border-left: 5px solid #3498db; padding: 10px;">
+			<code>models:</code><br>
+			<code>&nbsp;&nbsp;- name: stg_customers</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;columns:</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: customer_id</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;description: <span style="color: #27ae60; font-weight: bold;">"{{ doc('shared_customer_id') }}"</span> ✨</code><br>
+			<br>
+			<code>&nbsp;&nbsp;- name: fct_orders</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;columns:</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name: customer_id</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;description: <span style="color: #27ae60; font-weight: bold;">"{{ doc('shared_customer_id') }}"</span> ✨</code>
+							</div>
+
+							<h3>Pourquoi l'Option C est la bonne :</h3>
+							<ul>
+								<li><b>Maintenance :</b> Sans <i>Doc block</i>, tu devrais copier-coller la même phrase 50 fois. Si la définition change, tu ferais 50 erreurs potentielles.</li>
+								<li><b>Formatage :</b> Les <i>Doc blocks</i> supportent le Markdown (gras, listes, liens), contrairement aux descriptions simples en une ligne.</li>
+								<li><b>Centralisation :</b> C'est la seule méthode qui "garantit" (guarantees) une description strictement identique sur plusieurs modèles.</li>
+							</ul>
+
+							<p><i>💡 Note technique pour ta <b>Freebox-49010A</b> : N'oublie pas que les fichiers Markdown contenant les <code>docs</code> doivent se trouver dans ton dossier <code>models/</code> ou être déclarés dans ton <code>dbt_project.yml</code>.</i></p>
+						</div>
+					</div>
 
         <div class="q-card">
-            <span class="q-head_orange">DOCUMENTATION FILE TYPE</span>
+            <span class="q-head_green">QUESTION 30/65 ::DOCUMENTATION FILE TYPE</span>
             <span class="q-txt">Which file type are single-line descriptions written in?</span>
             <div class="opt">A. .sql</div>
             <div class="opt">B. .yml</div>
@@ -604,7 +877,7 @@
 		
 		
 		<div class="q-card">
-            <span class="q-head_orange">DIRECT PROMOTION (ONE TRUNK)</span>
+            <span class="q-head_red">QUESTION 31/65 ::DIRECT PROMOTION (ONE TRUNK)</span>
             <span class="q-txt">Which of the following best describes the direct promotion (one trunk) strategy in dbt Cloud?</span>
             <div class="opt">A. Merging feature branches directly into an intermediate QA branch before production.</div>
             <div class="opt">B. Merging feature branches directly into the main branch for immediate production deployment.</div>
@@ -618,7 +891,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">RISK ASSESSMENT</span>
+            <span class="q-head_green">QUESTION 32/65 ::RISK ASSESSMENT</span>
             <span class="q-txt">What is the primary risk associated with the direct promotion strategy?</span>
             <div class="opt">A. The inability to deploy changes automatically.</div>
             <div class="opt">B. Automated testing is not available.</div>
@@ -631,7 +904,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">INDIRECT PROMOTION (QA BRANCH)</span>
+            <span class="q-head_green">QUESTION 33/65 ::INDIRECT PROMOTION (QA BRANCH)</span>
             <span class="q-txt">In the many trunk (indirect promotion) strategy, what is the purpose of the QA branch?</span>
             <div class="opt">A. To merge changes directly into production.</div>
             <div class="opt">B. To act as a staging area for additional testing before merging into the main branch.</div>
@@ -645,7 +918,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DBT BUILD vs RUN/TEST (PIÈGE)</span>
+            <span class="q-head_red">QUESTION 34/65 ::DBT BUILD vs RUN/TEST (PIÈGE)</span>
             <span class="q-txt">What is the primary advantage of using the <b>dbt build</b> command over separate run and test commands?</span>
             <div class="opt">A. It allows for faster deployment without any testing.</div>
             <div class="opt">B. It materializes and tests nodes in dependency order, skipping downstream dependencies if a test fails.</div>
@@ -659,7 +932,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">FULL REFRESH (PIÈGE)</span>
+            <span class="q-head_red">QUESTION 35/65 ::FULL REFRESH (PIÈGE)</span>
             <span class="q-txt">When would you typically choose to run a <b>full refresh</b> job in dbt Cloud?</span>
             <div class="opt">A. When a critical bug is identified in the DAG structure.</div>
             <div class="opt">B. When you need the most up-to-date information across all models and can tolerate rebuilding large tables.</div>
@@ -673,61 +946,193 @@
 		
 		
 <div class="q-card">
-            <span class="q-head_orange">TIME-SENSITIVE JOBS</span>
+            <span class="q-head_red">QUESTION 36/65 : TIME-SENSITIVE JOBS</span>
             <span class="q-txt">Which situation is best handled by using a time-sensitive job in dbt Cloud?</span>
+            
             <div class="opt">A. You need to ensure that data for a specific dashboard is updated every hour.</div>
             <div class="opt">B. You need to perform a one-time refresh of all data in production.</div>
             <div class="opt">C. You need to fix a syntax error in a macro.</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : A</strong>
-                <p>Un job "time-sensitive" est un job <b>planifié</b> (scheduled). On l'utilise pour garantir la fraîcheur des données (SLA) de manière récurrente (ex: toutes les heures pour un dashboard de ventes).</p>
+                <strong>✅ Answer: A</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « Un job "time-sensitive" est un job <b>planifié (scheduled)</b>. On l'utilise pour garantir la fraîcheur des données de manière récurrente afin de respecter les engagements (SLA) envers les utilisateurs. »
+                </blockquote>
+
+                <h3>🕰️ Comprendre les types de Jobs dans dbt Cloud :</h3>
+                
+                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="border: 1px solid #ddd; padding: 8px;">Type de Job</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Cas d'usage (Use Case)</th>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Scheduled (Option A)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Mise à jour automatique (ex: toutes les heures, tous les matins à 8h). <b>C'est le "Time-sensitive".</b></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>CI (Continuous Integration)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Se déclenche lors d'une Pull Request pour vérifier que le code ne casse rien.</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Manual / Ad-hoc (Option B)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Lancé à la main par le développeur pour un besoin ponctuel.</td>
+                    </tr>
+                </table>
+
+                <h3>Pourquoi l'Option A est correcte :</h3>
+                <ul>
+                    <li><b>Récurrence :</b> Le besoin "every hour" (chaque heure) nécessite une automatisation basée sur le temps (Cron schedule).</li>
+                    <li><b>SLA (Service Level Agreement) :</b> Si un dashboard est utilisé par la direction, dbt Cloud garantit que les transformations tournent à l'heure précise.</li>
+                </ul>
+
+                <h3>Pourquoi les autres sont fausses :</h3>
+                <ul>
+                    <li><b>B (One-time refresh) :</b> C'est une action manuelle ponctuelle. Pas besoin de planificateur.</li>
+                    <li><b>C (Fix syntax error) :</b> C'est du développement local. On utilise l'IDE dbt Cloud ou un éditeur de code, pas un job planifié en production.</li>
+                </ul>
+
+                <p><i>💡 Conseil d'expert : Dans dbt Cloud, un job "Time-sensitive" se configure souvent via une syntaxe <b>Cron</b> (ex: <code>0 * * * *</code> pour chaque heure).</i></p>
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">SCHEDULING PURPOSE</span>
+<div class="q-card">
+            <span class="q-head_green">QUESTION 37/65 : SCHEDULING PURPOSE</span>
             <span class="q-txt">What is the main purpose of dbt Cloud's scheduling feature?</span>
+            
             <div class="opt">A. To manage different environments for various projects</div>
             <div class="opt">B. To automate the triggering of jobs at specific times</div>
             <div class="opt">C. To restrict job access to specific users</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : B</strong>
-                <p>Le scheduling sert à l'<b>automatisation</b>. Il permet de déclencher les pipelines (build, run, test) sans intervention humaine, par exemple tous les matins avant l'arrivée des utilisateurs.</p>
+                <strong>✅ Answer: B</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « Le but principal du scheduling est l'<b>automatisation</b>. Il s'agit de s'assurer que les données sont prêtes et testées chaque jour sans qu'un humain n'ait à cliquer sur "Run". »
+                </blockquote>
+
+                
+
+                <h3>🎯 Pourquoi l'Option B est le cœur du sujet :</h3>
+                <ul>
+                    <li><b>Hands-off Operations :</b> Une fois que ton projet est en production, tu veux qu'il tourne tout seul. Le scheduler est le "réveil" qui déclenche tes commandes <code>dbt build</code> ou <code>dbt run</code>.</li>
+                    <li><b>Fiabilité :</b> Contrairement à un lancement manuel, l'automate n'oublie jamais de lancer le job à 4h du matin pour que les rapports soient frais à 8h.</li>
+                </ul>
+
+                <h3>🔍 Pourquoi les autres options ne sont pas le "Scheduling" :</h3>
+                <ul>
+                    <li><b>Option A (Environments) :</b> La gestion des environnements (Dev, Staging, Prod) est une fonctionnalité de configuration de projet, pas de planification temporelle.</li>
+                    <li><b>Option C (Access Control) :</b> La restriction d'accès est gérée par le <b>RBAC</b> (Role-Based Access Control) et les permissions utilisateurs, ce qui relève de la sécurité.</li>
+                </ul>
+
+                <p><i>💡 Rappel d'examen : Si tu vois "Trigger", "Automate" ou "Cron" associés à dbt Cloud, on parle presque toujours de <b>Scheduling</b>.</i></p>
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">CUSTOMIZATION LEVEL (CRON)</span>
+<div class="q-card">
+            <span class="q-head_green">QUESTION 38/65 : CUSTOMIZATION LEVEL (CRON)</span>
             <span class="q-txt">Which of the following scheduling methods in dbt Cloud allows for the highest level of customization?</span>
+            
             <div class="opt">A. Standard time intervals (e.g., every hour)</div>
             <div class="opt">B. Weekday selection only</div>
             <div class="opt">C. Webhooks from Git providers</div>
             <div class="opt">D. Custom cron syntax</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : D. Custom cron syntax</strong>
-                <p>La syntaxe <b>Cron</b> (ex: <code>0 6,18 * * 1-5</code>) offre une précision totale : elle permet de choisir la minute, l'heure, le jour du mois et le jour de la semaine avec des combinaisons complexes.</p>
+                <strong>✅ Answer: D. Custom cron syntax</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « La syntaxe <b>Cron</b> est le langage universel de la planification. Elle offre une précision chirurgicale (minute, heure, jour) que les menus simplifiés ne permettent pas. »
+                </blockquote>
+
                 
+
+                <h3>🛠️ Pourquoi le Cron est le "Highest Level" :</h3>
+                <ul>
+                    <li><b>Flexibilité totale :</b> Tu peux dire à dbt : "Lance ce job à 4h15 du matin, uniquement du lundi au vendredi, mais seulement si on est le 1er du mois".</li>
+                    <li><b>Exemple concret :</b> <code>15 4 1 * 1-5</code> (4h15, le 1er du mois, si c'est un jour de semaine).</li>
+                </ul>
+
+                <h3>🔍 Comparaison des méthodes :</h3>
+                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="border: 1px solid #ddd; padding: 8px;">Méthode</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Niveau de contrôle</th>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Intervalles (A)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Faible. Limité à des choix pré-définis (ex: toutes les 3h).</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Weekdays (B)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Moyen. Tu choisis les jours, mais souvent avec des heures fixes simples.</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Webhooks (C)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Événementiel. Ce n'est pas basé sur le temps, mais sur une action (ex: merge Git).</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Custom Cron (D)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Maximum.</b> Contrôle total sur chaque unité de temps.</td>
+                    </tr>
+                </table>
+
+                <p><i>💡 Rappel d'examen : Si la question demande le maximum de contrôle ou de personnalisation (customization) pour le temps, la réponse est toujours <b>Cron</b>.</i></p>
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">UNION MODEL SELECTOR (PIÈGE)</span>
+<div class="q-card">
+            <span class="q-head_red">QUESTION 39/65 : UNION MODEL SELECTOR</span>
             <span class="q-txt">What is the benefit of using the union model selector syntax in dbt Cloud?</span>
+            
             <div class="opt">A. It merges multiple jobs into one for faster execution.</div>
             <div class="opt">B. It ensures that jobs run independently.</div>
             <div class="opt">C. It allows you to select and run all parent nodes of multiple models in one command.</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : C</strong>
-                <p>L'union (gérée par un <b>espace</b> entre les sélecteurs) permet de combiner plusieurs sélections. Par exemple : <code>dbt run --select +mod_a +mod_b</code> exécute les deux modèles ET tous leurs parents respectifs en une seule commande.</p>
+                <strong>✅ Answer: C</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « L'union (gérée par un espace entre les sélecteurs) permet de combiner plusieurs sélections. Cela évite de lancer plusieurs commandes à la suite et permet à dbt d'optimiser l'ordre d'exécution. »
+                </blockquote>
+
+                
+
+                <h3>🛠️ Exemple concret de syntaxe :</h3>
+                <div class="code-block" style="background-color: #f8f9fa; border-left: 5px solid #3498db; padding: 10px; margin: 10px 0;">
+                    <code>dbt run --select <span style="color: #27ae60; font-weight: bold;">+model_a</span> <span style="color: #e67e22; font-weight: bold;">+model_b</span></code>
+                </div>
+                <p>Dans cet exemple, l'espace entre les deux modèles agit comme une <b>UNION</b> :</p>
+                <ul>
+                    <li>✨ dbt va chercher <code>model_a</code> et tous ses ancêtres (le <code>+</code> devant).</li>
+                    <li>✨ dbt va chercher <code>model_b</code> et tous ses ancêtres.</li>
+                    <li>✨ dbt fusionne ces deux listes pour créer un seul plan d'exécution.</li>
+                </ul>
+
+                <h3>Pourquoi l'Option C est la bonne :</h3>
+                <ul>
+                    <li><b>Efficacité :</b> Au lieu de faire deux <code>dbt run</code> séparés, tu en fais un seul. Si <code>model_a</code> et <code>model_b</code> partagent un parent commun, dbt ne le construira qu'une seule fois !</li>
+                    <li><b>Gestion des dépendances :</b> C'est le seul moyen de dire à dbt : "Je veux ces deux branches du graphe en même temps".</li>
+                </ul>
+
+                <h3>⚠️ Attention au piège (Intersection vs Union) :</h3>
+                <p>Ne confonds pas l'<b>Union</b> (espace) avec l'<b>Intersection</b> (virgule <code>,</code>). Une virgule exécute uniquement ce qui appartient aux deux sélections à la fois.</p>
+
+                <p><i>💡 Rappel d'examen : L'espace dans une commande <code>--select</code> est l'opérateur "OU" (Union).</i></p>
             </div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">VERIFYING SUCCESS</span>
+            <span class="q-head_green">QUESTION 40/65 ::VERIFYING SUCCESS</span>
             <span class="q-txt">What would be the best way to verify that a dbt Cloud job run succeeded without any model errors?</span>
             <div class="opt">A. By checking the JSON artifacts only</div>
             <div class="opt">B. By reviewing the job logs and model timing</div>
@@ -743,7 +1148,7 @@
 
 
 <div class="q-card">
-            <span class="q-head_orange">VERIFYING SUCCESS</span>
+            <span class="q-head_green">QUESTION 41/65 ::VERIFYING SUCCESS</span>
             <span class="q-txt">What would be the best way to verify that a dbt Cloud job run succeeded without any model errors?</span>
             <div class="opt">A. By checking the JSON artifacts only</div>
             <div class="opt">B. By reviewing the job logs and model timing</div>
@@ -757,21 +1162,41 @@
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">OVERLAPPING JOBS</span>
+<div class="q-card">
+            <span class="q-head_orange">QUESTION 42/65 : OVERLAPPING JOBS</span>
             <span class="q-txt">What might happen if two overlapping jobs attempt to run the same database model at the same time?</span>
+            
             <div class="opt">A. The second job will overwrite the first without issues</div>
-            <div class="opt">B. Both jobs will fail due to database lock conflicts</div>
+            <div class="opt">B. <b>Both jobs will fail due to database lock conflicts</b></div>
             <div class="opt">C. Only the first job will complete, and the second will remain queued</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : B</strong>
-                <p>C'est un problème de <b>Database Lock</b>. Pour garantir l'intégrité (ACID), le warehouse pose un verrou. Si deux jobs se battent pour la même table, cela finit souvent en "Lock wait timeout" ou en erreur de conflit.</p>
+                <strong>✅ Answer: B</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « C'est un problème de <b>Database Lock</b>. Pour garantir que les données ne soient pas corrompues, le warehouse "verrouille" la table. Si deux jobs tentent de la modifier en même temps, ils entrent en conflit. »
+                </blockquote>
+
+                
+
+                <h3>🔍 Pourquoi l'Option B est la réponse attendue :</h3>
+                <ul>
+                    <li><b>Database Locks :</b> Lorsqu'un job dbt exécute un <code>CREATE OR REPLACE TABLE</code> ou un <code>INSERT</code>, la base de données pose un verrou (lock). Un second job essayant de faire la même chose sera bloqué.</li>
+                    <li><b>Timeout :</b> dbt Cloud attendra un certain temps, mais si le premier job ne libère pas la table, le second échouera avec une erreur de type <i>"Lock wait timeout"</i>. Par ricochet, cela peut faire échouer le premier job selon la gestion des transactions de la base.</li>
+                    <li><b>Intégrité ACID :</b> C'est une protection normale pour éviter que les données ne soient dans un état instable (mi-job 1, mi-job 2).</li>
+                </ul>
+
+                <h3>⚠️ Pourquoi l'Option C est un piège :</h3>
+                <p>Dans dbt Cloud, il existe une option "Limit concurrency", mais cela limite le nombre de <i>threads</i> dans <b>un seul job</b>. Si deux <b>jobs différents</b> sont lancés, dbt Cloud ne les met pas automatiquement en file d'attente (queue) l'un derrière l'autre pour la même table, sauf si tu as configuré des dépendances spécifiques.</p>
+
+                <p><i>💡 Conseil d'expert : Pour éviter cela, espace tes "Scheduled Jobs" ou utilise des sélecteurs pour t'assurer qu'ils ne touchent pas aux mêmes modèles en même temps.</i></p>
             </div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">CI PRIMARY BENEFIT</span>
+            <span class="q-head_green">QUESTION 43/65 ::CI PRIMARY BENEFIT</span>
             <span class="q-txt">What is the primary benefit of implementing continuous integration (CI) in dbt Cloud?</span>
             <div class="opt">A. Reducing database storage requirements</div>
             <div class="opt">B. Automating code builds and tests to prevent errors before merging</div>
@@ -784,7 +1209,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">CI FUNCTION (PR SCHEMA)</span>
+            <span class="q-head_green">QUESTION 44/65 ::CI FUNCTION (PR SCHEMA)</span>
             <span class="q-txt">In dbt Cloud, what is the function of a CI job set up with “run on pull request”?</span>
             <div class="opt">A. To automatically deploy changes to production</div>
             <div class="opt">B. To trigger a job only when a pull request is merged</div>
@@ -797,24 +1222,67 @@
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">SLIM CI vs STANDARD CI</span>
+<div class="q-card">
+            <span class="q-head_red">QUESTION 45/65 : SLIM CI vs STANDARD CI</span>
             <span class="q-txt">What distinguishes Slim CI from standard CI in dbt Cloud?</span>
+            
             <div class="opt">A. Slim CI runs builds only on modified nodes and their downstream dependencies</div>
             <div class="opt">B. Slim CI requires more compute resources than standard CI</div>
             <div class="opt">C. Slim CI runs builds on all nodes in the database</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : A</strong>
-                <p>Le <b>Slim CI</b> utilise le sélecteur <code>state:modified+</code>. Il compare ton code au "manifest.json" de la prod pour ne tester que ce que tu as touché. C'est l'arme ultime pour économiser du temps et de l'argent (Compute).</p>
+                <strong>✅ Answer: A</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « Le <b>Slim CI</b> est une optimisation intelligente : au lieu de tout reconstruire, dbt identifie uniquement les changements et leurs impacts. C'est le principe du "test intelligent". »
+                </blockquote>
+
                 
+
+                <h3>🚀 Comment fonctionne le Slim CI ?</h3>
+                <ul>
+                    <li><b>Le Manifeste :</b> dbt Cloud compare ton code actuel au fichier <code>manifest.json</code> de ton dernier job de production réussi (le "State").</li>
+                    <li><b>Détection de changement :</b> Il repère les modèles que tu as modifiés, ajoutés ou supprimés.</li>
+                    <li><b>Sélecteur Magique :</b> Il utilise la syntaxe <code>--select state:modified+</code> (le "+" signifie "et tout ce qui en découle en aval").</li>
+                </ul>
+
+                <h3>📊 Comparaison Standard vs Slim :</h3>
+                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="border: 1px solid #ddd; padding: 8px;">Caractéristique</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Standard CI</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Slim CI</th>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Portée (Scope)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Tout le projet (Full build)</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Uniquement les modifs + impact</b></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Temps</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Long (selon la taille)</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Très rapide</b></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Coût (Compute)</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Élevé</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Optimisé (Réduit)</b></td>
+                    </tr>
+                </table>
+
+                <h3>Pourquoi l'Option A est correcte :</h3>
+                <p>Le terme "Slim" (mince) fait référence à la réduction du volume de données traitées. En ne testant que ce qui a changé, on garantit la sécurité du code tout en libérant les ressources du warehouse.</p>
+
+                <p><i>💡 Rappel d'examen : Pour que le Slim CI fonctionne, tu DOIS configurer un "Deferral State" (un job de référence) dans les paramètres de ton environnement dbt Cloud.</i></p>
             </div>
         </div>
 
 
 
 <div class="q-card">
-            <span class="q-head_orange">SLIM CI COMMAND SYNTAX</span>
+            <span class="q-head_green">QUESTION 46/65 ::SLIM CI COMMAND SYNTAX</span>
             <span class="q-txt">Which command syntax is used in Slim CI to select only modified nodes and their downstream dependencies?</span>
             <div class="opt">A. dbt run</div>
             <div class="opt">B. state:modified+</div>
@@ -827,34 +1295,97 @@
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">ENVIRONMENT VARIABLES PURPOSE</span>
+<div class="q-card">
+            <span class="q-head_green">QUESTION 47/65 : ENVIRONMENT VARIABLES PURPOSE</span>
             <span class="q-txt">What is the primary purpose of using environment variables in dbt Cloud?</span>
+            
             <div class="opt">A. To customize the behavior of dbt in different environments.</div>
             <div class="opt">B. To create schemas in different colors.</div>
             <div class="opt">C. To configure databases only for production environments.</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : A</strong>
-                <p>Le but est le <b>"Write Once, Run Anywhere"</b>. Les variables permettent de changer dynamiquement des paramètres (ex: limiter le volume de données en Dev, changer de base de données source) sans modifier une seule ligne de SQL.</p>
+                <strong>✅ Answer: A</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « Les variables d'environnement permettent d'écrire ton code une seule fois (Write Once) et de le faire s'adapter dynamiquement selon qu'il tourne en Dev, Staging ou Prod. »
+                </blockquote>
+
+                
+
+                <h3>🛠️ Exemple concret d'utilisation :</h3>
+                <p>Imagine que tu veuilles limiter le nombre de jours de données en Dev pour économiser des coûts, mais prendre tout en Prod :</p>
+                
+                <div class="code-block" style="background-color: #f8f9fa; border-left: 5px solid #3498db; padding: 10px; margin: 10px 0;">
+                    <code>select * from orders</code><br>
+                    <code>where order_date > current_date - <span style="color: #d35400; font-weight: bold;">{{ env_var('DBT_DAYS_OF_DATA') }}</span></code>
+                </div>
+
+                <p><b>Configuration dbt Cloud :</b></p>
+                <ul>
+                    <li>✨ En <b>DEV</b> : <code>DBT_DAYS_OF_DATA = 7</code> (Rapide et gratuit)</li>
+                    <li>🚀 En <b>PROD</b> : <code>DBT_DAYS_OF_DATA = 365</code> (Complet)</li>
+                </ul>
+
+                <h3>Pourquoi l'Option A est correcte :</h3>
+                <ul>
+                    <li><b>Flexibilité :</b> Tu peux changer le nom d'un schéma, une clé API, ou un paramètre de filtrage sans jamais toucher au fichier <code>.sql</code>.</li>
+                    <li><b>Sécurité :</b> Les variables d'environnement sont aussi utilisées pour injecter des secrets (identifiants) de manière sécurisée sans les écrire en dur dans le code Git.</li>
+                    <li><b>Standardisation :</b> Cela garantit que le même code est testé en Dev et déployé en Prod, seule la "configuration" externe change.</li>
+                </ul>
+
+                <p><i>💡 Rappel technique : Dans dbt, les variables d'environnement doivent obligatoirement commencer par le préfixe <code>DBT_</code> pour être reconnues dans dbt Cloud (ex: <code>DBT_MY_VARIABLE</code>).</i></p>
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">JINJA & ENV_VAR</span>
+<div class="q-card">
+            <span class="q-head_green">QUESTION 48/65 : JINJA & ENV_VAR</span>
             <span class="q-txt">Which function in Jinja would you use to retrieve the environment variable <b>DBT_MY_ENV</b>?</span>
+            
             <div class="opt">A. target.name</div>
             <div class="opt">B. schema_var</div>
-            <div class="opt">C. env_var</div>
+            <div class="opt">C. <b>env_var</b></div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : C. env_var</strong>
-                <p>La syntaxe correcte est <code>{{ env_var('DBT_MY_ENV') }}</code>. Tu peux même ajouter une valeur par défaut : <code>{{ env_var('DBT_MY_ENV', 'default_val') }}</code>.</p>
+                <strong>✅ Answer: C. env_var</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « La fonction <b>env_var()</b> est le pont entre ton système (dbt Cloud ou ton terminal) et ton code SQL. Elle permet d'injecter des valeurs dynamiques en toute sécurité. »
+                </blockquote>
+
+                
+
+                <h3>🛠️ Syntaxe et Usage :</h3>
+                <p>Dans dbt, tu appelles cette fonction à l'intérieur des doubles accolades Jinja :</p>
+                
+                <div class="code-block" style="background-color: #f8f9fa; border-left: 5px solid #3498db; padding: 10px; margin: 10px 0;">
+                    <code>-- Utilisation simple</code><br>
+                    <code>{{ <span style="color: #27ae60; font-weight: bold;">env_var</span>('DBT_MY_ENV') }}</code><br><br>
+                    <code>-- Avec une valeur par défaut (Sécurité ✨)</code><br>
+                    <code>{{ <span style="color: #27ae60; font-weight: bold;">env_var</span>('DBT_MY_ENV', 'dev_schema') }}</code>
+                </div>
+
+                <h3>Pourquoi l'Option C est la seule correcte :</h3>
+                <ul>
+                    <li><b>Standard dbt :</b> <code>env_var</code> est la fonction native de dbt pour lire les variables d'environnement.</li>
+                    <li><b>Pre-parsing :</b> dbt récupère cette valeur <i>avant</i> de compiler le SQL, ce qui permet de l'utiliser même dans tes fichiers <code>.yml</code> (pour les noms de base ou de schéma).</li>
+                </ul>
+
+                <h3>🔍 Pourquoi les autres sont fausses :</h3>
+                <ul>
+                    <li><b>A (target.name) :</b> Cette variable existe, mais elle contient le nom du profil utilisé (ex: 'dev' ou 'prod'), pas une variable personnalisée.</li>
+                    <li><b>B (schema_var) :</b> Cette fonction n'existe pas nativement dans dbt. On utilise souvent <code>var()</code> pour les variables du projet ou <code>env_var()</code> pour le système.</li>
+                </ul>
+
+                <p><i>💡 Rappel critique : Si la variable d'environnement n'est pas définie et que tu n'as pas mis de valeur par défaut, dbt renverra une erreur lors de la compilation. Toujours prévoir un "fallback" !</i></p>
             </div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">DEFAULT SCHEMA BEHAVIOR</span>
+            <span class="q-head_green">QUESTION 49/65 ::DEFAULT SCHEMA BEHAVIOR</span>
             <span class="q-txt">What happens if a developer does not specify a custom schema name in dbt Cloud?</span>
             <div class="opt">A. dbt creates an error and stops the build.</div>
             <div class="opt">B. dbt uses the default schema name configured for the environment.</div>
@@ -866,22 +1397,57 @@
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">TARGET.NAME MEANING</span>
+<div class="q-card">
+            <span class="q-head_orange">QUESTION 50/65 : TARGET.NAME MEANING</span>
             <span class="q-txt">If the <b>target.name</b> is set to "prod" in dbt Cloud, what does it indicate?</span>
+            
             <div class="opt">A. dbt will use the "default" schema.</div>
-            <div class="opt">B. The environment is configured for production.</div>
+            <div class="opt">B. <b>The environment is configured for production.</b></div>
             <div class="opt">C. dbt will ignore any custom schema settings.</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : B</strong>
-                <p><code>target.name</code> est un label. S'il vaut "prod", cela confirme que dbt utilise les accès et le contexte de la production. C'est très utile dans les blocs <code>{% if target.name == 'prod' %}</code>.</p>
+                <strong>✅ Answer: B</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « <code>target.name</code> est l'identifiant (le label) de ton environnement actuel. S'il est réglé sur "prod", dbt sait qu'il doit appliquer les règles de production, comme l'écriture dans les schémas finaux. »
+                </blockquote>
+
+                
+
+                <h3>🛠️ Utilisation pratique dans le code :</h3>
+                <p>On utilise très souvent cette variable pour adapter le SQL selon l'environnement :</p>
+                
+                <div class="code-block" style="background-color: #f8f9fa; border-left: 5px solid #3498db; padding: 10px; margin: 10px 0;">
+                    <code>{% if <span style="color: #27ae60; font-weight: bold;">target.name</span> == 'prod' %}</code><br>
+                    <code>&nbsp;&nbsp;-- En production, on prend toute l'historique</code><br>
+                    <code>&nbsp;&nbsp;select * from raw_data</code><br>
+                    <code>{% else %}</code><br>
+                    <code>&nbsp;&nbsp;-- En dev, on limite à 3 jours pour économiser du compute</code><br>
+                    <code>&nbsp;&nbsp;select * from raw_data limit 100</code><br>
+                    <code>{% endif %}</code>
+                </div>
+
+                <h3>Pourquoi l'Option B est correcte :</h3>
+                <ul>
+                    <li><b>Identification :</b> Dans ton fichier <code>profiles.yml</code> (ou dans les settings d'environnement dbt Cloud), tu nommes tes cibles. "prod" est le nom standard pour désigner l'environnement final.</li>
+                    <li><b>Comportement des Schémas :</b> dbt utilise souvent <code>target.name</code> pour décider s'il doit ajouter un préfixe aux schémas ou non (ex: en prod, on écrit directement dans <code>ANALYTICS</code>, en dev dans <code>DBT_USER_ANALYTICS</code>).</li>
+                </ul>
+
+                <h3>🔍 Pourquoi les autres sont fausses :</h3>
+                <ul>
+                    <li><b>A (Default schema) :</b> Le schéma utilisé dépend de la configuration <code>schema</code> dans ton profil, pas directement du nom "prod".</li>
+                    <li><b>C (Ignore custom schema) :</b> Au contraire, dbt utilise souvent le <code>target.name</code> justement pour décider quelle logique de <i>Custom Schema</i> appliquer.</li>
+                </ul>
+
+                <p><i>💡 Note d'examen : Ne confonds pas <b>target.name</b> (le nom que tu as choisi, ex: 'prod') et <b>target.schema</b> (le nom de la base de données/schéma où dbt écrit réellement).</i></p>
             </div>
         </div>
 
 		
 		<div class="q-card">
-            <span class="q-head_orange">KEY BENEFIT</span>
+            <span class="q-head_green">QUESTION 51/65 ::KEY BENEFIT</span>
             <span class="q-txt">What is the key benefit of using incremental models in dbt?</span>
             <div class="opt">A. Processes entire data sets on every run.</div>
             <div class="opt">B. Quickest materialization to reference.</div>
@@ -894,22 +1460,49 @@
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">REQUIRED CONFIGURATION (PIÈGE)</span>
-            <span class="q-txt">Which of the following is NOT one of the three required configurations for incremental models?</span>
+<div class="q-card">
+            <span class="q-head_red">QUESTION 52/65 : REQUIRED CONFIGURATION (PIÈGE)</span>
+            <span class="q-txt">Which of the following is <b>NOT</b> one of the three required configurations for incremental models?</span>
+            
             <div class="opt">A. materialized='incremental' setting</div>
             <div class="opt">B. A unique key defined for the table</div>
             <div class="opt">C. An is_incremental() conditional block</div>
             <div class="opt">D. An incremental_strategy defined in the config block</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : D</strong>
-                <p>L'<b>incremental_strategy</b> est optionnelle (dbt en choisit une par défaut selon ton warehouse). Les 3 éléments obligatoires sont : la matérialisation, la <code>unique_key</code> (pour éviter les doublons) et le bloc Jinja <code>is_incremental()</code>.</p>
+                <strong>✅ Answer: D</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « L'<b>incremental_strategy</b> est optionnelle. Si tu ne la précises pas, dbt utilisera la stratégie par défaut de ton warehouse (ex: "merge" sur Snowflake ou "insert_overwrite" sur BigQuery). »
+                </blockquote>
+
+                
+
+                <h3>🧱 Le "Trépied" obligatoire d'un modèle incrémental :</h3>
+                <p>Pour qu'un modèle fonctionne en mode incrémental, tu as besoin de ces 3 piliers :</p>
+                <ol>
+                    <li><b>La Matérialisation (A) :</b> Tu dois dire à dbt que ce n'est pas une table classique.
+                        <br><code>{{ config(materialized='incremental') }}</code></li>
+                    <li><b>La Clé Unique (B) :</b> Indispensable pour que dbt sache si une ligne doit être <b>mise à jour</b> (update) ou <b>ajoutée</b> (insert). Sans elle, tu auras des doublons à chaque run.
+                        <br><code>{{ config(unique_key='id') }}</code></li>
+                    <li><b>Le Filtre de données (C) :</b> C'est le bloc qui dit à dbt de ne prendre que les nouvelles données.
+                        <br><code>{% if is_incremental() %} where event_time > (select max(event_time) from {{ this }}) {% endif %}</code></li>
+                </ol>
+
+                <h3>🔍 Pourquoi l'Option D est le "piège" :</h3>
+                <ul>
+                    <li><b>Valeurs par défaut :</b> dbt est intelligent. Il connaît les spécificités de chaque base de données. Si tu ne spécifies pas de stratégie, il choisit la plus efficace pour toi.</li>
+                    <li><b>Personnalisation :</b> Tu ne définis l'<code>incremental_strategy</code> que si tu as un besoin très spécifique (ex: forcer un "delete+insert" au lieu d'un "merge").</li>
+                </ul>
+
+                <p><i>💡 Conseil d'expert : Pour l'examen, retiens bien que <b>is_incremental()</b> est une fonction qui renvoie <b>True</b> uniquement si la table existe déjà ET que tu ne fais pas un <code>--full-refresh</code>.</i></p>
             </div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">LATE-ARRIVING DATA</span>
+            <span class="q-head_green">QUESTION 53/65 ::LATE-ARRIVING DATA</span>
             <span class="q-txt">What is a potential strategy for handling late-arriving data in incremental models?</span>
             <div class="opt">A. Including logic to rebuild the entire table every run.</div>
             <div class="opt">B. Creating conditional logic in the is_incremental() block to update rows for overlapping time periods.</div>
@@ -921,21 +1514,62 @@
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">IMMUTABLE DATA (APPEND)</span>
+<div class="q-card">
+            <span class="q-head_green">QUESTION 54/65 : IMMUTABLE DATA (APPEND)</span>
             <span class="q-txt">What incremental strategy is best suited for a data source that does not update historical records (immutable logs)?</span>
+            
             <div class="opt">A. Append</div>
             <div class="opt">B. Merge</div>
             <div class="opt">C. Delete-Insert</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : A. Append</strong>
-                <p>Si les données ne changent jamais (comme des logs de clics), la stratégie <b>Append</b> est la plus rapide car elle ne vérifie pas les doublons et se contente d'ajouter les lignes à la fin de la table.</p>
+                <strong>✅ Answer: A. Append</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « Pour des données <b>immuables</b> (qui ne changent jamais une fois écrites), l'<b>Append</b> est la stratégie ultime : c'est la plus simple, la moins coûteuse et la plus rapide. »
+                </blockquote>
+
+                
+
+                <h3>🚀 Pourquoi choisir l'Append ?</h3>
+                <ul>
+                    <li><b>Vitesse :</b> Pas de comparaison de lignes (scan) pour chercher des doublons. dbt se contente de faire un <code>INSERT INTO</code> avec les nouvelles données.</li>
+                    <li><b>Économie :</b> Sur des plateformes comme Snowflake ou BigQuery, le <i>Merge</i> consomme beaucoup de ressources car il doit lire la table existante. L'Append ne fait qu'écrire.</li>
+                    <li><b>Cas d'usage :</b> Idéal pour les <i>Events</i>, les <i>Logs</i> serveurs, ou les transactions bancaires historiques.</li>
+                </ul>
+
+                <h3>🔍 Comparaison avec les autres stratégies :</h3>
+                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="border: 1px solid #ddd; padding: 8px;">Stratégie</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Action</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Coût</th>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Append</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Ajoute simplement à la fin.</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Très faible 🟢</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Merge</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Update si existe, sinon Insert.</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Élevé 🔴</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><b>Delete+Insert</b></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Supprime les anciennes versions et ré-insère.</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Moyen 🟡</td>
+                    </tr>
+                </table>
+
+                <p><i>💡 Attention : Utiliser l'Append sur des données qui PEUVENT changer (ex: statut de commande) est dangereux, car tu créeras des doublons au lieu de mettre à jour la ligne existante.</i></p>
             </div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">MICRO-BATCH PURPOSE</span>
+            <span class="q-head_green">QUESTION 55/65 ::MICRO-BATCH PURPOSE</span>
             <span class="q-txt">What is the primary purpose of the micro-batch incremental strategy in dbt?</span>
             <div class="opt">A. To partition data by a unique key.</div>
             <div class="opt">B. To split a large dataset into smaller, more manageable chunks during incremental runs.</div>
@@ -947,38 +1581,93 @@
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">CI & FULL-REFRESH (PIÈGE)</span>
+<div class="q-card">
+            <span class="q-head_green">QUESTION 56/65 : CI & FULL-REFRESH (PIÈGE)</span>
             <span class="q-txt">Why might a full-refresh of incremental models during a slim CI job be problematic?</span>
+            
             <div class="opt">A. It introduces schema drift.</div>
             <div class="opt">B. Full-refresh builds for large incremental models are slow and expensive.</div>
             <div class="opt">C. It causes all downstream models to skip execution.</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : B</strong>
-                <p>Le <b>Slim CI</b> doit être rapide. Comme les modèles incrémentaux portent souvent sur des milliards de lignes, faire un <code>--full-refresh</code> en CI coûterait trop cher et prendrait trop de temps pour une simple validation de code.</p>
+                <strong>✅ Answer: B</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « Le <b>Slim CI</b> est fait pour être une "vérification rapide". Faire un <b>Full-refresh</b> sur un modèle incrémental géant, c'est comme vider et remplir une piscine olympique juste pour vérifier si le robinet fuit. »
+                </blockquote>
+
+                
+
+                <h3>🧠 Mémo-Icones pour l'examen :</h3>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>⚡ <b>Slim CI = Vitesse :</b> On veut un feedback en 2 minutes, pas en 2 heures.</li>
+                    <li>💰 <b>Full-refresh = Facture :</b> Recalculer des milliards de lignes à chaque Pull Request ruinerait ton budget Cloud.</li>
+                    <li>🏗️ <b>Incremental = Poids lourd :</b> Si on utilise l'incrémental, c'est justement parce que la table est trop grosse pour être reconstruite souvent.</li>
+                </ul>
+
+                <h3>🔍 Pourquoi l'Option B est le piège classique :</h3>
+                <p>En entreprise, les modèles incrémentaux sont utilisés pour les tables de <b>plusieurs To</b> (logs, transactions). Si ton job de CI (qui tourne à chaque fois que tu modifies une virgule dans ton code) déclenche un <code>--full-refresh</code> :</p>
+                <ul>
+                    <li>Le développeur attend 45 minutes avant de savoir si son code est bon.</li>
+                    <li>Le Data Warehouse (Snowflake/BigQuery) tourne à plein régime et coûte très cher.</li>
+                </ul>
+
+                <h3>💡 La bonne pratique dbt Cloud :</h3>
+                <p>En Slim CI, dbt utilise le <b>Deferral</b> (report). Il ne construit que ton changement en incrémental par rapport à la production existante, ce qui est extrêmement léger.</p>
+
+                <p style="color: #e67e22; font-weight: bold;">⚠️ Rappel : On ne fait un --full-refresh qu'en cas de changement de structure (ex: changement de type de colonne) ou pour corriger des données historiques corrompues.</p>
             </div>
         </div>
 		
 		
-		
-	<div class="q-card">
-            <span class="q-head_orange">ON_SCHEMA_CHANGE VALUES (PIÈGE)</span>
-            <span class="q-txt">Which of the following is NOT a possible value for the <b>on_schema_change</b> key?</span>
+<div class="q-card">
+            <span class="q-head_green">QUESTION 57/65 : ON_SCHEMA_CHANGE VALUES (PIÈGE)</span>
+            <span class="q-txt">Which of the following is <b>NOT</b> a possible value for the <b>on_schema_change</b> key?</span>
+            
             <div class="opt">A. fail</div>
             <div class="opt">B. ignore</div>
             <div class="opt">C. sync_all_columns</div>
             <div class="opt">D. warn</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : D. warn</strong>
-                <p>Les valeurs valides sont : <code>fail</code> (par défaut), <code>ignore</code>, <code>append_new_columns</code> et <code>sync_all_columns</code>. L'option "warn" n'existe pas ; dbt demande une action claire (bloquer ou synchroniser).</p>
+                <strong>✅ Answer: D. warn</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « dbt est binaire sur les changements de schéma : soit il ignore, soit il bloque (fail), soit il répare. Il ne reste pas dans l'entre-deux avec un simple avertissement (warn). »
+                </blockquote>
+
                 
+
+                <h3>🧠 Mémo-Icones des 4 vraies valeurs :</h3>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>🛑 <b>fail (Par défaut) :</b> "Stop !" Le job s'arrête net si une colonne est ajoutée ou supprimée. C'est la sécurité maximale.</li>
+                    <li>🙈 <b>ignore :</b> "Je ne vois rien." dbt continue le run sans mettre à jour la structure de la table cible.</li>
+                    <li>➕ <b>append_new_columns :</b> "Ajoute le nouveau." Ajoute les nouvelles colonnes mais ne supprime pas les anciennes.</li>
+                    <li>🔄 <b>sync_all_columns :</b> "Miroir parfait." Ajoute les nouvelles et supprime celles qui ne sont plus dans le code.</li>
+                </ul>
+
+                <h3>🔍 Pourquoi l'Option D est le piège :</h3>
+                <p>Dans beaucoup d'outils, <b>"warn"</b> est une option courante. Mais dbt considère qu'un changement de schéma dans un modèle incrémental est un événement critique qui nécessite une stratégie de traitement automatique (sync/append) ou une intervention manuelle (fail). Un simple message d'avertissement dans les logs risquerait de passer inaperçu et de corrompre l'intégrité des données.</p>
+
+                <h3>🛠️ Rappel de Syntaxe :</h3>
+                <div class="code-block" style="background-color: #f8f9fa; border-left: 5px solid #3498db; padding: 10px; margin: 10px 0;">
+                    <code>{{ config(</code><br>
+                    <code>&nbsp;&nbsp;materialized='incremental',</code><br>
+                    <code>&nbsp;&nbsp;unique_key='id',</code><br>
+                    <code>&nbsp;&nbsp;<span style="color: #27ae60; font-weight: bold;">on_schema_change='sync_all_columns'</span></code><br>
+                    <code>) }}</code>
+                </div>
+
+                <p style="color: #e67e22; font-weight: bold;">⚠️ Attention : "sync_all_columns" n'est pas supporté par tous les warehouses de la même manière (certains ne permettent pas de supprimer des colonnes facilement).</p>
             </div>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">WHY USE 'FAIL'?</span>
+            <span class="q-head_green">QUESTION 58/65 ::WHY USE 'FAIL'?</span>
             <span class="q-txt">Why might someone set the <b>on_schema_change</b> config to 'fail' in an incremental model?</span>
             <div class="opt">A. To prevent incremental models from being rebuilt during CI jobs.</div>
             <div class="opt">B. To ensure schema changes are explicitly addressed before the incremental model is rebuilt.</div>
@@ -990,19 +1679,48 @@
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">AVOIDING FULL-REFRESH IN CI</span>
+<div class="q-card">
+            <span class="q-head_orange">QUESTION 59/65 : AVOIDING FULL-REFRESH IN CI</span>
             <span class="q-txt">How can you avoid full-refresh builds for incremental models in a slim CI job?</span>
+            
             <div class="opt">A. Use the dbt build command without the state:modified selector.</div>
-            <div class="opt">B. Clone pre-existing incremental models into the PR-specific schema using the <b>dbt clone</b> command.</div>
+            <div class="opt">B. Clone pre-existing incremental models into the PR-specific schema using the dbt clone command.</div>
             <div class="opt">C. Modify the incremental model configurations to disable full-refresh builds.</div>
+
             <button class="btn" onclick="t(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponse : B</strong>
-                <p>Dans un environnement CI tout neuf, la table n'existe pas, donc dbt fait un full-refresh par défaut. Le <b>dbt clone</b> permet de copier la structure (metadata) de la prod vers le CI instantanément, permettant ainsi un run incrémental immédiat et léger.</p>
+                <strong>✅ Answer: B</strong>
+                <hr>
+
+                <blockquote style="background-color: #eafaf1; border-left: 5px solid #2ecc71; padding: 15px; border-radius: 4px; font-style: italic; color: #1b5e20; margin: 10px 0; line-height: 1.5; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                    « Le <b>dbt clone</b> est comme une "téléportation" de table : il crée une copie virtuelle de ton modèle de production dans ton schéma de CI en quelques secondes, sans copier les données physiquement. »
+                </blockquote>
+
                 
+
+                <h3>🧠 Mémo-Icones pour comprendre le problème :</h3>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>❄️ <b>Le Schéma Vide :</b> En CI, dbt crée un schéma temporaire vide. Comme la table n'existe pas, dbt dit : "Je dois tout construire de zéro" (Full-refresh 🔴).</li>
+                    <li>👯 <b>Le Clone Magique :</b> <code>dbt clone</code> va chercher la table en PROD et crée un pointeur dans le CI. dbt voit alors que la table existe déjà.</li>
+                    <li>⏩ <b>L'Incrémental Réel :</b> dbt peut alors faire un vrai run incrémental (uniquement les nouvelles lignes), ce qui est 100x plus rapide.</li>
+                </ul>
+
+                <h3>🔍 Pourquoi l'Option B est la révolution du Slim CI :</h3>
+                <ul>
+                    <li><b>Zéro Coût :</b> Sur Snowflake ou BigQuery, le clone est souvent "gratuit" (Metadata-only) tant que tu ne modifies pas les données existantes.</li>
+                    <li><b>Vitesse Éclaire :</b> Au lieu de charger 1 To de données pour tester une Pull Request, tu clones la structure en 2 secondes et tu testes ton changement sur 100 lignes.</li>
+                    <li><b>Réalisme :</b> Tu testes ton code contre de vraies données de production, pas un schéma vide.</li>
+                </ul>
+
+                <h3>⚠️ Pourquoi les autres échouent :</h3>
+                <ul>
+                    <li><b>Option A :</b> Sans <code>state:modified</code>, dbt reconstruirait tout le projet, ce qui est l'inverse du Slim CI.</li>
+                    <li><b>Option C :</b> Désactiver le full-refresh dans le code est dangereux car tu en as parfois besoin. Ce n'est pas une solution d'infrastructure.</li>
+                </ul>
+
+                <p style="color: #2980b9; font-weight: bold;">💡 Note technique : Pour utiliser cette méthode, ton job de CI doit exécuter <code>dbt clone --select state:modified+</code> juste avant le <code>dbt build</code>.</p>
             </div>
-        </div>	
+        </div>
 		
 		
 		

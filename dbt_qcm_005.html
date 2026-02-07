@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dbt QCM - Pièges & Synthèse Expert</title>
+   <style>
+        :root {
+            --bg: #0d1117; 
+            --card: #161b22; 
+            --txt: #c9d1d9; 
+            --border: #30363d;
+            --level-green: #2ea043;
+            --level-orange: #f0883e;
+            --level-red: #ff4500;
+            --cmd-main: #2ea043;
+            --cmd-args: #58a6ff;
+            --hl-red: #ff7b72;
+            --green-ans: #238636;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg); color: var(--txt); line-height: 1.4; 
+            margin: 0; display: flex; 
+        }
+
+        /* --- SIDEBAR MENU --- */
+        .sidebar {
+            width: 300px; background: var(--card); border-right: 1px solid var(--border);
+            padding: 20px; height: 100vh; position: sticky; top: 0; box-sizing: border-box; overflow-y: auto;
+        }
+
+        .sidebar h2 { color: var(--level-red); font-size: 1.1rem; margin-bottom: 20px; text-align: center; }
+
+        .menu-item {
+            display: block; padding: 10px 15px; margin-bottom: 8px; background: #21262d;
+            color: var(--txt); text-decoration: none; border-radius: 6px; border: 1px solid var(--border);
+            font-size: 0.9rem; transition: 0.2s;
+        }
+
+        .menu-item:hover { background: #30363d; transform: translateX(5px); border-color: #8b949e; }
+
+        .sub-menu {
+            display: flex; flex-direction: column; margin-left: 15px; padding-left: 10px;
+            border-left: 2px solid var(--border); margin-bottom: 15px;
+        }
+
+        .sub-item { font-size: 0.8rem !important; padding: 8px 10px !important; margin: 2px 0 !important; }
+
+        .active-page {
+            border-color: var(--level-orange) !important;
+            color: var(--level-orange) !important;
+            background: rgba(240, 136, 62, 0.1) !important;
+            font-weight: bold;
+        }
+
+        /* --- CONTENU --- */
+        .container { flex: 1; max-width: 800px; margin: 0 auto; padding: 30px; }
+        h1 { text-align: center; color: var(--level-red); font-size: 1.8rem; margin-bottom: 20px; }
+
+        .q-card { 
+            background: var(--card); border: 1px solid var(--border); border-radius: 12px; 
+            padding: 20px; margin-bottom: 20px; 
+        }
+
+        .q-head_orange, .q-head_green, .q-head_red { 
+            font-weight: bold; font-size: 0.85rem; display: inline-block; 
+            text-transform: uppercase; margin-bottom: 10px; padding: 4px 10px; border-radius: 4px;
+        }
+        .q-head_orange { color: var(--level-orange); border-left: 4px solid var(--level-orange); background: rgba(240, 136, 62, 0.1); }
+        .q-head_green { color: var(--level-green); border-left: 4px solid var(--level-green); background: rgba(46, 160, 67, 0.1); }
+        .q-head_red { color: var(--hl-red); border-left: 4px solid var(--hl-red); background: rgba(255, 123, 114, 0.1); }
+
+        code { background: #000; padding: 2px 8px; border-radius: 6px; font-family: monospace; color: #58a6ff; border: 1px solid var(--border); }
+        pre { background: #0d1117; padding: 15px; border-radius: 8px; border: 1px solid var(--border); color: #c9d1d9; overflow-x: auto; font-size: 0.9rem; }
+
+        .ans { display: block; margin-top: 15px; padding: 15px; font-size: 0.9rem; background: rgba(35, 134, 54, 0.05); border-left: 4px solid var(--green-ans); border-radius: 4px; }
+        .quote { font-style: italic; color: #a5d6ff; border-left: 3px solid #58a6ff; padding-left: 10px; margin: 10px 0; }
+
+        .separator-blue { display: flex; align-items: center; text-align: center; margin: 40px 0; }
+        .separator-blue::before, .separator-blue::after { content: ''; flex: 1; border-bottom: 3px solid #007bff; }
+        .separator-blue span { padding: 0 20px; font-weight: bold; color: #007bff; text-transform: uppercase; }
+
+        .expert-box { border: 2px solid var(--level-orange); border-radius: 10px; padding: 15px; margin: 20px 0; background: rgba(240, 136, 62, 0.05); }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>📂 NAVIGATION</h2>
+        <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
+        <a href="piege_dbt.html" class="menu-item">📙 Voir la Pige dbt</a>
+
+        <details class="menu-dropdown" open>
+            <summary class="menu-item">✅ Questions d'Entraînement</summary>
+            <div class="sub-menu">
+                <a href="dbt_qcm_001.html" class="menu-item sub-item">📝 QCM 1 : Fondamentaux</a>
+                <a href="dbt_qcm_002.html" class="menu-item sub-item">🚀 EXAMEN BLANC FR</a>
+                <a href="dbt_qcm_004.html" class="menu-item sub-item">🚀 EXAMEN BLANC EN</a>
+                <a href="dbt_qcm_003.html" class="menu-item sub-item">🎓 QCM LEARN.GETDB</a>
+                <a href="dbt_qcm_005.html" class="menu-item sub-item active-page">⚠️ PIÈGES À ÉVITER</a>
+                <a href="dbt_qcm_006.html" class="menu-item sub-item">🔧 QCM 6 : Autres</a>
+            </div>
+        </details>
+    </div>
+
+    <div class="container">
+        <h1>🧠 Condensé "Expert" & Pièges 🔥</h1>
+
+        <div class="separator-blue"><span>⚙️ Logique & Parsing</span></div>
+
+        <div class="q-card">
+            <span class="q-head_orange">La Variable Execute</span>
+            <p class="ans">La variable <code>execute</code> est <strong>True</strong> uniquement lors de la phase d'exécution réelle (<code>dbt run</code>), évitant les erreurs SQL lors du simple parsing (<code>dbt compile</code>).</p>
+        </div>
+
+        <div class="expert-box">
+            <h3 style="color: var(--level-orange); margin-top: 0;">❌ Les pièges fatals</h3>
+            <ul>
+                <li><strong>Le Tiret (<code>-</code>)</strong> : Interdit. dbt est basé sur Python/Jinja, donc c'est <strong>toujours</strong> l'underscore (<code>_</code>).</li>
+                <li><strong>Les Doubles Moustaches (<code>{{ }}</code>)</strong> : Interdit <strong>à l'intérieur</strong> d'un bloc <code>{% %}</code>.</li>
+            </ul>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_green">✅ La Règle d'Or (Schéma Mental)</span>
+            <p>1. <strong>Mode "Action" <code>{% %}</code></strong> : Pas de moustaches ici.</p>
+            <pre>{% set x = env_var('...') %}</pre>
+            <p>2. <strong>Mode "Affichage" <code>{{ }}</code></strong> : On imprime le résultat.</p>
+            <pre>SELECT {{ env_var('...') }}</pre>
+            <p class="ans"><strong>Astuce Flash :</strong> Si tu vois <code>{{</code> à l'intérieur de <code>{%</code>, c'est faux. Point final.</p>
+        </div>
+
+        <div class="separator-blue"><span>🛠️ Commandes & Diagnostics</span></div>
+
+        <div class="q-card">
+            <span class="q-head_orange">dbt compile</span>
+            <p>Compile les modèles dans <code>target/</code> sans les exécuter.</p>
+            <div class="ans">💡 Idéal pour vérifier la syntaxe Jinja/YAML sans payer de frais de compute.</div>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_green">💡 Schéma Mémoire : "La Poupée Russe"</span>
+            <p>Retenez cet ordre pour les variables d'environnement :</p>
+            <ol>
+                <li><strong>L'enveloppe :</strong> <code>{% ... %}`</code> (Logique)</li>
+                <li><strong>La fonction :</strong> <code>env_var</code> (L'outil)</li>
+                <li><strong>La soudure :</strong> <code>_</code> (L'underscore)</li>
+                <li><strong>La valeur :</strong> <code>('NOM_VAR')</code> (L'argument)</li>
+            </ol>
+        </div>
+
+        <div class="separator-blue"><span>📊 Concepts Clés</span></div>
+
+        <div class="q-card">
+            <span class="q-head_green">Doc Blocks & Slim CI</span>
+            <p class="quote">« Un doc block permet de centraliser une description dans un fichier .md et de la réutiliser partout. »</p>
+            <p class="quote">« Le Slim CI est une optimisation intelligente : dbt identifie uniquement les changements et leurs impacts. »</p>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_orange">dbt clone & target.name</span>
+            <p class="quote">« Le <strong>dbt clone</strong> est comme une "téléportation" de table : copie virtuelle instantanée sans copier physiquement les données. »</p>
+            <p class="quote">« <strong>target.name</strong> est l'identifiant de ton environnement actuel (ex: "prod"). »</p>
+        </div>
+
+        <div class="q-card">
+            <span class="q-head_red">⚠️ Le Piège du Booléen (YAML)</span>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <div style="flex: 1;">
+                    <code style="color: #ff7b72;">❌ INCORRECT :</code>
+<pre>+enabled:
+  - true</pre>
+                </div>
+                <div style="flex: 1;">
+                    <code style="color: #2ea043;">✅ CORRECT :</code>
+<pre>+enabled: true</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>Réseau :</strong> Freebox-49010A active ✅
+        </div>
+    </div>
+
+</body>
+</html>

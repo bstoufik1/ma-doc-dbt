@@ -167,7 +167,46 @@
         .btn:hover { background: var(--level-orange); color: #fff; }
 
         .footer { text-align: center; font-size: 0.8rem; padding: 30px; border-top: 1px solid var(--border); margin-top: 40px; }
-    </style>
+    
+	
+	
+	
+	
+.separator-blue {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 40px 0; /* Espace au dessus et en dessous */
+}
+
+.separator-blue::before,
+.separator-blue::after {
+    content: '';
+    flex: 1;
+    border-bottom: 3px solid #007bff; /* Épaisseur et couleur de la ligne bleue */
+}
+
+.separator-blue span {
+    padding: 0 20px;
+    font-weight: bold;
+    color: #007bff;
+    font-family: sans-serif;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+ 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</style>
 </head>
 <body>
 
@@ -176,17 +215,35 @@
         <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
         <a href="piege_dbt.html" class="menu-item">📙 Voir la Pige dbt</a>
 
-        <details class="menu-dropdown" open>
+ 
+		
+		
+		<details class="menu-dropdown" open>
             <summary class="menu-item" style="cursor: pointer;">✅ Questions d'Entraînement</summary>
             <div class="sub-menu">
                 <a href="dbt_qcm_001.html" class="menu-item sub-item active-page">📝 QCM 1 : Fondamentaux</a>
                 <a href="dbt_qcm_002.html" class="menu-item sub-item">🚀 EXAMEN BLANC FR</a>
 				<a href="dbt_qcm_004.html" class="menu-item sub-item">🚀 EXAMEN BLANC EN</a>
-                <a href="dbt_qcm_003.html" class="menu-item sub-item">🔄 QCM 3 : Incremental</a>
-                <a href="dbt_qcm_005.html" class="menu-item sub-item">📸 QCM 5 : Snapshots</a>
-                <a href="dbt_qcm_006.html" class="menu-item sub-item">🔧 QCM 6 : Macros</a>
+                <a href="dbt_qcm_003.html" class="menu-item sub-item">🎓 QCM LEARN.GETDB</a>
+                <a href="dbt_qcm_005.html" class="menu-item sub-item">⚠️ PIÈGES À ÉVITER</a>
+				
+                <a href="dbt_qcm_006.html" class="menu-item sub-item">🔧 QCM 6 : Autres</a>
             </div>
         </details>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
     </div>
 
     <div class="container">
@@ -347,7 +404,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">QUESTION 5/65 :: JINJA VARIABLE SYNTAX</span>
+            <span class="q-head_green">QUESTION 5/65 :: JINJA VARIABLE SYNTAX</span>
             <span class="q-txt">You want to dynamically select only rows created after a specific date in your model. Assume <b>target_date</b> is a variable you plan to pass. Which Jinja snippet in your .sql is most appropriate?</span>
             
             <div class="code-block">
@@ -382,7 +439,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">QUESTION 6/65 :: REFERENCING SEEDS</span>
+            <span class="q-head_green">QUESTION 6/65 :: REFERENCING SEEDS</span>
             <span class="q-txt">You added a CSV file named <b>user_attributes.csv</b> into <b>seeds/</b>. You want to load it exactly as is and reference it in downstream models. Which code snippet is correct for referencing the seeded table?</span>
             
             <div class="opt">A - {{ ref('user_attributes') }}</div>
@@ -412,7 +469,7 @@
 		
 		
 		<div class="q-card">
-            <span class="q-head_orange">QUESTION 7/65 :: DATA TEST DEFINITION</span>
+            <span class="q-head_green">QUESTION 7/65 :: DATA TEST DEFINITION</span>
             <span class="q-txt">You want to ensure that the column <b>user_id</b> in the <b>fact_orders</b> model is always present (not null). How do you define this test in a <b>schema.yml</b> file?</span>
             
             <div class="code-block">
@@ -658,7 +715,7 @@
 
 
 <div class="q-card">
-            <span class="q-head_red">QUESTION 14/65 :: REFERENCING VARIABLES</span>
+            <span class="q-head_green">QUESTION 14/65 :: REFERENCING VARIABLES</span>
             <span class="q-txt">You define a variable in <b>dbt_project.yml</b> like:</span>
             <div class="code-block">
                 vars:<br>
@@ -719,7 +776,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">QUESTION 16/65 :: DBT COMPILE COMMAND</span>
+            <span class="q-head_green">QUESTION 16/65 :: DBT COMPILE COMMAND</span>
             <span class="q-txt">Which statement is true regarding the <b>dbt compile</b> command?</span>
             
             <div class="opt">A - It compiles and runs the SQL to produce tables/views.</div>
@@ -749,7 +806,7 @@
 		
 		
 		<div class="q-card">
-            <span class="q-head_orange">QUESTION 17/65 :: SOURCE FRESHNESS</span>
+            <span class="q-head_green">QUESTION 17/65 :: SOURCE FRESHNESS</span>
             <span class="q-txt">True or False: You can test how up-to-date a source table is by defining a freshness check in <b>sources.yml</b>.</span>
             
             <div class="opt">A - True</div>
@@ -776,7 +833,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">QUESTION 18/65 :: SNAPSHOT VS INCREMENTAL</span>
+            <span class="q-head_green">QUESTION 18/65 :: SNAPSHOT VS INCREMENTAL</span>
             <span class="q-txt">Which of the following is a primary reason to use a snapshot over an incremental model?</span>
             
             <div class="opt">A - Snapshots are faster to build than incremental models.</div>
@@ -881,7 +938,7 @@
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">QUESTION 22/65 :: SEED COLUMN TYPES</span>
+            <span class="q-head_green">QUESTION 22/65 :: SEED COLUMN TYPES</span>
             <span class="q-txt">When loading a seed, how can you control the column data types in the warehouse?</span>
             
             <div class="opt">A - Modify the CSV file's header row with typed columns.</div>
@@ -911,7 +968,7 @@
 	
 	
 	<div class="q-card">
-    <span class="q-head_red">QUESTION 23/65 :: BIGQUERY PARTITIONING</span>
+    <span class="q-head_green">QUESTION 23/65 :: BIGQUERY PARTITIONING</span>
     <span class="q-txt">You want to create a partitioned table on BigQuery, partitioned by <code>created_at</code>. Which snippet is valid in your .sql config block?</span>
     
     <div class="opt">A
@@ -1438,7 +1495,7 @@ select * from {{ source('events', 'raw_events') }}
 
 
 <div class="q-card">
-    <span class="q-head_orange">QUESTION 32/65 :: MACRO USAGE IN MODELS</span>
+    <span class="q-head_green">QUESTION 32/65 :: MACRO USAGE IN MODELS</span>
     <span class="q-txt">You have a macro named <code>calculate_discount</code> in your <code>macros/discounts.sql</code> file:</span>
     
     <div class="code-block">
@@ -1676,7 +1733,7 @@ FROM {{ ref('orders') }}</pre></div>
         </div>
 
 <div class="q-card">
-    <span class="q-head_orange">QUESTION 35/65 : TEST SELECTION BY TAG</span>
+    <span class="q-head_green">QUESTION 35/65 : TEST SELECTION BY TAG</span>
     <span class="q-txt">Your enterprise deployment has many tests. For performance reasons, in production you only want to run a subset of critical tests. You have tagged these critical tests with <code>tag:critical</code>. Which dbt command runs only critical tests?</span>
     
     <div class="opt">A. <code>dbt test --select tag:critical</code></div>
@@ -2347,7 +2404,7 @@ seeds:<br>
 
 		
 		<div class="q-card">
-            <span class="q-head_orange">QUESTION 37/65 :: LARGE SEEDS PERFORMANCE</span>
+            <span class="q-head_green">QUESTION 37/65 :: LARGE SEEDS PERFORMANCE</span>
             <span class="q-txt">You have a very large <b>country_codes.csv</b> seed and want to avoid re-seeding it in every CI run. Which best practice addresses this?</span>
             
             <div class="opt">A - Convert it to ephemeral so it never physically loads.</div>
@@ -2376,7 +2433,7 @@ seeds:<br>
 	  
 	 
 <div class="q-card">
-    <span class="q-head_red">QUESTION 38/65 :: MODULAR REFACTORING IN DBT</span>
+    <span class="q-head_green">QUESTION 38/65 :: MODULAR REFACTORING IN DBT</span>
     <span class="q-txt">You inherit a 300-line monolithic SQL script that joins 8 different source tables, applies transformations, and produces final columns for a BI dashboard. You want to conform to dbt best practices. How would you refactor this script using dbt's modular approach?</span>
     
     <div class="opt">A. Extract each source table's cleaning/renaming steps into staging models (e.g., <code>stg_orders</code>, <code>stg_users</code>) so they can each be tested or reused.</div>
@@ -3194,7 +3251,7 @@ jobs:<br>
 
 
 <div class="q-card">
-    <span class="q-head_red">QUESTION 41/65 : ENVIRONMENT VARIABLES DIAGNOSIS</span>
+    <span class="q-head_green">QUESTION 41/65 : ENVIRONMENT VARIABLES DIAGNOSIS</span>
     <span class="q-txt">You define a Snowflake profile in <code>profiles.yml</code> referencing environment variables for the user, password, and account. You suspect your CI pipeline is failing because these vars aren't set. Which dbt command (or approach) helps confirm the environment variables are recognized and the profile is valid?</span>
     
     <div class="opt">A. <code>dbt compile --env-check</code></div>
@@ -3502,7 +3559,7 @@ ENTRYPOINT ["/entrypoint.sh"]<br>
 		
 		
 		<div class="q-card">
-            <span class="q-head_orange">QUESTION 41/65 : DIAGNOSING PROFILES & ENV VARS</span>
+            <span class="q-head_green">QUESTION 41/65 : DIAGNOSING PROFILES & ENV VARS</span>
             <span class="q-txt">You suspect your CI pipeline is failing because environment variables for Snowflake (user, password, account) aren't set. Which command helps confirm this?</span>
             
             <div class="opt">A - dbt compile --env-check</div>
@@ -3529,7 +3586,7 @@ ENTRYPOINT ["/entrypoint.sh"]<br>
         </div>
 
         <div class="q-card">
-            <span class="q-head_orange">QUESTION 42/65 : ENV_VAR() LIMITATIONS</span>
+            <span class="q-head_green">QUESTION 42/65 : ENV_VAR() LIMITATIONS</span>
             <span class="q-txt">Where can you use <b>env_var()</b> directly in dbt?</span>
             
             <div class="opt">A - Directly in a model's config() block.</div>
@@ -4561,7 +4618,7 @@ models:<br>
 		
 		
 		<div class="q-card">
-    <span class="q-head_orange">QUESTION 48/65 :: TEST COST OPTIMIZATION</span>
+    <span class="q-head_green">QUESTION 48/65 :: TEST COST OPTIMIZATION</span>
     <span class="q-txt">Your team runs all tests (schema + data tests) on a 500M-row table daily. This is becoming costly in your Snowflake warehouse. You still want reliable data checks but also control costs. Which approach is recommended?</span>
     
     <div class="opt">A. Move the entire table to ephemeral, so tests don't run physically.</div>
@@ -4939,7 +4996,7 @@ select * from {{ ref('stg_customers') }}</pre></div>
 		
 		
 		<div class="q-card">
-    <span class="q-head_red">QUESTION 52/65 :: DEBUGGING COMPILATION ERRORS</span>
+    <span class="q-head_green">QUESTION 52/65 :: DEBUGGING COMPILATION ERRORS</span>
     <span class="q-txt">Vous exécutez <code>dbt run</code> localement (dbt Core CLI) et vous voyez une erreur :<br>
     <code>Database Error: syntax error at or near "FROM"</code><br><br>
     Mais le numéro de ligne affiché fait référence à du code compilé qui ne correspond pas à votre fichier .sql. Vous suspectez soit une erreur Jinja de dbt, soit un problème de conformité SQL de l'entrepôt de données.<br><br>
@@ -4968,7 +5025,7 @@ select * from {{ ref('stg_customers') }}</pre></div>
 
  
 <div class="q-card">
-    <span class="q-head_red">QUESTION 53/65 :: DBT CLONE COMMAND USE CASE</span>
+    <span class="q-head_orange">QUESTION 53/65 :: DBT CLONE COMMAND USE CASE</span>
     <span class="q-txt">Your team uses dbt Cloud with a Snowflake warehouse. You've heard about <code>dbt clone</code>, which can clone an existing dbt environment quickly, including seeds, snapshots, and more—if your underlying warehouse supports zero-copy cloning (e.g., Snowflake).<br><br>
     Which scenario best describes a valid use case for <code>dbt clone</code>?</span>
     
