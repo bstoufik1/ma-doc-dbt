@@ -181,8 +181,7 @@
 
 
 
-        .btn:hover { background: var(--level-orange); color: #fff; }
-
+  
         .footer { text-align: center; font-size: 0.8rem; padding: 30px; border-top: 1px solid var(--border); margin-top: 40px; }
     
 	
@@ -215,10 +214,7 @@
  
 	
 	
-	
-	
-	
-	
+ 
 	
 	
 	
@@ -5558,7 +5554,7 @@ sources:<br>
 
 
 <div class="q-card">
-    <span class="q-head_orange">QUESTION 61/65 :: SOURCE SCHEMA MISMATCH FIX</span>
+    <span class="q-head_green">QUESTION 61/65 :: SOURCE SCHEMA MISMATCH FIX</span>
     <span class="q-txt">You have a model that calculates a complex metric. During a <code>dbt run</code>, it fails with a database error. You notice that the error is related to a column that was recently renamed in a source table, but you forgot to update the corresponding source definition in your YAML file. What is the most efficient way to fix this and verify the fix?</span>
     
     <div class="opt">A) Update the YAML file, run <code>dbt compile</code>, and then run the specific model using <code>dbt run --select &lt;model_name&gt;</code>.</div>

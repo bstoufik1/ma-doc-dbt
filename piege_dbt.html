@@ -113,12 +113,254 @@
     <article id="welcome" class="card active">
         <h1>Guide Expert dbt</h1>
         <p>Utilisez le menu latéral pour naviguer dans les concepts clés de dbt.</p>
-        <div class="info-block">
-            <strong>Réseau :</strong> Freebox-49010A active ✅
-        </div>
+       
     </article>
 
+
+
+<article id="matrix" class="card">
+    <h1>🧩 Matrice complète des commandes dbt</h1>
+    <p>Vue exhaustive et exacte de l'impact réel des commandes dbt sur chaque type d'objet.</p>
     
+    <div class="info-block">
+        🎯 <strong>Règles d'or examen :</strong><br>
+        • <code>dbt build</code> = Commande PROD (run + test + seed + snapshot)<br>
+        • <code>dbt run</code> = Jamais sur seeds/snapshots<br>
+        • <code>dbt test</code> = Lecture seule DB<br>
+        • <strong>Sources</strong> = Jamais exécutées, uniquement testées<br>
+        • <strong>Seeds & Snapshots</strong> = Jamais lancés par <code>dbt run</code>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th>Commande</th>
+                    <th>Models</th>
+                    <th>Sources</th>
+                    <th>Seeds</th>
+                    <th>Snapshots</th>
+                    <th>Tests</th>
+                    <th>Docs</th>
+                    <th>Macros</th>
+                    <th>Packages</th>
+                    <th>Écrit DB</th>
+                    <th>Compile SQL</th>
+                    <th>-m</th>
+                    <th>CI/CD</th>
+                    <th>QUAND l'utiliser ?</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="command">dbt run</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>⚠️</td>
+                    <td class="comment"><strong>Développement quotidien</strong>. Après création/modification modèle. <code>dbt run --full-refresh</code> pour rebuild complet.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt run -m</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>⚠️</td>
+                    <td class="comment"><strong>Exécution ciblée</strong>. Debug : <code>-m +model</code> (parents), <code>-m model+</code> (enfants), <code>-m tag:prod</code>.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt test</td>
+                    <td>❌</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td class="comment"><strong>CI/CD & qualité</strong>. Avant merge en prod. <code>--store-failures</code> pour debug. <strong>Lecture seule DB</strong>.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt seed</td>
+                    <td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>⚠️</td>
+                    <td class="comment"><strong>Tables de référence statiques</strong>. CSV → DB (pays, codes produits, mapping). Premier setup projet.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt snapshot</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅</td><td>✅</td><td>❌</td><td>⚠️</td>
+                    <td class="comment"><strong>Historisation SCD2</strong>. Tracking prix, statuts commandes. Tous les soirs à minuit pour audit.</td>
+                </tr>
+
+                <tr style="background: rgba(63, 185, 80, 0.1); border-left: 3px solid var(--success);">
+                    <td class="command">dbt build ⭐</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td class="comment"><strong>PRODUCTION uniquement</strong>. Commande tout-en-un recommandée. Pipeline Airflow/Dagster : <code>dbt build</code>.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt compile</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td class="comment"><strong>Debug & code review</strong>. Vérifier SQL généré avant exécution. Regarder <code>target/compiled/</code>.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt debug</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment"><strong>"Ça marche pas !"</strong>. Premier setup, problème connexion. <code>dbt debug --config-dir</code> pour config.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt deps</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>✅</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment"><strong>Après git pull</strong>. Télécharge packages (dbt-utils, etc.). <code>dbt deps --upgrade</code> pour mise à jour.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt docs generate</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>✅</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>⚠️</td>
+                    <td class="comment"><strong>Documentation & onboarding</strong>. Après refacto majeure. Puis <code>dbt docs serve</code> pour visualiser.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt show</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>✅</td><td>❌</td>
+                    <td class="comment"><strong>Preview rapide</strong>. Démo stakeholder non-tech : <code>dbt show --limit 10 --model customer_segmentation</code>.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt clean</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment"><strong>Avant commit</strong>. Supprime <code>target/</code> et <code>dbt_packages/</code>. Nettoyage artefacts compilation.</td>
+                </tr>
+
+                <!-- COMMANDES AVANCÉES -->
+                <tr style="border-top: 2px solid var(--accent);">
+                    <td class="command">dbt clone</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>✅</td><td>❌</td><td>❌</td><td>⚠️</td>
+                    <td class="comment"><strong>Snowflake/BigQuery uniquement</strong>. Clone schéma/table. Environnements dev/test : <code>dbt clone --target dev</code>.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt run-operation</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>✅*</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment"><strong>Maintenance custom</strong>. Exécute macro spécifique : <code>dbt run-operation cleanup_old_partitions --args '{days: 90}'</code>.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt source freshness</td>
+                    <td>❌</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment"><strong>Monitoring SLA</strong>. Vérifie fraîcheur données sources. Job quotidien + alerte Slack si > 24h.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt list</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td>❌</td><td>❌</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>✅</td><td>✅</td>
+                    <td class="comment"><strong>Listing ressources</strong>. <code>dbt list -m tag:prod -o output.txt</code> pour export. CI/CD.</td>
+                </tr>
+
+                <tr>
+                    <td class="command">dbt parse</td>
+                    <td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+                    <td>❌</td><td>✅</td><td>❌</td>
+                    <td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+                    <td class="comment"><strong>Validation syntaxique</strong>. Parse projet sans compilation. Génère manifest uniquement.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+        <div style="background: var(--sidebar-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+            <h3 style="color: var(--success); margin-bottom: 0.5rem;">👨‍💻 Workflow Développement</h3>
+            <ol style="padding-left: 1.2rem; font-size: 0.9rem;">
+                <li><code>dbt compile -m nouveau_modele</code> (vérif)</li>
+                <li><code>dbt run -m nouveau_modele --limit 100</code></li>
+                <li><code>dbt show -m nouveau_modele</code> (preview)</li>
+                <li><code>dbt test -m nouveau_modele</code></li>
+                <li><code>dbt clean</code> (avant commit)</li>
+            </ol>
+        </div>
+
+        <div style="background: var(--sidebar-color); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+            <h3 style="color: var(--warning); margin-bottom: 0.5rem;">🏭 Workflow Production</h3>
+            <ol style="padding-left: 1.2rem; font-size: 0.9rem;">
+                <li><code>dbt source freshness</code> (monitoring SLA)</li>
+                <li><code>dbt build --fail-fast</code> (tout-en-un)</li>
+                <li><code>dbt docs generate</code> (documentation)</li>
+                <li><code>dbt test --store-failures</code> (debug si échec)</li>
+            </ol>
+        </div>
+    </div>
+
+    <div style="background: var(--sidebar-color); padding: 1rem; border-radius: 8px; margin: 1rem 0; font-family: monospace; font-size: 0.9rem;">
+        <h3 style="color: var(--accent); margin-bottom: 0.5rem;">🎯 Sélecteurs Avancés</h3>
+        <div><code>dbt run -s +model</code> → modèle + tous ses parents</div>
+        <div><code>dbt run -s model+</code> → modèle + tous ses enfants</div>
+        <div><code>dbt run -s @model</code> → modèle + parents + enfants</div>
+        <div><code>dbt run -s tag:daily</code> → modèles avec tag daily</div>
+        <div><code>dbt build --select state:modified</code> → uniquement ce qui a changé</div>
+    </div>
+
+    <h2>⚠️ Pièges Classiques à l'Examen</h2>
+    <div class="info-block">
+        <ul style="margin: 0;">
+            <li>❌ <code>dbt run</code> sur un seed → <strong>FAUX</strong> (utiliser <code>dbt seed</code>)</li>
+            <li>❌ <code>dbt test</code> écrit dans la DB → <strong>FAUX</strong> (lecture seule)</li>
+            <li>❌ <code>dbt compile</code> exécute le SQL → <strong>FAUX</strong> (génère seulement)</li>
+            <li>❌ Variables évaluées à l'exécution SQL → <strong>FAUX</strong> (évaluées à la compilation)</li>
+            <li>❌ <code>dbt build</code> = <code>dbt run</code> + <code>dbt test</code> → <strong>INCOMPLET</strong> (+ seed + snapshot)</li>
+            <li>❌ <code>dbt show</code> modifie les données → <strong>FAUX</strong> (preview read-only)</li>
+        </ul>
+    </div>
+
+    <h2>✅ Checklist Mentale avant de répondre</h2>
+    <div class="info-block">
+        <ul style="margin: 0;">
+            <li>✔️ La commande écrit-elle en DB ? (run/seed/snapshot/build/clone)</li>
+            <li>✔️ Est-ce que ça fonctionne avec les sources ? (test/freshness uniquement)</li>
+            <li>✔️ Y a-t-il un flag <code>-m</code> disponible ? (run/test/compile/show)</li>
+            <li>✔️ Est-ce safe pour la CI/CD ? (test/debug/parse/list)</li>
+            <li>✔️ Quel workflow (dev vs prod) ? (run vs build)</li>
+            <li>✔️ Impact sur seeds/snapshots ? (run ne les touche pas)</li>
+        </ul>
+    </div>
+
+    <h2>🧠 Synthèse Expert</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+        <div style="background: rgba(88, 166, 255, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid var(--accent);">
+            <h4 style="color: var(--accent);">📝 Écriture DB</h4>
+            <code>dbt run</code>, <code>dbt seed</code>, <code>dbt snapshot</code>, <code>dbt build</code>, <code>dbt clone</code>
+        </div>
+        <div style="background: rgba(63, 185, 80, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid var(--success);">
+            <h4 style="color: var(--success);">👁️ Lecture seule</h4>
+            <code>dbt test</code>, <code>dbt show</code>, <code>dbt compile</code>, <code>dbt source freshness</code>
+        </div>
+    </div>
+</article>
 	
 <article id="matrix" class="card">
     <h1>🧩 Matrice complète des commandes dbt</h1>
