@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dbt QCM - Fondamentaux</title>
+    <title>⚠️ QCM PIÈGES - Commandes dbt</title>
     <style>
         :root {
             --bg: #0d1117; 
@@ -17,12 +17,13 @@
             --cmd-args: #58a6ff;
             --hl-red: #ff7b72;
             --green-ans: #238636;
+            --blue-highlight: #58a6ff;
         }
 
         body {
             font-family: -apple-system, system-ui, sans-serif;
             background: var(--bg); color: var(--txt); line-height: 1.4; 
-            margin: 0; display: flex; /* Layout en deux colonnes */
+            margin: 0; display: flex;
         }
 
         /* --- SIDEBAR MENU --- */
@@ -65,8 +66,6 @@
         }
 
         .sub-item { font-size: 0.8rem !important; padding: 8px 10px !important; margin: 2px 0 !important; }
-
-        /* Style pour indiquer la page actuelle */
         .active-page {
             border-color: var(--level-orange) !important;
             color: var(--level-orange) !important;
@@ -87,18 +86,50 @@
             margin-bottom: 25px; font-size: 0.9rem; text-align: center;
         }
 
+        .warning-box {
+            background: rgba(255, 69, 0, 0.1);
+            border: 1px solid var(--level-red);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
         .q-card { 
             background: var(--card); border: 1px solid var(--border); border-radius: 12px; 
             padding: 20px; margin-bottom: 20px; 
+            position: relative;
         }
 
-        .q-head, .q-head_orange, .q-head_green { font-weight: bold; font-size: 0.85rem; display: block; text-transform: uppercase; margin-bottom: 10px; }
-        .q-head { color: var(--level-red); }
-        .q-head_orange { color: var(--level-orange); }
-        .q-head_green { color: var(--level-green); }
+        .q-card.difficulty-high { border-left: 4px solid var(--level-red); }
+        .q-card.difficulty-medium { border-left: 4px solid var(--level-orange); }
+        .q-card.difficulty-low { border-left: 4px solid var(--level-green); }
+
+        .difficulty-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .difficulty-high .difficulty-badge { background: rgba(255, 69, 0, 0.2); color: var(--level-red); }
+        .difficulty-medium .difficulty-badge { background: rgba(240, 136, 62, 0.2); color: var(--level-orange); }
+        .difficulty-low .difficulty-badge { background: rgba(46, 160, 67, 0.2); color: var(--level-green); }
+
+        .q-head { font-weight: bold; font-size: 0.85rem; display: block; text-transform: uppercase; margin-bottom: 10px; color: var(--blue-highlight); }
 
         .q-txt { font-weight: 600; margin-bottom: 15px; display: block; font-size: 1.1rem; }
-        .opt { background: #21262d; padding: 12px; margin: 8px 0; border-radius: 6px; font-size: 0.95rem; border: 1px solid transparent; }
+        .opt { 
+            background: #21262d; padding: 12px; margin: 8px 0; border-radius: 6px; font-size: 0.95rem; 
+            border: 1px solid transparent; cursor: pointer; transition: all 0.2s;
+        }
+        .opt:hover { border-color: var(--border); background: #30363d; }
+        .opt.selected { border-color: var(--blue-highlight); background: rgba(88, 166, 255, 0.1); }
+        .opt.correct { border-color: var(--level-green); background: rgba(46, 160, 67, 0.1); }
+        .opt.incorrect { border-color: var(--level-red); background: rgba(255, 69, 0, 0.1); opacity: 0.6; }
         
         code { background: #000; padding: 2px 5px; border-radius: 4px; font-family: monospace; color: var(--txt); }
         .cmd { color: var(--cmd-main); font-weight: bold; }
@@ -110,23 +141,49 @@
             background: rgba(35, 134, 54, 0.05); border-left: 4px solid var(--green-ans); border-radius: 4px;
         }
 
-.btn { 
-    background: none; 
-    border: 1px solid #007bff; 
-    color: #007bff; 
-    border-radius: 20px; 
-    cursor: pointer; 
-    font-size: 0.85rem; 
-    margin-top: 10px; 
-    padding: 6px 18px; 
-    font-weight: bold;
-    transition: 0.3s;
-}
+        .btn { 
+            background: none; 
+            border: 1px solid #007bff; 
+            color: #007bff; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 0.85rem; 
+            margin-top: 10px; 
+            padding: 6px 18px; 
+            font-weight: bold;
+            transition: 0.3s;
+        }
 
-.btn:hover { 
-    background: #007bff; 
-    color: #fff; 
-}
+        .btn:hover { background: #007bff; color: #fff; }
+        
+        .btn-check-all {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            font-size: 1rem;
+            background: rgba(0, 123, 255, 0.1);
+            border: 2px solid #007bff;
+        }
+
+        .score-display {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card);
+            border: 2px solid var(--level-orange);
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 150px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--level-orange);
+        }
+
         .footer { text-align: center; font-size: 0.8rem; padding: 30px; border-top: 1px solid var(--border); margin-top: 40px; }
     </style>
 </head>
@@ -134,68 +191,655 @@
 
     <div class="sidebar">
         <h2>📂 NAVIGATION</h2>
-		<a href="db_structure.html" class="menu-item">🏗️ Architecture & Best Practices</a>
-	    <a href="piege_dbt.html" class="menu-item">📙 Voir la Pieges dbt</a>
+        <a href="db_structure.html" class="menu-item">🏗️ Architecture & Best Practices</a>
+        <a href="piege_dbt.html" class="menu-item">📙 Voir la Matrice Commandes</a>
         <details class="menu-dropdown" open>
             <summary class="menu-item">✅ Questions d'Entraînement</summary>
             <div class="sub-menu">
-               
-                
                 <a href="dbt_qcm_004.html" class="menu-item sub-item">🚀 EXAMEN BLANC EN 004</a>
-				<a href="dbt_qcm_002.html" class="menu-item sub-item">🚀 EXAMEN BLANC FR 002</a>
+                <a href="dbt_qcm_002.html" class="menu-item sub-item">🚀 EXAMEN BLANC FR 002</a>
                 <a href="dbt_qcm_003.html" class="menu-item sub-item">🎓 QCM LEARN.GETDB 003</a>
-                <a href="dbt_qcm_005.html" class="menu-item sub-item active-page">⚠️ PIÈGES À ÉVITER 005 </a>
-				 <a href="dbt_qcm_001.html" class="menu-item sub-item">📝 QCM 1 : Fondamentaux 001</a>
+                <a href="dbt_qcm_005.html" class="menu-item sub-item active-page">⚠️ PIÈGES COMMANDES 005</a>
+                <a href="dbt_qcm_001.html" class="menu-item sub-item">📝 QCM 1 : Fondamentaux 001</a>
                 <a href="dbt_qcm_006.html" class="menu-item sub-item">🔧 QCM 6 : Autres 006</a>
             </div>
         </details>
-  
-
         <hr>
         <a href="index.html" class="menu-item">🏠 Retour Accueil</a>
     </div>
 
     <div class="container">
-        <h1>🧠 dbt QCM 1 : Fondamentaux 🔥</h1>
-        <div class="intro">Module focus sur les commandes de base et le cycle de vie des sources/modèles.</div>
+        <h1>⚠️ QCM PIÈGES - Commandes dbt 🔥</h1>
+        <div class="intro">30 questions TRÈS DIFFICILES basées sur la matrice des commandes. Attention aux subtilités !</div>
+        
+        <div class="warning-box">
+            ⚠️ CHALLENGE EXPERT : Chaque question a au moins une réponse piège. Visez 24/30 minimum !
+        </div>
 
-        <div class="q-card">
-            <span class="q-head_orange">QCM 1️⃣ — SOURCE vs MODEL</span>
-            <span class="q-txt">Quelles commandes s’exécutent SUR UNE SOURCE ?</span>
-            <div class="opt">A. <code><span class="cmd">dbt</span> <span class="arg">test --select source:raw.customers</span></code></div>
-            <div class="opt">B. <code><span class="cmd">dbt</span> <span class="arg">run --select source:raw.customers</span></code></div>
-            <div class="opt">C. <code><span class="cmd">dbt</span> <span class="arg">source freshness --select source:raw.customers</span></code></div>
-            <div class="opt">D. <code><span class="cmd">dbt</span> <span class="arg">build --select source:raw.customers</span></code></div>
-            <button class="btn" onclick="t(this)">Vérifier</button>
+        <!-- Q1 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q1 — ÉCRITURE DB</span>
+            <span class="q-txt">Quelle commande NE PEUT PAS écrire dans la base de données ?</span>
+            <div class="opt" data-correct="false">A. <code>dbt run-operation cleanup_old_partitions</code></div>
+            <div class="opt" data-correct="true">B. <code>dbt source freshness</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt clone</code></div>
+            <div class="opt" data-correct="false">D. <code>dbt seed --full-refresh</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p><code>source freshness</code> est en lecture seule. <code>run-operation</code> peut écrire via des macros custom. <code>clone</code> écrit dans Snowflake/BigQuery. <code>seed</code> écrit les CSV en tables.</p>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q2 — IMPACT SUR LES SOURCES</span>
+            <span class="q-txt">Quelle commande fonctionne AVEC les sources ? (Plusieurs réponses)</span>
+            <div class="opt" data-correct="true">A. <code>dbt test --select source:raw.*</code></div>
+            <div class="opt" data-correct="false">B. <code>dbt run --select source:raw.customers</code></div>
+            <div class="opt" data-correct="true">C. <code>dbt build --select source:raw.orders</code></div>
+            <div class="opt" data-correct="true">D. <code>dbt list -s source:*</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
             <div class="ans">
                 <strong>✅ Réponses : A, C, D</strong>
-                <p>Les sources n’ont jamais de SQL exécuté directement par dbt (pas de <b>run</b>). On les teste, on vérifie leur fraîcheur, ou on utilise <b>build</b> qui englobe les tests.</p>
+                <p><code>dbt run</code> ne fonctionne JAMAIS sur les sources. <code>build</code> les teste, <code>test</code> les teste, <code>list</code> les liste.</p>
             </div>
         </div>
 
-        <div class="q-card">
-            <span class="q-head_green">QCM 2️⃣ — STATE SELECTION</span>
-            <span class="q-txt">Effet exact de : <code><span class="cmd">dbt</span> <span class="arg">build --select state:modified+</span></code> ?</span>
-            <div class="opt">A. Exécute uniquement les modèles modifiés</div>
-            <div class="opt">B. Exécute les modèles modifiés + leurs enfants</div>
-            <div class="opt">C. Exécute les modèles modifiés + leurs parents</div>
-            <div class="opt">D. Inclut les tests liés aux modèles sélectionnés</div>
-            <button class="btn" onclick="t(this)">Vérifier</button>
+        <!-- Q3 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q3 — COMMANDE build</span>
+            <span class="q-txt">Que fait EXACTEMENT <code>dbt build --select tag:daily</code> ?</span>
+            <div class="opt" data-correct="false">A. Exécute les modèles avec tag:daily</div>
+            <div class="opt" data-correct="false">B. Exécute + teste les modèles avec tag:daily</div>
+            <div class="opt" data-correct="true">C. Exécute + teste les modèles avec tag:daily, ET exécute seeds/snapshots avec ce tag si existants</div>
+            <div class="opt" data-correct="false">D. Génère la documentation pour les modèles avec tag:daily</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
             <div class="ans">
-                <strong>✅ Réponses : B, D</strong>
-                <p>Le <b>+</b> après signifie "downstream" (enfants). <b>build</b> garantit l'exécution et le test ensemble.</p>
+                <strong>✅ Réponse : C</strong>
+                <p><code>build</code> est TOUT-EN-UN : run + test + seed + snapshot. C'est la différence cruciale avec <code>run</code>.</p>
             </div>
         </div>
 
- 
+        <!-- Q4 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q4 — FLAG -m / --select</span>
+            <span class="q-txt">Sur quelle commande le flag <code>-m</code> ou <code>--select</code> NE FONCTIONNE PAS ?</span>
+            <div class="opt" data-correct="false">A. <code>dbt run</code></div>
+            <div class="opt" data-correct="true">B. <code>dbt seed</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt test</code></div>
+            <div class="opt" data-correct="false">D. <code>dbt compile</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p><code>dbt seed</code> n'accepte PAS <code>-m</code> ou <code>--select</code>. On peut utiliser <code>--select</code> mais pas avec la syntaxe des modèles. Pour les seeds, c'est <code>dbt seed --select seed_name</code>.</p>
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q5 — LECTURE SEULE</span>
+            <span class="q-txt">Quelles commandes sont PUREMENT en lecture seule ? (Plusieurs)</span>
+            <div class="opt" data-correct="true">A. <code>dbt show -m orders</code></div>
+            <div class="opt" data-correct="true">B. <code>dbt compile</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt clone</code></div>
+            <div class="opt" data-correct="true">D. <code>dbt list</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponses : A, B, D</strong>
+                <p><code>show</code>, <code>compile</code>, <code>list</code> = lecture seule. <code>clone</code> écrit dans la DB (Snowflake/BigQuery).</p>
+            </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q6 — SNAPSHOTS</span>
+            <span class="q-txt">Quelle affirmation sur <code>dbt snapshot</code> est FAUSSE ?</span>
+            <div class="opt" data-correct="false">A. Utilise des macros pour générer le SQL</div>
+            <div class="opt" data-correct="false">B. Compile le SQL avant exécution</div>
+            <div class="opt" data-correct="true">C. Peut être exécuté via <code>dbt run -m snapshot_name</code></div>
+            <div class="opt" data-correct="false">D. Écrit dans la base de données</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : C</strong>
+                <p>PIÈGE : <code>dbt run</code> ne touche JAMAIS aux snapshots. Seuls <code>dbt snapshot</code> et <code>dbt build</code> les exécutent.</p>
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q7 — COMMANDE clone</span>
+            <span class="q-txt">À propos de <code>dbt clone</code>, quelle affirmation est VRAIE ?</span>
+            <div class="opt" data-correct="true">A. Fonctionne uniquement sur Snowflake et BigQuery</div>
+            <div class="opt" data-correct="false">B. Clone aussi les seeds et snapshots</div>
+            <div class="opt" data-correct="false">C. Est en lecture seule</div>
+            <div class="opt" data-correct="false">D. Accepte le flag <code>-m</code> pour sélection</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p><code>dbt clone</code> est spécifique à Snowflake/BigQuery. Il écrit dans la DB (clone les objets), ne clone pas seeds/snapshots automatiquement.</p>
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q8 — MACROS</span>
+            <span class="q-txt">Comment exécuter DIRECTEMENT une macro custom ?</span>
+            <div class="opt" data-correct="false">A. <code>dbt run -m macro_name</code></div>
+            <div class="opt" data-correct="true">B. <code>dbt run-operation macro_name</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt macro macro_name</code></div>
+            <div class="opt" data-correct="false">D. <code>dbt execute-macro macro_name</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Seule <code>run-operation</code> exécute directement une macro. Les macros sont normalement appelées indirectement via run/test/compile.</p>
+            </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="q-card difficulty-low">
+            <div class="difficulty-badge">FACILE</div>
+            <span class="q-head">Q9 — COMMANDE clean</span>
+            <span class="q-txt">Que supprime <code>dbt clean</code> ? (Plusieurs)</span>
+            <div class="opt" data-correct="true">A. Le répertoire <code>target/</code></div>
+            <div class="opt" data-correct="true">B. Le répertoire <code>dbt_packages/</code></div>
+            <div class="opt" data-correct="false">C. Les tables de la base de données</div>
+            <div class="opt" data-correct="false">D. Les fichiers sources du projet</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponses : A, B</strong>
+                <p><code>clean</code> supprime les artefacts locaux (compilation, packages). JAMAIS la base de données ou les fichiers sources.</p>
+            </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q10 — TEST store-failures</span>
+            <span class="q-txt">Quel est l'effet de <code>dbt test --store-failures</code> ?</span>
+            <div class="opt" data-correct="false">A. Écrit les résultats des tests dans des tables</div>
+            <div class="opt" data-correct="true">B. Écrit les LIGNES EN ÉCHEC des tests dans des tables</div>
+            <div class="opt" data-correct="false">C. Rend les tests plus rapides</div>
+            <div class="opt" data-correct="false">D. Désactive les tests qui échouent</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>PIÈGE : <code>--store-failures</code> crée des tables avec les LIGNES QUI ÉCHOUENT aux tests, pas tous les résultats. Utile pour debug.</p>
+            </div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q11 — COMMANDE deps</span>
+            <span class="q-txt">Que fait <code>dbt deps</code> ?</span>
+            <div class="opt" data-correct="false">A. Télécharge les dépendances Python</div>
+            <div class="opt" data-correct="true">B. Télécharge les packages dbt depuis packages.yml</div>
+            <div class="opt" data-correct="false">C. Met à jour dbt-core</div>
+            <div class="opt" data-correct="false">D. Installe les adaptateurs de base de données</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p><code>dbt deps</code> = télécharge les packages dbt (dbt-utils, etc.) définis dans <code>packages.yml</code>.</p>
+            </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q12 — SOURCE FRESHNESS</span>
+            <span class="q-txt">Quel est le résultat de <code>dbt source freshness</code> si une source est stale ?</span>
+            <div class="opt" data-correct="false">A. Il exécute automatiquement les modèles downstream</div>
+            <div class="opt" data-correct="false">B. Il bloque <code>dbt build</code></div>
+            <div class="opt" data-correct="true">C. Il retourne un code d'erreur non-zero</div>
+            <div class="opt" data-correct="false">D. Il supprime les données obsolètes</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : C</strong>
+                <p><code>source freshness</code> retourne un code d'erreur si une source est stale. Ça permet l'alerting dans les pipelines CI/CD.</p>
+            </div>
+        </div>
+
+        <!-- Q13 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q13 — COMPILE vs PARSE</span>
+            <span class="q-txt">Différence entre <code>dbt compile</code> et <code>dbt parse</code> ?</span>
+            <div class="opt" data-correct="true">A. compile génère le SQL, parse ne génère que le manifest</div>
+            <div class="opt" data-correct="false">B. parse exécute les tests, compile non</div>
+            <div class="opt" data-correct="false">C. compile est plus rapide que parse</div>
+            <div class="opt" data-correct="false">D. parse nécessite une connexion DB, compile non</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p><code>compile</code> génère le SQL compilé dans <code>target/</code>. <code>parse</code> ne fait que parser et génère le manifest.json.</p>
+            </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q14 — COMMANDE show</span>
+            <span class="q-txt">Que fait <code>dbt show --model orders --limit 5</code> ?</span>
+            <div class="opt" data-correct="false">A. Exécute le modèle avec LIMIT 5</div>
+            <div class="opt" data-correct="true">B. Compile le modèle et montre 5 lignes de preview</div>
+            <div class="opt" data-correct="false">C. Montre les 5 derniers runs du modèle</div>
+            <div class="opt" data-correct="false">D. Génère la documentation avec 5 exemples</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p><code>show</code> compile le modèle et fait un SELECT LIMIT en lecture seule pour preview. N'écrit pas en DB.</p>
+            </div>
+        </div>
+
+        <!-- Q15 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q15 — FLAG --full-refresh</span>
+            <span class="q-txt">Sur quelles commandes fonctionne <code>--full-refresh</code> ? (Plusieurs)</span>
+            <div class="opt" data-correct="true">A. <code>dbt run</code></div>
+            <div class="opt" data-correct="true">B. <code>dbt seed</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt test</code></div>
+            <div class="opt" data-correct="false">D. <code>dbt snapshot</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponses : A, B</strong>
+                <p><code>--full-refresh</code> fonctionne sur <code>run</code> (rebuild tables) et <code>seed</code> (recréer tables CSV). Pas sur <code>test</code> ou <code>snapshot</code>.</p>
+            </div>
+        </div>
+
+        <!-- Q16 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q16 — DOCS GENERATE</span>
+            <span class="q-txt">Que génère <code>dbt docs generate</code> ?</span>
+            <div class="opt" data-correct="true">A. <code>manifest.json</code> et <code>catalog.json</code></div>
+            <div class="opt" data-correct="false">B. Un site HTML complet auto-hébergé</div>
+            <div class="opt" data-correct="false">C. La documentation des seeds uniquement</div>
+            <div class="opt" data-correct="false">D. Les schémas de la base de données</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p><code>docs generate</code> crée les fichiers JSON (manifest + catalog). <code>docs serve</code> sert le site HTML.</p>
+            </div>
+        </div>
+
+        <!-- Q17 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q17 — EXÉCUTION PARALLÈLE</span>
+            <span class="q-txt">Quelle commande supporte <code>--threads</code> pour exécution parallèle ?</span>
+            <div class="opt" data-correct="true">A. <code>dbt run</code></div>
+            <div class="opt" data-correct="false">B. <code>dbt compile</code></div>
+            <div class="opt" data-correct="true">C. <code>dbt test</code></div>
+            <div class="opt" data-correct="true">D. <code>dbt build</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponses : A, C, D</strong>
+                <p><code>--threads</code> fonctionne sur run, test, build (qui exécutent du SQL). <code>compile</code> ne fait pas d'exécution parallèle de SQL.</p>
+            </div>
+        </div>
+
+        <!-- Q18 -->
+        <div class="q-card difficulty-low">
+            <div class="difficulty-badge">FACILE</div>
+            <span class="q-head">Q18 — COMMANDE debug</span>
+            <span class="q-txt">Que vérifie <code>dbt debug</code> ? (Plusieurs)</span>
+            <div class="opt" data-correct="true">A. La connexion à la base de données</div>
+            <div class="opt" data-correct="true">B. La configuration du profile</div>
+            <div class="opt" data-correct="false">C. La syntaxe des modèles SQL</div>
+            <div class="opt" data-correct="true">D. Les versions de dbt et adaptateur</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponses : A, B, D</strong>
+                <p><code>debug</code> vérifie l'environnement, pas la syntaxe SQL (c'est <code>compile</code> ou <code>parse</code>).</p>
+            </div>
+        </div>
+
+        <!-- Q19 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q19 — STATE MODIFIED</span>
+            <span class="q-txt">Quel est l'effet de <code>dbt build --select state:modified</code> avec un manifest précédent ?</span>
+            <div class="opt" data-correct="false">A. Exécute tout depuis le début</div>
+            <div class="opt" data-correct="true">B. Exécute seulement les modèles modifiés depuis le dernier état</div>
+            <div class="opt" data-correct="false">C. Ignore les seeds et snapshots</div>
+            <div class="opt" data-correct="false">D. Désactive les tests</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p><code>state:modified</code> compare avec un manifest précédent pour exécuter seulement ce qui a changé. Optimisation CI/CD.</p>
+            </div>
+        </div>
+
+        <!-- Q20 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q20 — EXCLUSION</span>
+            <span class="q-txt">Comment exclure un modèle avec tag:exclude ?</span>
+            <div class="opt" data-correct="false">A. <code>dbt run --exclude tag:exclude</code></div>
+            <div class="opt" data-correct="true">B. <code>dbt run --select "tag:!exclude"</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt run --skip tag:exclude</code></div>
+            <div class="opt" data-correct="false">D. <code>dbt run --ignore tag:exclude</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Syntaxe d'exclusion : <code>--select "tag:!exclude"</code> ou <code>--exclude tag:exclude</code> selon version. Le ! est la syntaxe correcte.</p>
+            </div>
+        </div>
+
+        <!-- Q21 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q21 — FAIL-FAST</span>
+            <span class="q-txt">Quel est l'effet de <code>--fail-fast</code> sur <code>dbt build</code> ?</span>
+            <div class="opt" data-correct="true">A. Stop au premier modèle/test qui échoue</div>
+            <div class="opt" data-correct="false">B. Continue malgré les échecs</div>
+            <div class="opt" data-correct="false">C. Exécute plus rapidement</div>
+            <div class="opt" data-correct="false">D. Ignore les warnings</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p><code>--fail-fast</code> arrête l'exécution dès le premier échec. Utile en CI pour économiser des ressources.</p>
+            </div>
+        </div>
+
+        <!-- Q22 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q22 — VARIABLES D'ENVIRONNEMENT</span>
+            <span class="q-txt">Comment passer une variable depuis la ligne de commande ?</span>
+            <div class="opt" data-correct="true">A. <code>dbt run --vars '{key: value}'</code></div>
+            <div class="opt" data-correct="false">B. <code>dbt run --variables key=value</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt run -var key=value</code></div>
+            <div class="opt" data-correct="false">D. <code>DBT_VAR_key=value dbt run</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p>Syntaxe CLI : <code>--vars '{key: value}'</code>. Les variables CLI écrasent toutes les autres définitions.</p>
+            </div>
+        </div>
+
+        <!-- Q23 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q23 — SÉLECTEURS AVANCÉS</span>
+            <span class="q-txt">Que fait <code>dbt run -s +orders</code> ?</span>
+            <div class="opt" data-correct="false">A. Exécute orders et ses enfants</div>
+            <div class="opt" data-correct="true">B. Exécute orders et ses parents</div>
+            <div class="opt" data-correct="false">C. Exécute seulement orders</div>
+            <div class="opt" data-correct="false">D. Exécute tout sauf orders</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p><code>+</code> = upstream (parents). <code>orders+</code> = downstream (enfants). <code>@orders</code> = parents + enfants.</p>
+            </div>
+        </div>
+
+        <!-- Q24 -->
+        <div class="q-card difficulty-low">
+            <div class="difficulty-badge">FACILE</div>
+            <span class="q-head">Q24 — SEEDS AVEC HEADER</span>
+            <span class="q-txt">Comment gérer un CSV sans header avec <code>dbt seed</code> ?</span>
+            <div class="opt" data-correct="false">A. <code>dbt seed --no-header</code></div>
+            <div class="opt" data-correct="true">B. Dans le schema.yml avec <code>quote: false</code></div>
+            <div class="opt" data-correct="false">C. Impossible avec dbt</div>
+            <div class="opt" data-correct="false">D. Renommer les colonnes manuellement</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>On configure les seeds dans schema.yml avec des options comme <code>quote</code>, <code>separator</code>, etc.</p>
+            </div>
+        </div>
+
+        <!-- Q25 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q25 — RUN-OPERATION ARGS</span>
+            <span class="q-txt">Comment passer des arguments à <code>dbt run-operation</code> ?</span>
+            <div class="opt" data-correct="true">A. <code>dbt run-operation macro_name --args '{key: value}'</code></div>
+            <div class="opt" data-correct="false">B. <code>dbt run-operation macro_name key=value</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt run-operation macro_name --key value</code></div>
+            <div class="opt" data-correct="false">D. <code>dbt run-operation macro_name --vars '{key: value}'</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p>Syntaxe spécifique : <code>--args '{key: value}'</code>. Différent de <code>--vars</code> qui est pour les variables du projet.</p>
+            </div>
+        </div>
+
+        <!-- Q26 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q26 — PROFILES MULTI-ENV</span>
+            <span class="q-txt">Comment spécifier un profil différent en CLI ?</span>
+            <div class="opt" data-correct="true">A. <code>dbt run --profile prod_profile</code></div>
+            <div class="opt" data-correct="false">B. <code>dbt run --target prod</code></div>
+            <div class="opt" data-correct="false">C. <code>DBT_PROFILE=prod dbt run</code></div>
+            <div class="opt" data-correct="false">D. <code>dbt run prod</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p><code>--profile</code> spécifie le nom du profil. <code>--target</code> spécifie la target dans le profil.</p>
+            </div>
+        </div>
+
+        <!-- Q27 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q27 — LIST FORMAT OUTPUT</span>
+            <span class="q-txt">Comment exporter la liste des modèles dans un fichier ?</span>
+            <div class="opt" data-correct="true">A. <code>dbt list -o models.txt</code></div>
+            <div class="opt" data-correct="false">B. <code>dbt list > models.txt</code></div>
+            <div class="opt" data-correct="false">C. <code>dbt list --output models.txt</code></div>
+            <div class="opt" data-correct="false">D. <code>dbt list --file models.txt</code></div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p><code>dbt list -o fichier.txt</code> pour exporter. La redirection shell (<code>></code>) fonctionne aussi mais <code>-o</code> est l'option officielle.</p>
+            </div>
+        </div>
+
+        <!-- Q28 -->
+        <div class="q-card difficulty-medium">
+            <div class="difficulty-badge">MOYEN</div>
+            <span class="q-head">Q28 — MATÉRIALISATION ÉPHÉMÈRE</span>
+            <span class="q-txt">Que se passe-t-il avec un modèle éphémère lors de <code>dbt compile</code> ?</span>
+            <div class="opt" data-correct="false">A. Il est exécuté dans une CTE</div>
+            <div class="opt" data-correct="true">B. Son SQL est injecté dans les modèles qui l'appellent</div>
+            <div class="opt" data-correct="false">C. Il est ignoré</div>
+            <div class="opt" data-correct="false">D. Il génère une table temporaire</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : B</strong>
+                <p>Les modèles éphémères sont compilés en SQL qui est injecté dans les modèles parents. Pas de création de table/CTE à la compilation.</p>
+            </div>
+        </div>
+
+        <!-- Q29 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q29 — DEPENDENCIES CIRCOLAIRES</span>
+            <span class="q-txt">Que fait dbt face à une dépendance circulaire ?</span>
+            <div class="opt data-correct="true">A. Échoue à la compilation avec une erreur</div>
+            <div class="opt" data-correct="false">B. Ignore une des dépendances</div>
+            <div class="opt" data-correct="false">C. Exécute dans l'ordre alphabétique</div>
+            <div class="opt" data-correct="false">D. Crée une vue récursive</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponse : A</strong>
+                <p>dbt détecte les dépendances circulaires et échoue à la compilation. Impossible de résoudre l'ordre d'exécution.</p>
+            </div>
+        </div>
+
+        <!-- Q30 -->
+        <div class="q-card difficulty-high">
+            <div class="difficulty-badge">DIFFICILE</div>
+            <span class="q-head">Q30 — BUILD vs RUN + TEST</span>
+            <span class="q-txt">Différence cruciale entre <code>dbt build</code> et <code>dbt run && dbt test</code> ?</span>
+            <div class="opt" data-correct="true">A. build garantit l'atomicité (run puis test pour chaque modèle)</div>
+            <div class="opt" data-correct="false">B. build est plus rapide</div>
+            <div class="opt" data-correct="true">C. build inclut seeds et snapshots</div>
+            <div class="opt" data-correct="false">D. build ne fonctionne qu'en production</div>
+            <button class="btn" onclick="showAnswer(this)">Vérifier</button>
+            <div class="ans">
+                <strong>✅ Réponses : A, C</strong>
+                <p>Clé : <code>build</code> = atomicité (run→test par modèle) + seeds/snapshots. <code>run && test</code> = run TOUT puis test TOUT.</p>
+            </div>
+        </div>
+
+        <button class="btn btn-check-all" onclick="checkAllAnswers()">📊 VÉRIFIER TOUTES MES RÉPONSES</button>
+
+        <div class="footer">
+            <p>⚠️ Ces questions couvrent les pièges les plus fréquents sur les commandes dbt. Revoyez la matrice si vous avez moins de 24/30.</p>
+            <p>© 2024 - Préparation Certification dbt - Niveau Expert</p>
+        </div>
+    </div>
+
+    <div class="score-display" id="scoreDisplay">
+        <div>SCORE</div>
+        <div class="score-value" id="scoreValue">0/30</div>
+        <div id="scoreMessage">Commencez !</div>
     </div>
 
 <script>
-    function t(b) {
-        var a = b.nextElementSibling;
-        a.style.display = (a.style.display === 'block') ? 'none' : 'block';
-        b.innerText = (a.style.display === 'block') ? 'Masquer' : 'Vérifier';
+    let score = 0;
+    let totalQuestions = 30;
+    let userAnswers = new Array(totalQuestions).fill(null);
+
+    function showAnswer(button) {
+        const answerDiv = button.nextElementSibling;
+        answerDiv.style.display = (answerDiv.style.display === 'block') ? 'none' : 'block';
+        button.innerText = (answerDiv.style.display === 'block') ? 'Masquer' : 'Vérifier';
     }
+
+    function selectOption(optionElement) {
+        const questionCard = optionElement.closest('.q-card');
+        const allOptions = questionCard.querySelectorAll('.opt');
+        
+        // Reset all options in this question
+        allOptions.forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        // Select this option
+        optionElement.classList.add('selected');
+        
+        // Store user answer
+        const questionIndex = Array.from(document.querySelectorAll('.q-card')).indexOf(questionCard);
+        userAnswers[questionIndex] = optionElement.textContent.charAt(0);
+        
+        updateScore();
+    }
+
+    function updateScore() {
+        let correct = 0;
+        const allQuestions = document.querySelectorAll('.q-card');
+        
+        allQuestions.forEach((question, index) => {
+            const userAnswer = userAnswers[index];
+            if (userAnswer) {
+                const correctOptions = question.querySelectorAll('.opt[data-correct="true"]');
+                const correctLetters = Array.from(correctOptions).map(opt => opt.textContent.charAt(0));
+                
+                // For single answer questions
+                if (correctLetters.length === 1) {
+                    if (userAnswer === correctLetters[0]) {
+                        correct++;
+                    }
+                }
+                // For multiple answer questions - we'll handle this differently
+            }
+        });
+        
+        score = correct;
+        document.getElementById('scoreValue').textContent = `${score}/${totalQuestions}`;
+        
+        // Update message
+        let message = "Commencez !";
+        if (score > 0) {
+            if (score < 15) message = "👶 Débutant - Revoyez la matrice";
+            else if (score < 24) message = "📚 Moyen - Presque expert";
+            else if (score < 28) message = "🎯 Bon - Très bon niveau";
+            else message = "🏆 Expert - Prêt pour la certification !";
+        }
+        document.getElementById('scoreMessage').textContent = message;
+    }
+
+    function checkAllAnswers() {
+        const allQuestions = document.querySelectorAll('.q-card');
+        let totalCorrect = 0;
+        
+        allQuestions.forEach((question, index) => {
+            const userAnswer = userAnswers[index];
+            const options = question.querySelectorAll('.opt');
+            
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                
+                const isCorrect = opt.getAttribute('data-correct') === 'true';
+                const isSelected = opt.classList.contains('selected');
+                
+                if (isCorrect) {
+                    opt.classList.add('correct');
+                }
+                
+                if (isSelected && !isCorrect) {
+                    opt.classList.add('incorrect');
+                }
+                
+                if (isSelected && isCorrect) {
+                    totalCorrect++;
+                }
+            });
+            
+            // Show answer for this question
+            const answerDiv = question.querySelector('.ans');
+            const button = question.querySelector('.btn');
+            if (answerDiv) {
+                answerDiv.style.display = 'block';
+                button.innerText = 'Masquer';
+            }
+        });
+        
+        // Calculate final score (adjusting for multi-answer questions)
+        score = totalCorrect;
+        document.getElementById('scoreValue').textContent = `${score}/${totalQuestions}`;
+        
+        // Final message
+        let message = "";
+        if (score < 15) message = "❌ Insuffisant - Étudiez la matrice";
+        else if (score < 20) message = "⚠️ Passable - Beaucoup de révisions";
+        else if (score < 24) message = "✅ Bon - Quelques points à travailler";
+        else if (score < 28) message = "🎯 Très bon - Presque parfait";
+        else message = "🏆 Excellent - Prêt pour l'examen !";
+        
+        document.getElementById('scoreMessage').textContent = message;
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Add click events to options
+    document.addEventListener('DOMContentLoaded', function() {
+        const allOptions = document.querySelectorAll('.opt');
+        allOptions.forEach(opt => {
+            opt.addEventListener('click', function() {
+                selectOption(this);
+            });
+        });
+        
+        // Initialize score display
+        updateScore();
+    });
 </script>
 
 </body>
